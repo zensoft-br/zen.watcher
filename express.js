@@ -1,26 +1,35 @@
+// DO NOT CHANGE
+
 import express from "express";
-import { watch } from "./watcher";
+import { watch } from "./src/watcher.js";
 
 const app = express();
 const port = 8090;
 
 app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({ extended: true }));
 
-app.post("/", async (req, res, next) => {
-  // if (req.body?.args?.bean)
-  //   req.body.args.bean.code = "xxx";
+app.all("*", async (req, res, next) => {
+  try {
+    // Convert Express req to z_req
+    const z_req = {
+      method: req.method,
+      path: req.path,
+      query: req.query,
+      headers: req.headers,
+      body: req.body,
+    };
 
-  // const result = JSON.stringify({
-  //   args: {
-  //     ...req.body?.args,
-  //   },
-  // });
+    const result = await watch(z_req);
 
-  const result = await watch(req.body ?? {});
-
-  res.status(result.statusCode);
-  res.contentType("application/json");
-  res.send(result.body ?? {});
+    if (result.statusCode)
+      res.status(result.statusCode);
+    res.contentType("application/json");
+    res.send(result.body ?? {});
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.listen(port, () => {

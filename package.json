@@ -25,6 +25,7 @@
   "contributors": [],
   "scripts": {
     "dev": "",
+    "express": "node ./express.js",
     "test": ""
   },
   "devDependencies": {

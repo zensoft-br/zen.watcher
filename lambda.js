@@ -1,14 +1,21 @@
-import { watch } from "./watcher";
+// DO NOT CHANGE
+
+import { watch } from "./src/watcher.js";
 
 export const handler = async (event) => {
-  const body = JSON.parse(event.body);
-  const result = watch(body);
+  if ((event.headers["content-type"] ?? "").toLowerCase().startsWith("application/json"))
+    event.body = JSON.parse(event.body);
 
-  return {
-    statusCode: 200,
-    body: result,
-    headers: {
-      "content-type": "application/json",
-    },
+  // Convert AWS Lambda event to z_req
+  const z_req = {
+    method: event.requestContext?.http?.method,
+    path: event.requestContext?.http?.path,
+    query: event.queryStringParameters,
+    headers: event.headers,
+    body: event.body,
   };
+
+  const result = await watch(z_req);
+
+  return result;
 };
