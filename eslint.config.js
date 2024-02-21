@@ -1,7 +1,16 @@
 import globals from "globals";
 import stylistic from "@stylistic/eslint-plugin-js";
+// import all from "@eslint/js";
+// import recommended from "@eslint/js";
+
+// https://eslint.org/blog/2022/08/new-config-system-part-1
+// https://eslint.org/blog/2022/08/new-config-system-part-2
 
 export default [
+  {
+    ignores: ["dist/**", "node_modules/**"],
+  },
+  "eslint:recommended",
   {
     files: ["**/*.js"],
     languageOptions: {

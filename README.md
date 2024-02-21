@@ -10,20 +10,21 @@ Cada ação realizada através dos endpoints da API do Zen ERP dispara um evento
 
 Aqui estão alguns exemplos de como os eventos são nomeados e disparados em resposta às operações na API:
 
-* Ao criar uma venda peloo endpoint `POST /sale/sale`, um evento chamado `/sale/saleCreate` é disparado
-* Atualizações de venda pelo endpoint `PUT /sale/sale` disparam o evento `/sale/saleUpdate`
-* A exclusão de vendas pelo endpoint `DELETE /sale/sale` gera o evento `/sale/saleDelete`
-* Operações de preparação e aprovação de vendas, através dos endpoints `POST /sale/saleOpPrepare` e `POST /sale/saleOpApprove`, emitem os eventos `/sale/saleOpPrepare` e `/sale/saleOpApprove`, respectivamente
+* Ao criar uma venda pelo endpoint `POST /sale/sale`, um evento `/sale/saleCreate` é disparado
+* Ao alterar uma venda pelo endpoint `PUT /sale/sale`, um evento `/sale/saleUpdate` é disparado
+* Ao excluir uma venda pelo endpoint `DELETE /sale/sale` um evento `/sale/saleDelete` é disparado
+* Operações de preparação de vendas, através do endpoint `POST /sale/saleOpPrepare`, emitem o evento `/sale/saleOpPrepare`
+* Operações de aprovação de vendas, através do endpoint `POST /sale/saleOpApprove`, emitem o evento `/sale/saleOpApprove`
 
 ### Aplicação dos observadores
 
 Os observadores configurados podem realizar uma ampla gama de ações em resposta aos eventos, incluindo, mas não se limitando a:
 
-* Alteração de dados para manutenção da integridade e atualização de informações.
-* Automação de processos para aumentar a eficiência operacional.
-* Realização de validações para garantir a conformidade e a qualidade dos dados.
-* Bloqueio de operações que não atendem a critérios específicos.
-* Envio de notificações para manter as partes interessadas informadas sobre mudanças importantes.
+* Alteração de dados para manutenção da integridade e atualização de informações
+* Automação de processos para aumentar a eficiência operacional
+* Realização de validações para garantir a conformidade e a qualidade dos dados
+* Bloqueio de operações que não atendem a critérios específicos
+* Envio de notificações para manter as partes interessadas informadas sobre mudanças importantes
 
 ### Acesso à API
 
@@ -35,7 +36,7 @@ O projeto Zen.Watcher é projetado para operar como um serviço web, oferecendo 
 
 ### Mecanismo de observação de eventos
 
-Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.js` é automaticamente acionada. Esta função é projetada para receber um argumento crucial: um objeto `z_req`, que encapsula detalhes significativos sobre o evento ocorrido. A estrutura deste objeto é meticulosamente definida para fornecer uma visão abrangente do evento, incluindo:
+Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.js` é acionada. Esta função é projetada para receber um argumento crucial: um objeto `z_req`, que encapsula detalhes significativos sobre o evento ocorrido. A estrutura deste objeto é meticulosamente definida para fornecer uma visão abrangente do evento, incluindo:
 
 * **method**: Identifica o tipo de solicitação feita (e.g., POST, PUT).
 * **path**: O endpoint acessado que resultou no evento.
@@ -88,7 +89,7 @@ A função `watch` utiliza a estrutura `z_req` para analisar detalhadamente o ev
 
 ## Como executar
 
-Para colocar o projeto Zen.Watcher em funcionamento no ambiente local, um procedimento simples e direto é necessário. O primeiro passo é iniciar o serviço web por meio do comando específico no terminal ou prompt de comando. Este comando prepara o sistema para monitorar eventos e responder a eles de forma eficaz.
+Para colocar o projeto `zen.watcher` em funcionamento no ambiente local, um procedimento simples e direto é necessário. O primeiro passo é iniciar o serviço web por meio do comando específico no terminal ou prompt de comando. Este comando prepara o sistema para monitorar eventos e responder a eles de forma eficaz.
 
 ### Inicializando o webservice
 
@@ -106,7 +107,7 @@ Suponha que o webservice esteja operacional no endereço IP `10.0.0.10`. Ao real
 
 ```json
 {
-  "method": "GET", // ou o verbo HTTP utilizado na requisição
+  "method": "GET",
   "path": "/pasta1/pasta2",
   "query": {
     "p1": "v1",

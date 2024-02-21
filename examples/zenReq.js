@@ -13,6 +13,7 @@ const z_req = {
       "tentant": "tenant",
       "event": "/module/operation",
       "token": "jwt",
+      "tags": ["after", "before"],
     },
     "args": {
       // "id": 9999,
@@ -22,3 +23,11 @@ const z_req = {
     },
   },
 };
+
+export class ZenReq {
+  method;
+  path;
+  query;
+  headers;
+  body;
+}

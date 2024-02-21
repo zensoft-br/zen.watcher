@@ -1,4 +1,4 @@
-// DO NOT CHANGE
+// DO NOT CHANGE THIS FILE!
 
 import express from "express";
 import { watch } from "./src/watcher.js";
