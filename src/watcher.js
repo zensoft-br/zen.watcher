@@ -1,15 +1,9 @@
-import { normalize } from "./normalize.js";
-
-export async function watch(z_req) {
+// eslint-disable-next-line no-unused-vars
+export async function watch(zenReq) {
   const result = {
     statusCode: 200,
     body: {},
   };
 
-  if (z_req.path === "/normalize") {
-    normalize(z_req);
-    result.body.args = {
-      bean: z_req.body.args.bean,
-    };
-  }
+  return result;
 }

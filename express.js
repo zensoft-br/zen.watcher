@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.all("*", async (req, res, next) => {
   try {
-    // Convert Express req to z_req
-    const z_req = {
+    // Convert Express req to zenReq
+    const zenReq = {
       method: req.method,
       path: req.path,
       query: req.query,
@@ -21,7 +21,11 @@ app.all("*", async (req, res, next) => {
       body: req.body,
     };
 
-    const result = await watch(z_req);
+    let result = await watch(zenReq);
+    result = {
+      ...result,
+      statusCode: result?.statusCode ?? 200,
+    };
 
     if (result.statusCode)
       res.status(result.statusCode);

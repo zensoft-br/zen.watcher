@@ -6,8 +6,8 @@ export const handler = async (event) => {
   if ((event.headers?.["content-type"] ?? "").toLowerCase().startsWith("application/json"))
     event.body = JSON.parse(event.body);
 
-  // Convert AWS Lambda event to z_req
-  const z_req = {
+  // Convert AWS Lambda event to zenReq
+  const zenReq = {
     method: event.requestContext?.http?.method ?? "POST",
     path: event.requestContext?.http?.path ?? "/",
     query: event.queryStringParameters ?? {},
@@ -15,7 +15,11 @@ export const handler = async (event) => {
     body: event.body ?? {},
   };
 
-  const result = await watch(z_req);
+  let result = await watch(zenReq);
+  result = {
+    ...result,
+    statusCode: result?.statusCode ?? 200,
+  };
 
   return result;
 };

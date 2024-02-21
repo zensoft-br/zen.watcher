@@ -1,4 +1,4 @@
-const z_req = {
+const zenReq = {
   "method": "POST",
   "path": "/",
   "query": {

@@ -15,7 +15,7 @@ watch({
     },
     args: {
       bean: {
-        id: 1001, 
+        id: 1001,
         company: {
           id: 1001,
           // ...demais propriedades
@@ -31,4 +31,4 @@ watch({
       },
     },
   },
-})
+});

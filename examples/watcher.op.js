@@ -1,7 +1,7 @@
 import Zen from "@zensoft-br/zenclient";
 
 // Exemplo de ZenReq para a operação /sale/saleOpPrepare
-// const z_req = {
+// const zenReq = {
 //   method: "POST",
 //   path: "/sale/saleOpPrepare",
 //   query: {},
@@ -20,16 +20,16 @@ import Zen from "@zensoft-br/zenclient";
 //   },
 // };
 
-export async function watch(z_req) {
-  if (z_req.body?.context?.event === "/sale/saleOpPrepare" && (z_req.body?.context?.tags ?? []).includes("before")) {
+export async function watch(zenReq) {
+  if (zenReq.body?.context?.event === "/sale/saleOpPrepare" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     // Instancia o cliente Zen
-    const zenClient = Zen.createFromToken(z_req.body.context.tenant, z_req.body.context.token);
+    const zenClient = Zen.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
     // Instancia o serviço sale.Service
     const saleService = new Zen.api.sale.Service(zenClient);
 
     // Carrega a venda (no body da operação vem apenas o id)
-    const sale = await saleService.saleReadById(z_req.body.args.id);
+    const sale = await saleService.saleReadById(zenReq.body.args.id);
 
     // Se o valor total do pedido de venda for < 10000, adiciona uma observação no pedido de venda
     if (sale.totalValue < 10000) {

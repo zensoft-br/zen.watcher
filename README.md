@@ -36,7 +36,7 @@ O projeto Zen.Watcher é projetado para operar como um serviço web, oferecendo 
 
 ### Mecanismo de observação de eventos
 
-Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.js` é acionada. Esta função é projetada para receber um argumento crucial: um objeto `z_req`, que encapsula detalhes significativos sobre o evento ocorrido. A estrutura deste objeto é meticulosamente definida para fornecer uma visão abrangente do evento, incluindo:
+Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.js` é acionada. Esta função é projetada para receber um argumento crucial: um objeto `zenReq`, que encapsula detalhes significativos sobre o evento ocorrido. A estrutura deste objeto é meticulosamente definida para fornecer uma visão abrangente do evento, incluindo:
 
 * **method**: Identifica o tipo de solicitação feita (e.g., POST, PUT).
 * **path**: O endpoint acessado que resultou no evento.
@@ -52,7 +52,7 @@ Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.
 Exemplo:
 
 ```json
-const z_req = {
+const zenReq = {
   "method": "POST",
   "path": "/",
   "query": {
@@ -80,7 +80,7 @@ const z_req = {
 
 ### Análise e resposta aos eventos
 
-A função `watch` utiliza a estrutura `z_req` para analisar detalhadamente o evento. Isso envolve uma compreensão do tipo de operação realizada, os dados envolvidos e o contexto sob o qual a operação foi executada. A partir dessa análise, o script pode:
+A função `watch` utiliza a estrutura `zenReq` para analisar detalhadamente o evento. Isso envolve uma compreensão do tipo de operação realizada, os dados envolvidos e o contexto sob o qual a operação foi executada. A partir dessa análise, o script pode:
 
 * Executar validações para garantir que a operação atenda a critérios pré-estabelecidos.
 * Modificar dados em resposta ao evento, seja para atualização de registros, correção de informações ou qualquer outra forma de manutenção de dados.
@@ -99,11 +99,11 @@ Para colocar o projeto `zen.watcher` em funcionamento no ambiente local, um proc
 node .\express.js
 ```
 
-Ao executar este comando, o webservice é ativado na porta `8090`. A partir deste momento, o observador está apto a receber requisições através desta porta, independentemente do verbo HTTP utilizado, do caminho especificado na URL ou dos parâmetros de consulta enviados. Todas essas informações serão capturadas e organizadas no objeto `z_req`, que serve como a base para a análise e resposta aos eventos.
+Ao executar este comando, o webservice é ativado na porta `8090`. A partir deste momento, o observador está apto a receber requisições através desta porta, independentemente do verbo HTTP utilizado, do caminho especificado na URL ou dos parâmetros de consulta enviados. Todas essas informações serão capturadas e organizadas no objeto `zenReq`, que serve como a base para a análise e resposta aos eventos.
 
 ### Exemplo Prático de Requisição
 
-Suponha que o webservice esteja operacional no endereço IP `10.0.0.10`. Ao realizar uma requisição para o endpoint `http://10.0.0.10:8090/pasta1/pasta2?p1=v1&p2=v2`, o seguinte objeto `z_req` é gerado para encapsular os detalhes da requisição:
+Suponha que o webservice esteja operacional no endereço IP `10.0.0.10`. Ao realizar uma requisição para o endpoint `http://10.0.0.10:8090/pasta1/pasta2?p1=v1&p2=v2`, o seguinte objeto `zenReq` é gerado para encapsular os detalhes da requisição:
 
 ```json
 {
