@@ -24,21 +24,23 @@ export function normalize(zenReq) {
   }
 }
 
-function titleCase(s) {
+export function titleCase(s) {
   // Convert to lowerCase and then to titleCase
   const titleCased = s.toLowerCase().replace(
-    /(^|\P{L})(\p{L})/gu,
+    // /(^|\P{L})(\p{L})/gu,
+    /(^|[^\p{L}\p{Nd}])([\p{L}\p{Nd}])/gu,
     (match, prefix, letter) => prefix + letter.toUpperCase(),
   );
 
   // Split in words and keep reserved words in lowerCase
-  const reservedWords = ["de", "da", "das", "do", "dos", "e", "a", "as", "o", "os", "na", "nas", "no", "nos", "para"];
+  const reservedWords = ["com", "de", "da", "das", "do", "dos", "e", "em", "a", "as", "o", "os", "na", "nas", "no", "nos", "para"];
   return titleCased.split(" ")
-    .map(word => {
-      const lowerWord = word.toLowerCase();
-      if (reservedWords.includes(lowerWord)) {
-        return lowerWord;
-      }
+    .map((word, i) => {
+      if (i > 0) {
+        const lowerWord = word.toLowerCase();
+        if (reservedWords.includes(lowerWord)) {
+          return lowerWord;
+        }}
       return word;
     })
     .join(" ");
