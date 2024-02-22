@@ -26,6 +26,7 @@
   "scripts": {
     "bundle": "npm install --production && npx npm-pack-zip",
     "express": "node ./express.js",
+    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lambda": "rollup --config ./rollup.config.lambda.js"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
     "express": "^4.18.2",
+    "jest": "^29.7.0",
     "rollup": "^4.12.0"
   }
 }
