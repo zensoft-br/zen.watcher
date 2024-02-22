@@ -32,7 +32,7 @@ function titleCase(s) {
   );
 
   // Split in words and keep reserved words in lowerCase
-  const reservedWords = ["de", "da", "das", "do", "dos", "e", "a", "as", "o", "os", "na", "nas", "no", "nos"];
+  const reservedWords = ["de", "da", "das", "do", "dos", "e", "a", "as", "o", "os", "na", "nas", "no", "nos", "para"];
   return titleCased.split(" ")
     .map(word => {
       const lowerWord = word.toLowerCase();
