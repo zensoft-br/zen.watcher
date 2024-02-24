@@ -7,13 +7,10 @@ import Z from "@zensoft-br/zenclient";
  * email: force e-mail
  */
 export async function emailNFe(zenReq) {
-  // We will get tenant from query for now
-  const tenant = zenReq.query?.tenant;
-
   // Recipients who should receive e-mails
   const recipients = (zenReq.query?.recipients ?? "company,person,salesperson,shipping").toLowerCase().split(",");
 
-  const z = Z.createFromToken(tenant, zenReq.body.context.token);
+  const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
   const fiscalBrService = new Z.api.fiscal.br.Service(z);
   const mailService = new Z.api.system.mail.Service(z);
