@@ -19,7 +19,12 @@ export async function emailReceivable(zenReq) {
 
   // Load NFe
   const instructionResponse = await billingService.instructionResponseReadById(zenReq.body.args.id);
+  if (instructionResponse.type !== "REGISTERED")
+    return;
+
   const receivable = instructionResponse.billingTitle;
+  if (!receivable)
+    return;
 
   // Let's load all personContact's in just on read
   const personIds = [];
