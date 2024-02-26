@@ -12,12 +12,12 @@ export async function watch(zenReq) {
     result = await email(zenReq);
   }
 
-  if (zenReq.path === "/normalize") {
+  else if (zenReq.path === "/normalize") {
     normalize(zenReq);
     result.body.args = zenReq.body.args;
   }
 
-  if (zenReq.path === "/print") {
+  else if (zenReq.path === "/print") {
     result = await print(zenReq);
   }
 
