@@ -1,4 +1,4 @@
-const response = await fetch("https://watcher.zenerp.app.br/normalize?case=titleCase&props=name", {
+await fetch("https://localhost:8090", {
   method: "POST",
   headers: {
     "content-type": "application/json",
@@ -6,15 +6,12 @@ const response = await fetch("https://watcher.zenerp.app.br/normalize?case=title
   body: JSON.stringify({
     context: {
       tenant: "teste",
-      event: "event",
+      event: "/module/event",
       token: "token",
       tags: ["before"],
     },
     args: {
-      bean: {
-        name: "test",
-      },
+      id: 1001,
     },
   }),
 });
-console.log(await response.json());
