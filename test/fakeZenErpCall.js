@@ -5,7 +5,8 @@ const response = await fetch("https://watcher.zenerp.app.br/normalize?case=title
   },
   body: JSON.stringify({
     context: {
-      tentant: "teste",
+      tenant: "teste",
+      event: "event",
       token: "token",
       tags: ["before"],
     },

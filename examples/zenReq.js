@@ -10,7 +10,7 @@ const zenReq = {
   },
   "body": {
     "context": {
-      "tentant": "tenant",
+      "tenant": "tenant",
       "event": "/module/operation",
       "token": "jwt",
       "tags": ["after", "before"],

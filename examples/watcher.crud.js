@@ -8,7 +8,7 @@
 //   },
 //   body: {
 //     context: {
-//       tentant: "teste",
+//       tenant: "teste",
 //       token: "...",
 //       tags: ["before"],
 //     },

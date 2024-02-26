@@ -10,7 +10,7 @@ import Zen from "@zensoft-br/zenclient";
 //   },
 //   body: {
 //     context: {
-//       tentant: "teste",
+//       tenant: "teste",
 //       token: "...",
 //       tags: ["before"],
 //     },

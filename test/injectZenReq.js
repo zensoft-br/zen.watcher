@@ -9,7 +9,8 @@ watch({
   },
   body: {
     context: {
-      tentant: "teste",
+      tenant: "teste",
+      event: "event",
       token: "...",
       tags: ["before"],
     },
