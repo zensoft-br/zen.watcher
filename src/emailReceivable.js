@@ -13,7 +13,6 @@ export async function emailReceivable(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
   const billingService = new Z.api.financial.billing.Service(z);
-  const mailService = new Z.api.system.mail.Service(z);
   const personService = new Z.api.catalog.person.Service(z);
   const i18n = await z.i18n;
 
@@ -76,21 +75,40 @@ export async function emailReceivable(zenReq) {
   // Convert XML and DANFE to base64 strings
   const bankslipBytes = Buffer.from(await blob.arrayBuffer()).toString("base64");
 
+  // mailerConfig=EMP1:MC1,EMP2:MC2
+  const mailerConfigMap = (zenReq.query.mailerConfig ?? "")
+    .split(",")
+    .filter(e => e)
+    .reduce((red, e) => {
+      const pair = e.split("=");
+      red[pair[0]] = pair[1];
+      return red;
+    }, {});
+  const sp = new URLSearchParams();
+  if (mailerConfigMap[receivable.company.code])
+    sp.set("mailerConfigCode", mailerConfigMap[receivable.company.code]);
+  else if (receivable.company.mailerConfig)
+    sp.set("mailerConfigId", receivable.company.mailerConfig.id);
+
   // Send the e-mails
-  // TODO Do not await
-  await mailService.messageOpSend({
-    from: {
-      description: receivable.company.person.name,
+  await z.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
     },
-    to: personContactList
-      .map(e => ({
-        address: zenReq.query?.email ?? e.description,
-        description: e.person.name,
-      }),
-      ),
-    subject: `O seu boleto chegou! Número ${receivable.code ?? receivable.id
-    }, vencimento ${i18n.formatDate(receivable.dueDate)}`,
-    content: `
+    body: JSON.stringify({
+      from: {
+        description: receivable.company.person.name,
+      },
+      to: personContactList
+        .map(e => ({
+          address: zenReq.query?.email ?? e.description,
+          description: e.person.name,
+        }),
+        ),
+      subject: `O seu boleto chegou! Número ${receivable.code ?? receivable.id
+      }, vencimento ${i18n.formatDate(receivable.dueDate)}`,
+      content: `
       Você está recebendo um boleto.
 
       Emitente: ${receivable.company.person.name}
@@ -109,14 +127,15 @@ export async function emailReceivable(zenReq) {
 
       Zen Erp ®
       `,
-    mimeType: "text/plain;charset=utf-8",
-    attachments: [
-      {
-        identifier: `${receivable.code ?? receivable.id }.pdf`,
-        bytes: bankslipBytes,
-        mimeType: "application/pdf",
-      },
-    ],
-    source: `/financial/receivable:${receivable.id}`,
+      mimeType: "text/plain;charset=utf-8",
+      attachments: [
+        {
+          identifier: `${receivable.code ?? receivable.id }.pdf`,
+          bytes: bankslipBytes,
+          mimeType: "application/pdf",
+        },
+      ],
+      source: `/financial/receivable:${receivable.id}`,
+    }),
   });
 }
