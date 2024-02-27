@@ -12,7 +12,7 @@ export async function watch(zenReq) {
 
     // Code is empty and variant is set
     if (!bean.code && bean.variant) {
-      bean.code = `${bean.product.code }.${ bean.variant.code}`;
+      bean.code = `${bean.product.code }.${bean.variant.code}`;
 
       // Will return zenRes.body.args just if code is changed
       zenRes.body.args = zenReq.body.args;
