@@ -29,7 +29,7 @@ app.all("*", async (req, res, next) => {
 
     if (result.statusCode)
       res.status(result.statusCode);
-    res.contentType("application/json");
+    res.contentType(result.contentType ?? "application/json");
     res.send(result.body ?? {});
   } catch (error) {
     next(error);

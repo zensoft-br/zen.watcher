@@ -1,10 +1,10 @@
-const z_res = {
-  "statusCode": 200,
-  "headers": {
+const zenRes = {
+  statusCode: 200,
+  headers: {
     "content-type": "application/json",
   },
-  "body": {
-    "args": {
+  body: {
+    args: {
       // "id": 9999,
       // "bean": {
       //   "id": 9999,
@@ -13,7 +13,7 @@ const z_res = {
   },
 };
 
-class ZenReq {
+class ZenRes {
   statusCode;
   headers;
   body;
