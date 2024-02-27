@@ -18,11 +18,11 @@ export default [
         ...globals.node,
       },
     },
-    "plugins": {
+    plugins: {
       stylistic,
     },
-    "rules": {
-      "indent":    [
+    rules: {
+      indent:    [
         "error",
         2,
       ],
@@ -30,11 +30,11 @@ export default [
         "error",
         "windows",
       ],
-      "quotes": [
+      quotes: [
         "error",
         "double",
       ],
-      "semi": [
+      semi: [
         "error",
         "always",
       ],
@@ -42,10 +42,11 @@ export default [
       "stylistic/array-bracket-spacing": ["error", "never"],
       "stylistic/comma-dangle": ["error", "always-multiline"],
       "stylistic/no-multi-spaces": "error",
-      "stylistic/no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+      "stylistic/no-multiple-empty-lines": ["error", { max: 1, maxEOF: 0 }],
       "stylistic/no-trailing-spaces": "error",
       "stylistic/nonblock-statement-body-position": ["error", "below"],
       "stylistic/object-curly-spacing": ["error", "always"],
+      "stylistic/quote-props": ["error", "as-needed"],
       "prefer-const": "error",
       "prefer-template": "error",
       // custom end
