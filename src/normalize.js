@@ -1,4 +1,11 @@
 export function normalize(zenReq) {
+  const zenRes = {
+    statusCode: 200,
+    body: {
+      args: {},
+    },
+  };
+
   for (const key of Object.keys(zenReq.body.args ?? {})) {
     const arg = zenReq.body.args[key];
     const props = zenReq.query.props.split(",").filter(e => e);
@@ -20,8 +27,10 @@ export function normalize(zenReq) {
           .join(" ");
       }
     }
-    zenReq.body.args[key] = arg;
+    zenRes.body.args[key] = arg;
   }
+
+  return zenRes;
 }
 
 export function titleCase(s) {

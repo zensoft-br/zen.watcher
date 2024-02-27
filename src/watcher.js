@@ -3,23 +3,22 @@ import { normalize } from "./normalize.js";
 import { print } from "./print.js";
 
 export async function watch(zenReq) {
-  let result = {
+  let zenRes = {
     statusCode: 200,
     body: {},
   };
 
   if (zenReq.path === "/email") {
-    result = await email(zenReq);
+    zenRes = await email(zenReq);
   }
 
   else if (zenReq.path === "/normalize") {
-    normalize(zenReq);
-    result.body.args = zenReq.body.args;
+    zenRes = normalize(zenReq);
   }
 
   else if (zenReq.path === "/print") {
-    result = await print(zenReq);
+    zenRes = await print(zenReq);
   }
 
-  return result;
+  return zenRes;
 }
