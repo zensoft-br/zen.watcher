@@ -1,18 +1,18 @@
 import "dotenv/config";
 
-import { watch } from "./watcher";
+import { watch } from "./watcher.js";
 
 watch({
   method: "POST",
   path: "/email",
   query: {
-    email: "user@domain.com",
-    mailerConfig: "EMP1=MC1",
+    email: "teste@zensoft.com.br",
+    mailerConfig: "ACT=ACT/NFE,MP=MP/NFE",
   },
   headers: {
     "content-type": "application/json",
   },
-  body: JSON.stringify({
+  body: {
     context: {
       event: "/fiscal/br/dfeNfeProcOutOpConfirm",
       tenant: process.env.tenant,
@@ -20,7 +20,7 @@ watch({
       tags: ["after"],
     },
     args: {
-      id: 3774,
+      id: 3838,
     },
-  }),
+  },
 });

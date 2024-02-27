@@ -14,6 +14,16 @@ query params:
     };
   }
 
+  // mailerConfig=EMP1=MC1,EMP2=MC2
+  zenReq.mailerConfigMap = (zenReq.query.mailerConfig ?? "")
+    .split(",")
+    .filter(e => e)
+    .reduce((red, e) => {
+      const pair = e.split("=");
+      red[pair[0]] = pair[1];
+      return red;
+    }, {});
+
   //
   if (zenReq.body?.context?.event === "/fiscal/br/dfeNfeProcOutOpConfirm") {
     return emailNFe(zenReq);
