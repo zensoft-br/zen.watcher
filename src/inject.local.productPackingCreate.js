@@ -1,6 +1,6 @@
-import { watch } from "./watcher";
+import { watch } from "./watcher.js";
 
-watch({
+const zenRes = await watch({
   method: "POST",
   path: "/",
   query: {},
@@ -10,7 +10,7 @@ watch({
   body: {
     context: {
       tenant: "teste",
-      event: "/catalog/product/producPackingUpdate",
+      event: "/catalog/product/productPackingCreate",
       token: "token",
       tags: ["before"],
     },
@@ -76,7 +76,6 @@ watch({
             textileAverageQuantity: "55 M",
           },
         },
-        code: "IMP011.0001",
         units: 1,
         variant: {
           code: "0001",
@@ -99,3 +98,5 @@ watch({
     },
   },
 });
+
+console.log(zenRes.body.args.bean.code);
