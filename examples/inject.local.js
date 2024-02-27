@@ -1,9 +1,12 @@
-await fetch("https://localhost:8090", {
+import { watch } from "../src/watcher";
+
+const zenRes = await watch({
   method: "POST",
-  headers: {
-    "content-type": "application/json",
+  path: "/path",
+  query: {
+    p1: "v1",
   },
-  body: JSON.stringify({
+  body: {
     context: {
       tenant: "teste",
       event: "/module/event",
@@ -13,5 +16,7 @@ await fetch("https://localhost:8090", {
     args: {
       id: 1001,
     },
-  }),
+  },
 });
+
+console.log(zenRes.statusCode);
