@@ -55,25 +55,19 @@ export async function emailReceivable(zenReq) {
     return;
 
   // Fetch XML and DANFE
-  const blob = await z.web.fetchBlob("/system/report/reportOpGenerate", {
+  const result = await z.web.fetchJson("/system/report/reportOpPrint", {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      code: "/financial/report/bankslip",
+      code: "/financial/report/receivableForm",
       format: "PDF",
-      dataSource: {
-        code: "/financial/report/bankslip",
-        parameters: {
-          IDS: `{${bean.id}}`,
-        },
+      parameters: {
+        ids: [bean.id],
       },
     }),
   });
-
-  // Convert XML and DANFE to base64 strings
-  const bankslipBytes = Buffer.from(await blob.arrayBuffer()).toString("base64");
 
   const sp = new URLSearchParams();
   if (zenReq.mailerConfigMap?.[bean.company.code])
@@ -122,8 +116,8 @@ export async function emailReceivable(zenReq) {
       attachments: [
         {
           identifier: `${bean.code ?? bean.id }.pdf`,
-          bytes: bankslipBytes,
-          mimeType: "application/pdf",
+          bytes: result.content,
+          mimeType: result.contentType,
         },
       ],
       source: `/financial/receivable:${bean.id}`,
