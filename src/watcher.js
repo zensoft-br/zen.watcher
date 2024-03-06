@@ -40,7 +40,7 @@ export async function watch(zenReq) {
     const client = Z.createFromToken(body.context.tenant, body.context.token);
 
     // Creating a sale service instance
-    const saleService = new Z.api.sale.Service(client);
+    const saleService = new Z.api.sale.SaleService(client);
 
     // Fetching sale details by ID extracted from the source
     const sale = await saleService.saleReadById(args.source.substring(11));
@@ -50,7 +50,7 @@ export async function watch(zenReq) {
       return;
 
     // Creating a security service instance
-    const securityService = new Z.api.system.security.Service(client);
+    const securityService = new Z.api.system.security.SecurityService(client);
 
     // Fetching current session details
     const session = await securityService.sessionOpGetCurrent();
@@ -67,7 +67,7 @@ export async function watch(zenReq) {
     message.mimeType = "text/plain; charset=utf-8";
 
     // Creating a mail service instance
-    const mailService = new Z.api.system.mail.Service(client);
+    const mailService = new Z.api.system.mail.MailService(client);
 
     // Sending the message via the mail service
     await mailService.messageOpSend(null, null, message);
