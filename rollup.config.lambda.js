@@ -9,4 +9,9 @@ export default {
     },
   ],
   plugins: [resolver()],
+  onwarn(warning ) {
+    if (warning.code === "CIRCULAR_DEPENDENCY")
+      return;
+    console.warn(warning.message);
+  },
 };
