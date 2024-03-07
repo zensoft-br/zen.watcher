@@ -61,7 +61,7 @@ export async function watch(zenReq) {
     // Setting message details like sender, recipient, subject, content, etc.
     message.from = { description: sale.company.person.name };
     message.to = [{ address: sale.personSalesperson.email }];
-    message.repplyTo = [{ address: session.user.code }];
+    message.repplyTo = [{ address: session.user.code, description: session.user.description }];
     message.subject = `Pedido de venda ${sale.code ?? sale.id}, ${sale.person.name}`;
     message.content = `Você tem uma nova mensagem sobre este pedido de venda:\n\n${args.content}\n\nZen Erp ®`;
     message.mimeType = "text/plain; charset=utf-8";
