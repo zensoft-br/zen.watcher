@@ -1,7 +1,8 @@
 import Z from "@zensoft-br/zenclient";
+import { notifyBackloggedSales } from "./notifyBackloggedSales.js";
 
 export async function watch(zenReq) {
-  const zenRes = {
+  let zenRes = {
     statusCode: 200,
     body: {},
   };
@@ -63,7 +64,7 @@ export async function watch(zenReq) {
     message.to = [{ address: sale.personSalesperson.email }];
     message.repplyTo = [{ address: session.user.code, description: session.user.description }];
     message.subject = `Pedido de venda ${sale.code ?? sale.id}, ${sale.person.name}`;
-    message.content = `Você tem uma nova mensagem sobre este pedido de venda:\n\n${args.content}\n\nZen Erp ®`;
+    message.content = `Você tem uma nova mensagem sobre o pedido de venda ${sale.code ?? sale.id}:\n\n${args.content}\n\nZen Erp ®`;
     message.mimeType = "text/plain; charset=utf-8";
 
     // Creating a mail service instance
@@ -71,6 +72,12 @@ export async function watch(zenReq) {
 
     // Sending the message via the mail service
     await mailService.messageOpSend(null, null, message);
+  }
+
+  if (zenReq.body?.context?.event === "/custom/notifyBackloggedSales") {
+    zenRes = {
+      ...await notifyBackloggedSales(zenReq),
+    };
   }
 
   return zenRes;
