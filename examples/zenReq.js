@@ -21,6 +21,7 @@ const zenReq = {
       //   "id": 9999,
       // },
     },
+    result: {},
   },
 };
 

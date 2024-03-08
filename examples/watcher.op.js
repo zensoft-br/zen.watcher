@@ -25,7 +25,7 @@ export async function watch(zenReq) {
     const zenClient = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
     // Instancia o serviço sale.Service
-    const saleService = new Z.api.sale.Service(zenClient);
+    const saleService = new Z.api.sale.SaleService(zenClient);
 
     // Carrega a venda (no body da operação vem apenas o id)
     const sale = await saleService.saleReadById(zenReq.body.args.id);

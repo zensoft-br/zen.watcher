@@ -28,7 +28,10 @@ Os observadores configurados podem realizar uma ampla gama de ações em respost
 
 ### Acesso à API
 
-Para mais detalhes sobre como utilizar a API e configurar os observadores de eventos, acesse a documentação completa disponível em: https://teste.zenerp.app.br/api.
+Para mais detalhes sobre como utilizar a API e configurar os observadores de eventos, acesse a documentação completa da API disponível:
+
+- Menu > Sistema > Informações do sistema
+  - API
 
 ## Funcionamento do projeto zen.watcher
 
