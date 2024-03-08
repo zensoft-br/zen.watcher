@@ -1,9 +1,9 @@
 import Z from "@zensoft-br/zenclient";
 
 export async function print(zenReq) {
-  const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const client = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
-  const reportService = new Z.api.system.report.Service(z);
+  const reportService = new Z.api.system.report.ReportService(client);
 
   if (!zenReq.query.report)
     throw new Error("Missing query.report");

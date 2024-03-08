@@ -10,11 +10,11 @@ export async function emailNFe(zenReq) {
   // Recipients who should receive e-mails
   const recipients = (zenReq.query?.recipients ?? "company,person,salesperson,shipping").toLowerCase().split(",");
 
-  const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const client = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
-  const fiscalBrService = new Z.api.fiscal.br.Service(z);
-  const personService = new Z.api.catalog.person.Service(z);
-  const i18n = await z.i18n;
+  const fiscalBrService = new Z.api.fiscal.br.FiscalBrService(client);
+  const personService = new Z.api.catalog.person.PersonService(client);
+  const i18n = await client.i18n;
 
   // Load NFe
   const dfeNfeProcOut = await fiscalBrService.dfeNfeProcOutReadById(zenReq.body.args.id);
@@ -66,7 +66,7 @@ export async function emailNFe(zenReq) {
     sp.set("mailerConfigId", bean.company.mailerConfig.id);
 
   // Send the e-mails
-  await z.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
+  await client.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
