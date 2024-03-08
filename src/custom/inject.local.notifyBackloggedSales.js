@@ -11,7 +11,7 @@ const zenRes = await watch({
     context: {
       tenant: "company",
       event: "/custom/notifyBackloggedSales",
-      token: "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5ZmVlZWVhZC1iZTNlLTQwMDItYmJiNi1lNWU5ZTMxNzA4NDQiLCJzdWIiOiJzdXBwb3J0QHBlcnNvbmFsc29mdC5jb20uYnIiLCJuYmYiOjE3MDk4MDI3ODYsImlhdCI6MTcwOTgwMjc4NiwiZXhwIjoxNzA5ODg5MTg2LCJsb2NhbGUiOiJwdC1CUiIsInRpbWVab25lIjoiQW1lcmljYS9TYW9fUGF1bG8ifQ.oEQ4RPdGPwQMIinhZfq13f0iCzAQ8LDnjAjf9L3j17M",
+      token: "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiZGI1ZjFlYy0yNjllLTQ1MTItODgwNy1kYzIwZmI3ZjFhMzciLCJzdWIiOiJzdXBwb3J0QHBlcnNvbmFsc29mdC5jb20uYnIiLCJuYmYiOjE3MDk5MDQ1NDUsImlhdCI6MTcwOTkwNDU0NSwiZXhwIjoxNzA5OTkwOTQ1LCJsb2NhbGUiOiJwdC1CUiIsInRpbWVab25lIjoiQW1lcmljYS9TYW9fUGF1bG8ifQ.MSqd5oEyxxrTVj-TfOr79xa1ZRis3BJeJ7GKtLT_7p4",
     },
     args: {},
   },

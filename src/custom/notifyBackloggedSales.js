@@ -27,7 +27,7 @@ export async function notifyBackloggedSales(zenReq) {
       break;
 
     for (const workpieceNode of workpieceNodeList) {
-      const sale = await saleService.saleReadById(workpieceNode.workpiece.source.split(":")[1]);
+      let sale = await saleService.saleReadById(workpieceNode.workpiece.source.split(":")[1]);
 
       if (["CANCELED", "FINISHED"].includes(sale.status))
         continue;
@@ -40,31 +40,37 @@ export async function notifyBackloggedSales(zenReq) {
 
       const hours = Math.floor((new Date() - new Date(workpieceNode.dateTimeStart)) / 3600000);
 
-      const severity = hours >= 72 ? "URGENTE" : "ATRASADO";
+      const severity = hours >= 72 ? "urgente" : "atrasado";
 
-      const message = new Z.api.system.mail.Message();
-      message.from = { description: sale.company.person.name };
-      // message.to = [{ address: workpieceNode.user?.code ?? sale.company.person.email }];
-      message.to = [{ address: "fabianobonin@gmail.com" }];
-      message.subject = `${severity}: Pedido de venda ${sale.code ?? sale.id}, ${sale.person.fantasyName ?? sale.person.name}`;
-      message.content =`
-Este pedido está há mais de ${hours} horas no status "${sale.workpiece.workflowNode.description}".
+      sale.tags = (sale.tags ?? "").split(",").concat(severity).filter(e => e).join(",");
 
-http://${body.context.tenant}.zenerp.app.br/sale/sale.html?q=id==${sale.id}
+      sale = saleService.saleOpUpdate(sale);
 
-Zen Erp ®`;
-      message.mimeType = "text/plain;charset=utf-8";
-      message.source = `/sale/sale:${sale.id}`;
+      console.info(`Pedido de venda ${sale.id} anotado com a tag "${severity}"`);
 
-      // adicionar tag no futuro, enviar e-mail no momento
-      // sale.tags = (sale.tags ?? "").split(",");
+      //       const message = new Z.api.system.mail.Message();
+      //       message.from = { description: sale.company.person.name };
+      //       // message.to = [{ address: workpieceNode.user?.code ?? sale.company.person.email }];
+      //       message.to = [{ address: "fabianobonin@gmail.com" }];
+      //       message.subject = `${severity}: Pedido de venda ${sale.code ?? sale.id}, ${sale.person.fantasyName ?? sale.person.name}`;
+      //       message.content =`
+      // Este pedido está há mais de ${hours} horas no status "${sale.workpiece.workflowNode.description}".
 
-      const mailService = new Z.api.system.mail.MailService(client);
-      try {
-        await mailService.messageOpSend(null, null, message);
-      } catch (error) {
-        console.error(error);
-      }
+      // http://${body.context.tenant}.zenerp.app.br/sale/sale.html?q=id==${sale.id}
+
+      // Zen Erp ®`;
+      //       message.mimeType = "text/plain;charset=utf-8";
+      //       message.source = `/sale/sale:${sale.id}`;
+
+      //       // adicionar tag no futuro, enviar e-mail no momento
+      //       // sale.tags = (sale.tags ?? "").split(",");
+
+      //       const mailService = new Z.api.system.mail.MailService(client);
+      //       try {
+      //         await mailService.messageOpSend(null, null, message);
+      //       } catch (error) {
+      //         console.error(error);
+      //       }
 
       console.log(++count, page, sale.id);
     }
