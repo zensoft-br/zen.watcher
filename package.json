@@ -40,6 +40,6 @@
     "rollup": "^4.12.0"
   },
   "dependencies": {
-    "@zensoft-br/zenclient": "^1.0.14"
+    "@zensoft-br/zenclient": "^1.0.15"
   }
 }
