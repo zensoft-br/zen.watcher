@@ -13,7 +13,6 @@ export async function notifyBackloggedSales(zenReq) {
   cutDate.setDate(cutDate.getDate() - 2);
 
   let page = 0;
-  let count = 0;
 
   while (true) {
     const sp = new URLSearchParams();
@@ -44,35 +43,9 @@ export async function notifyBackloggedSales(zenReq) {
 
       sale.tags = (sale.tags ?? "").split(",").concat(severity).filter(e => e).join(",");
 
-      sale = saleService.saleOpUpdate(sale);
+      sale = await saleService.saleOpUpdate(sale);
 
-      console.info(`Pedido de venda ${sale.id} anotado com a tag "${severity}"`);
-
-      //       const message = new Z.api.system.mail.Message();
-      //       message.from = { description: sale.company.person.name };
-      //       // message.to = [{ address: workpieceNode.user?.code ?? sale.company.person.email }];
-      //       message.to = [{ address: "fabianobonin@gmail.com" }];
-      //       message.subject = `${severity}: Pedido de venda ${sale.code ?? sale.id}, ${sale.person.fantasyName ?? sale.person.name}`;
-      //       message.content =`
-      // Este pedido está há mais de ${hours} horas no status "${sale.workpiece.workflowNode.description}".
-
-      // http://${body.context.tenant}.zenerp.app.br/sale/sale.html?q=id==${sale.id}
-
-      // Zen Erp ®`;
-      //       message.mimeType = "text/plain;charset=utf-8";
-      //       message.source = `/sale/sale:${sale.id}`;
-
-      //       // adicionar tag no futuro, enviar e-mail no momento
-      //       // sale.tags = (sale.tags ?? "").split(",");
-
-      //       const mailService = new Z.api.system.mail.MailService(client);
-      //       try {
-      //         await mailService.messageOpSend(null, null, message);
-      //       } catch (error) {
-      //         console.error(error);
-      //       }
-
-      console.log(++count, page, sale.id);
+      console.log(`Pedido de venda ${sale.id}, tag "${severity} incluída"`);
     }
   }
 
