@@ -1,4 +1,4 @@
-import { watch } from "./watcher.js";
+import { watch } from "../../watcher.js";
 
 const zenRes = await watch({
   method: "POST",
@@ -10,7 +10,7 @@ const zenRes = await watch({
   body: {
     context: {
       tenant: "teste",
-      event: "/system/audit/userLogCreate",
+      event: "/catalog/product/productPackingCreate",
       token: "token",
       tags: ["before"],
     },

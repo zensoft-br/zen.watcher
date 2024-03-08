@@ -1,4 +1,4 @@
-import { watch } from "./watcher.js";
+import { watch } from "../watcher.js";
 
 const zenRes = await watch({
   method: "POST",
