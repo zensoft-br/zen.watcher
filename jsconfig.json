@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "ESNext",
+    "target": "ESNext",
+    "paths": {
+      "@zensoft-br/zenclient": [
+        "node_modules/@zensoft-br/zenclient/dist/esm/index.js",
+      ],
+      "@zensoft-br/zenclient/*": [
+        "node_modules/@zensoft-br/zenclient/dist/esm/*",
+        "node_modules/@zensoft-br/zenclient/dist/types/*"
+      ],
+    },
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
