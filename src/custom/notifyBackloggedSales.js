@@ -41,7 +41,12 @@ export async function notifyBackloggedSales(zenReq) {
 
       const severity = hours >= 72 ? "urgente" : "atrasado";
 
-      sale.tags = (sale.tags ?? "").split(",").concat(severity).filter(e => e).join(",");
+      const tags = sale.tags ? sale.tags.split(",") : [];
+      tags.push("atrasado");
+      if (hours >= 72)
+        tags.push("urgente");
+
+      sale.tags = tags.join(",");
 
       sale = await saleService.saleOpUpdate(sale);
 
