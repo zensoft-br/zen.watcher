@@ -1,4 +1,4 @@
-import Z from "@zensoft-br/zenclient";
+import * as Z from "@zensoftbr/zenerpclient";
 
 /*
  * Este watcher monitora quando um status customizado de um pedido de venda

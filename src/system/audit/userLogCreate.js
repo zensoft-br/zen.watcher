@@ -1,4 +1,4 @@
-import Z from "@zensoft-br/zenclient";
+import * as Z from "@zensoftbr/zenerpclient";
 
 export async function userLogCreate(zenReq) {
   // Checks if the event is related to user log creation and if it's the "after" event.

@@ -1,4 +1,4 @@
-import Z from "@zensoft-br/zenclient";
+import * as Z from "@zensoftbr/zenerpclient";
 
 export async function notifyBackloggedSales(zenReq) {
   const body = zenReq.body;
