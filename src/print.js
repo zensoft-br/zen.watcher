@@ -1,4 +1,4 @@
-import Z from "@zensoft-br/zenclient";
+import * as Z from "@zensoftbr/zenerpclient";
 
 export async function print(zenReq) {
   const client = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
