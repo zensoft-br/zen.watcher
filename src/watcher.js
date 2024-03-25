@@ -1,4 +1,4 @@
-import Z from "@zensoft-br/zenclient";
+import * as Z from "@zensoftbr/zenerpclient";
 
 // eslint-disable-next-line no-unused-vars
 export async function watch(zenReq) {
