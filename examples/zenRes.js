@@ -13,7 +13,7 @@ const zenRes = {
   },
 };
 
-class ZenRes {
+export class ZenRes {
   statusCode;
   headers;
   body;
