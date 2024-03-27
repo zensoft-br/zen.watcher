@@ -1,6 +1,7 @@
 import { email } from "./email.js";
 import { normalize } from "./normalize.js";
 import { print } from "./print.js";
+import { saleProcess } from "./sale/saleProcess.js";
 
 export async function watch(zenReq) {
   let zenRes = {
@@ -18,6 +19,10 @@ export async function watch(zenReq) {
 
   else if (zenReq.path === "/print") {
     zenRes = await print(zenReq);
+  }
+
+  else if (zenReq.path === "/sale/process") {
+    zenRes = await saleProcess(zenReq);
   }
 
   return zenRes;

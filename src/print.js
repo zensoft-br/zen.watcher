@@ -1,9 +1,7 @@
 import * as Z from "@zensoftbr/zenerpclient";
 
 export async function print(zenReq) {
-  const client = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
-
-  const reportService = new Z.api.system.report.ReportService(client);
+  const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
   if (!zenReq.query.report)
     throw new Error("Missing query.report");
@@ -13,6 +11,8 @@ export async function print(zenReq) {
     throw new Error("Missing query.printer");
   if (!zenReq.body.args.id)
     throw new Error("Missing args.id");
+
+  const reportService = new Z.api.system.report.ReportService(z);
 
   await reportService.reportOpGenerate({
     code: zenReq.query.report,
