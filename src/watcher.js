@@ -32,7 +32,7 @@ export async function watch(zenReq) {
     }
   }
 
-  if (zenReq.body?.context?.event === "/custom/notifyBackloggedSales") {
+  if (zenReq.path === "/custom/notifyBackloggedSales") {
     const result = await notifyBackloggedSales(zenReq);
     if (result) {
       zenRes = {

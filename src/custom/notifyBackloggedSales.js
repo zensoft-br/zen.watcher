@@ -31,10 +31,10 @@ export async function notifyBackloggedSales(zenReq) {
       if (["CANCELED", "FINISHED"].includes(sale.status))
         continue;
 
-      if (!sale.workpiece.workflowNode)
+      if (!sale.workpiece?.workflowNode)
         continue;
 
-      if ((sale.workpiece.workflowNode.tags ?? "").includes("no-backlog"))
+      if ((sale.workpiece?.workflowNode.tags ?? "").includes("no-backlog"))
         continue;
 
       const hours = Math.floor((new Date() - new Date(workpieceNode.dateTimeStart)) / 3600000);
