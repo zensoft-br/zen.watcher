@@ -1,5 +1,6 @@
 import * as Z from "@zensoftbr/zenerpclient";
 
+// Cria um código no formato yymmdd.sss na inclusão de lotes sem código
 export async function lotCreate_setCodeSequence(zenReq) {
   const lot = zenReq.body.args.bean;
 
