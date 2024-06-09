@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { createFromToken } from "@zensoftbr/zenerpclient";
 import { SaleService } from "@zensoftbr/zenerpclient/api/sale/SaleService";
 
