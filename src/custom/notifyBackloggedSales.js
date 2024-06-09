@@ -3,7 +3,7 @@ import * as Z from "@zensoftbr/zenerpclient";
 export async function notifyBackloggedSales(zenReq) {
   const body = zenReq.body;
 
-  const client = Z.createFromToken(body.context.tenant, body.context.token);
+  const client = Z.createFromToken(body.context.tenant, process.env.token);
 
   const workflowService = new Z.api.system.workflow.WorkflowService(client);
   const saleService = new Z.api.sale.SaleService(client);

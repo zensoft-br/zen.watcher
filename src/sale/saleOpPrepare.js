@@ -10,7 +10,7 @@ export async function saleOpPrepare(zenReq) {
 
   const id = zenReq.body.args.id;
 
-  const z = createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const z = createFromToken(zenReq.body.context.tenant, process.env.token);
 
   const saleService = new SaleService(z);
 
