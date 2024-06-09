@@ -1,3 +1,4 @@
+import { databaseOpOptimize } from "./databaseOpOptimize.js";
 import { email } from "./email.js";
 import { logOpDeleteExpired } from "./logOpDeleteExpired.js";
 import { normalize } from "./normalize.js";
@@ -28,6 +29,10 @@ export async function watch(zenReq) {
 
   else if (zenReq.path === "/system/audit/logOpDeleteExpired") {
     zenRes = await logOpDeleteExpired(zenReq);
+  }
+
+  else if (zenReq.path === "/system/databaseOpOptimize") {
+    zenRes = await databaseOpOptimize(zenReq);
   }
 
   return zenRes;
