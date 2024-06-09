@@ -10,7 +10,6 @@ export default [
   {
     ignores: ["dist/**", "node_modules/**"],
   },
-  "eslint:recommended",
   {
     files: ["**/*.js"],
     languageOptions: {
