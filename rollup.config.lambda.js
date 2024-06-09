@@ -1,3 +1,5 @@
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
 import resolver from "@rollup/plugin-node-resolve";
 
 export default {
@@ -8,7 +10,11 @@ export default {
       format: "es",
     },
   ],
-  plugins: [resolver()],
+  plugins: [
+    resolver(),
+    commonjs(),
+    json(),
+  ],
   onwarn(warning ) {
     if (warning.code === "CIRCULAR_DEPENDENCY")
       return;
