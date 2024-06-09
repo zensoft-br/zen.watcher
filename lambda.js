@@ -21,5 +21,8 @@ export const handler = async (event) => {
     statusCode: result?.statusCode ?? 200,
   };
 
+  // Adiciona um body null
+  result.body = result.body ?? "null";
+
   return result;
 };
