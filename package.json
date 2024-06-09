@@ -40,6 +40,6 @@
     "rollup": "^4.12.0"
   },
   "dependencies": {
-    "@zensoftbr/zenerpclient": "^1.0.5"
+    "@zensoftbr/zenerpclient": "^1.0.6"
   }
 }
