@@ -6,7 +6,18 @@ export async function logOpDeleteExpired(zenReq) {
 
     const auditService = new Z.api.system.audit.AuditService(z);
 
-    await auditService.logOpDeleteExpired();
-  }
+    const count = await auditService.logOpDeleteExpired();
 
+    return {
+      statusCode: 200,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: {
+        result: {
+          count,
+        },
+      },
+    };
+  }
 }
