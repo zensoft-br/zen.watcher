@@ -1,3 +1,4 @@
+import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
 /**
@@ -10,11 +11,11 @@ export async function emailReceivable(zenReq) {
   // Recipients who should receive e-mails
   const recipients = (zenReq.query?.recipients ?? "company,person").toLowerCase().split(",");
 
-  const client = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
-  const billingService = new Z.api.financial.billing.BillingService(client);
-  const personService = new Z.api.catalog.person.PersonService(client);
-  const i18n = await client.i18n;
+  const billingService = new Z.api.financial.billing.BillingService(z);
+  const personService = new Z.api.catalog.person.PersonService(z);
+  const i18n = await z.i18n;
 
   // Load NFe
   const instructionResponse = await billingService.instructionResponseReadById(zenReq.body.args.id);
@@ -55,7 +56,7 @@ export async function emailReceivable(zenReq) {
     return;
 
   // Fetch XML and DANFE
-  const result = await client.web.fetchJson("/system/report/reportOpPrint", {
+  const result = await z.web.fetchJson("/system/report/reportOpPrint", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -76,7 +77,7 @@ export async function emailReceivable(zenReq) {
     sp.set("mailerConfigId", bean.company.mailerConfig.id);
 
   // Send the e-mails
-  await client.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
+  await z.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",

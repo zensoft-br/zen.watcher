@@ -1,23 +1,21 @@
+import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
 export async function logOpDeleteExpired(zenReq) {
-  if (zenReq.path === "/system/audit/logOpDeleteExpired") {
-    const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
-    const auditService = new Z.api.system.audit.AuditService(z);
+  const auditService = new Z.api.system.audit.AuditService(z);
 
-    const count = await auditService.logOpDeleteExpired();
+  // auditService.logOpDeleteExpired();
 
-    return {
-      statusCode: 200,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: {
-        result: {
-          count,
-        },
-      },
-    };
-  }
+  z.web.fetch("/system/audit/logOpDeleteExpired", {
+    method: "POST",
+  });
+
+  // To prevent lambda closing before fetch
+  await sleep(250);
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

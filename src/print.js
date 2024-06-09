@@ -1,7 +1,8 @@
+import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
 export async function print(zenReq) {
-  const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
   if (!zenReq.query.report)
     throw new Error("Missing query.report");

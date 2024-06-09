@@ -1,3 +1,4 @@
+import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
 /*
@@ -5,7 +6,7 @@ import * as Z from "@zensoftbr/zenerpclient";
  * It must be run after a /sale/saleOpProcess event
  */
 export async function saleProcess(zenReq) {
-  const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+  const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
   if (zenReq.body?.context?.event !== "/sale/saleOpApprove")
     throw new Error(`Unsupported event, expected /sale/saleOpProcess, received ${zenReq.body?.context?.event}`);
