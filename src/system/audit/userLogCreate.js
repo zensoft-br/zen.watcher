@@ -21,7 +21,7 @@ export async function userLogCreate(zenReq) {
     return;
 
   // Creating a client using token information from the request context
-  const client = Z.createFromToken(body.context.tenant, body.context.token);
+  const client = Z.createFromToken(body.context.tenant, process.env.token);
 
   // Creating a sale service instance
   const saleService = new Z.api.sale.SaleService(client);

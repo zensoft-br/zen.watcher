@@ -13,7 +13,7 @@ export async function workpieceOpForward(zenReq) {
   if (!workpieceNode?.workpiece?.source?.startsWith("/sale/sale:"))
     return;
 
-  const client = Z.createFromToken(body.context.tenant, body.context.token);
+  const client = Z.createFromToken(body.context.tenant, process.env.token);
 
   const saleService = new Z.api.sale.SaleService(client);
   let sale = await saleService.saleReadById(workpieceNode.workpiece.source.split(":")[1]);
