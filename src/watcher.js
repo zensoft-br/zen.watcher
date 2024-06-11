@@ -2,6 +2,7 @@
 
 import { saleCreate } from "../saleCreate.js";
 import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
+import { saleOpApprove } from "./saleOpApprove.js";
 
 export async function watch(zenReq) {
   const zenRes = {
@@ -17,6 +18,11 @@ export async function watch(zenReq) {
   // adicionar observação fixa ao inserir o pedido de venda
   if (zenReq.body?.context?.event === "/sale/saleCreate" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await saleCreate(zenReq);
+  }
+
+  // Validações ao aprovar pedido de venda
+  if (zenReq.body?.context?.event === "/sale/saleOpAprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await saleOpApprove(zenReq);
   }
 
   return zenRes;
