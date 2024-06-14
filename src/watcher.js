@@ -21,7 +21,7 @@ export async function watch(zenReq) {
   }
 
   // Validações ao aprovar pedido de venda
-  if (zenReq.body?.context?.event === "/sale/saleOpAprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+  if (zenReq.body?.context?.event === "/sale/saleOpApprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await saleOpApprove(zenReq);
   }
 
