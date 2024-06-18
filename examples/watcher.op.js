@@ -41,7 +41,13 @@ export async function watch(zenReq) {
       };
 
       // Atualiza o pedido de venda
-      await saleService.saleUpdate(sale);
+      const promise = saleService.saleUpdate(sale);
+
+      if (!zenReq.body.context.tags?.includes("async"))
+        await promise;
+      else
+        // Wait some time to prevent lambda from closing before request
+        await new Promise(resolve => setTimeout(resolve, 200));
     }
   }
 }
