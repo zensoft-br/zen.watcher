@@ -20,6 +20,5 @@ export async function outgoingInvoiceOpApprove(zenReq) {
     `q=person.id==${outgoingInvoice.person.id};status==APPROVED;dueDate<${new Date().toISOString().substring(0, 10)}`,
   );
   if (receivableList.length)
-    throw new Error(`O cliente possui ${receivableList.length
-    } título(s) vencido(s)\nSolicite aprovação de um operador com a permissão $act/aprovarNotasFiscaisDeSaidaComRestricoes`);
+    throw new Error(`O cliente possui ${receivableList.length} título(s) vencido(s)\nSolicite aprovação de um operador com a permissão $act/aprovarNotasFiscaisDeSaidaComRestricoes`);
 }
