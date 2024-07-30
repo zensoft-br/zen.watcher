@@ -1,5 +1,6 @@
 // DO NOT CHANGE THIS FILE!
 
+import "dotenv/config";
 import express from "express";
 import { watch } from "./src/watcher.js";
 
@@ -20,6 +21,11 @@ app.all("*", async (req, res, next) => {
       headers: req.headers,
       body: req.body,
     };
+
+    // Replace tenant (for debug)
+    if (process.env.tenant && zenReq.body?.context?.tenant) {
+      zenReq.body.context.tenant = process.env.tenant;
+    }
 
     let result = await watch(zenReq);
     result = {
