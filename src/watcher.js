@@ -1,9 +1,12 @@
+import { autoForward } from "./autoForward.js";
 import { databaseOpOptimize } from "./databaseOpOptimize.js";
+import { dfeNfeProcOutOpAuthorize } from "./dfeNfeProcOutOpAuthorize.js";
 import { email } from "./email.js";
 import { logOpDeleteExpired } from "./logOpDeleteExpired.js";
 import { normalize } from "./normalize.js";
+import { pickingOrderOpApprove } from "./pickingOrderOpApprove.js";
 import { print } from "./print.js";
-import { saleProcess } from "./sale/saleProcess.js";
+import { saleOpApprove } from "./saleOpApprove.js";
 
 export async function watch(zenReq) {
   let zenRes = {
@@ -11,8 +14,20 @@ export async function watch(zenReq) {
     body: {},
   };
 
+  if (zenReq.path === "/autoForward") {
+    zenRes = await autoForward(zenReq);
+  }
+
   if (zenReq.path === "/email") {
     zenRes = await email(zenReq);
+  }
+
+  else if (zenReq.path === "/fiscal/br/out/authorize" && zenReq.body?.context?.event == "/fiscal/outgoingInvoiceOpApprove") {
+    zenRes = await dfeNfeProcOutOpAuthorize(zenReq);
+  }
+
+  else if (zenReq.body?.context?.event == "/material/pickingOrderOpApprove") {
+    zenRes = await pickingOrderOpApprove(zenReq);
   }
 
   else if (zenReq.path === "/normalize") {
@@ -23,8 +38,8 @@ export async function watch(zenReq) {
     zenRes = await print(zenReq);
   }
 
-  else if (zenReq.path === "/sale/process") {
-    zenRes = await saleProcess(zenReq);
+  else if (zenReq.body?.context?.event == "/sale/saleOpApprove") {
+    zenRes = await saleOpApprove(zenReq);
   }
 
   else if (zenReq.path === "/system/audit/logOpDeleteExpired") {
