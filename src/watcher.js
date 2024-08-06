@@ -14,9 +14,10 @@ export async function watch(zenReq) {
     body: {},
   };
 
-  if (zenReq.path === "/autoForward") {
-    zenRes = await autoForward(zenReq);
-  }
+  // deprecated
+  // if (zenReq.path === "/autoForward") {
+  //   zenRes = await autoForward(zenReq);
+  // }
 
   if (zenReq.path === "/email") {
     zenRes = await email(zenReq);
@@ -38,9 +39,10 @@ export async function watch(zenReq) {
     zenRes = await print(zenReq);
   }
 
-  else if (zenReq.body?.context?.event == "/sale/saleOpApprove") {
-    zenRes = await saleOpApprove(zenReq);
-  }
+  // deprecated
+  // else if (zenReq.body?.context?.event == "/sale/saleOpApprove") {
+  //   zenRes = await saleOpApprove(zenReq);
+  // }
 
   else if (zenReq.path === "/system/audit/logOpDeleteExpired") {
     zenRes = await logOpDeleteExpired(zenReq);
