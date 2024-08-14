@@ -1,5 +1,6 @@
 // DO NOT CHANGE THIS FILE!
 
+import "dotenv/config";
 import express from "express";
 import { watch } from "./src/watcher.js";
 
@@ -21,6 +22,11 @@ app.all("*", async (req, res, next) => {
       body: req.body,
     };
 
+    // Replace tenant (for debug)
+    if (process.env.tenant && zenReq.body?.context?.tenant) {
+      zenReq.body.context.tenant = process.env.tenant;
+    }
+
     let result = await watch(zenReq);
     result = {
       ...result,
@@ -34,6 +40,16 @@ app.all("*", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+app.use((err, req, res, next) => {
+  res.status(500)
+    .contentType("application/json")
+    .send({
+      type: "error",
+      message: err.message,
+      stack: process.env.NODE_ENV === "producttion" ? {} : err.stack,
+    });
 });
 
 app.listen(port, () => {

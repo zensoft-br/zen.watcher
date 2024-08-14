@@ -15,14 +15,28 @@ export const handler = async (event) => {
     body: event.body ?? {},
   };
 
-  let result = await watch(zenReq);
-  result = {
-    ...result,
-    statusCode: result?.statusCode ?? 200,
-  };
+  try {
+    let result = await watch(zenReq);
+    result = {
+      ...result,
+      statusCode: result?.statusCode ?? 200,
+    };
 
-  // Adiciona um body null
-  result.body = result.body ?? "null";
+    // Adiciona um body null
+    result.body = result.body ?? "null";
 
-  return result;
+    return result;
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: {
+        type: "error",
+        message: error.message,
+        stackTrace: process.env.NODE_ENV === "producttion" ? {} : error.stack,
+      },
+    };
+  }
 };
