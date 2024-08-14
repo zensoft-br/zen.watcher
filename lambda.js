@@ -21,7 +21,10 @@ export const handler = async (event) => {
       ...result,
       statusCode: result?.statusCode ?? 200,
     };
+
+    // Adiciona um body null
     result.body = result.body ?? "null";
+
     return result;
   } catch (error) {
     return {
@@ -30,10 +33,9 @@ export const handler = async (event) => {
         "content-type": "application/json",
       },
       body: {
-        error: {
-          message: error.message,
-          stackTrace: error.stack,
-        },
+        type: "error",
+        message: error.message,
+        stackTrace: process.env.NODE_ENV === "producttion" ? {} : error.stack,
       },
     };
   }

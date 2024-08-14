@@ -42,6 +42,16 @@ app.all("*", async (req, res, next) => {
   }
 });
 
+app.use((err, req, res, next) => {
+  res.status(500)
+    .contentType("application/json")
+    .send({
+      type: "error",
+      message: err.message,
+      stack: process.env.NODE_ENV === "producttion" ? {} : err.stack,
+    });
+});
+
 app.listen(port, () => {
   console.log(`zen.watcher running on port ${port}`);
 });
