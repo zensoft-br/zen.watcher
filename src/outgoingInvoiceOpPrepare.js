@@ -1,12 +1,13 @@
 import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
-export async function outgoingInvoiceOpApprove(zenReq) {
+export async function outgoingInvoiceOpPrepare(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
+  const z1 = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
   const financialService = new Z.api.financial.FinancialService(z);
   const fiscalService = new Z.api.fiscal.FiscalService(z);
-  const securityService = new Z.api.system.security.SecurityService(z);
+  const securityService = new Z.api.system.security.SecurityService(z1);
 
   const outgoingInvoice = await fiscalService.outgoingInvoiceReadById(zenReq.body.args.id);
 

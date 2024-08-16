@@ -1,7 +1,7 @@
 // import * as Z from "@zensoftbr/zenerpclient";
 
 import { saleCreate } from "../saleCreate.js";
-import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
+import { outgoingInvoiceOpPrepare } from "./outgoingInvoiceOpPrepare.js";
 import { saleOpApprove } from "./saleOpApprove.js";
 
 export async function watch(zenReq) {
@@ -11,8 +11,8 @@ export async function watch(zenReq) {
   };
 
   // Validações ao aprovar nota fiscal de saída
-  if (zenReq.body?.context?.event === "/fiscal/outgoingInvoiceOpAprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
-    return await outgoingInvoiceOpApprove(zenReq);
+  if (zenReq.body?.context?.event === "/fiscal/outgoingInvoiceOpPrepare" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await outgoingInvoiceOpPrepare(zenReq);
   }
 
   // adicionar observação fixa ao inserir o pedido de venda
