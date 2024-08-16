@@ -1,6 +1,6 @@
 // import * as Z from "@zensoftbr/zenerpclient";
 
-import { saleCreate } from "../saleCreate.js";
+import { saleCreate } from "./saleCreate.js";
 import { outgoingInvoiceOpPrepare } from "./outgoingInvoiceOpPrepare.js";
 import { saleOpApprove } from "./saleOpApprove.js";
 
