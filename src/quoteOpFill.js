@@ -2,6 +2,11 @@ import * as Z from "@zensoftbr/zenerpclient";
 import { Message } from "@zensoftbr/zenerpclient/api/system/mail/Message";
 import "dotenv/config";
 
+/**
+ * Quando um orçamento é preenchido, envia um e-mail para o vendedor com o orçamento em anexo.
+ *
+ * @param {*} zenReq
+ */
 export async function quoteOpFill(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
@@ -20,16 +25,16 @@ export async function quoteOpFill(zenReq) {
     });
 
     var message = new Message();
+    message.source = `/sale/quote:${bean.id}`;
     message.from = { description: bean.company.person.fantasyName ?? bean.company.person.name };
     message.to = [{ address: bean.personSalesperson.email }];
     message.subject = (await z.i18n).format("/sale/quote/identified", bean.person?.name ?? bean.properties?.personName);
-    message.attachments = [
-      {
-        identifier: `${bean.code ?? bean.id}.pdf`,
-        bytes: result.content,
-        mimeType: result.contentType,
-      },
-    ];
+    message.body = "Zen Erp ®";
+    message.attachments = [{
+      identifier: `${bean.code ?? bean.id}.pdf`,
+      bytes: result.content,
+      mimeType: result.contentType,
+    }];
     await mailService.messageOpSend(null, null, message);
   }
 }
