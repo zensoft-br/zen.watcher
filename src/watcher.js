@@ -2,8 +2,8 @@ import { personCreate } from "./personCreate.js";
 import { instructionRequestOpCreateRegister } from "./instructionRequestOpCreateRegister.js";
 import { receivableOpApprove } from "./receivableOpApprove.js";
 import { saleOpApprove } from "./saleOpApprove.js";
+import { purchaseCreate } from "./purchaseCreate.js";
 
-// eslint-disable-next-line no-unused-vars
 export async function watch(zenReq) {
   let zenRes = {
     statusCode: 200,
@@ -24,6 +24,11 @@ export async function watch(zenReq) {
 
   if (zenReq.body?.context?.event === "/sale/saleOpApprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     zenRes = await saleOpApprove(zenReq);
+  }
+
+  if (["/supply/purchase/purchaseCreate", "/supply/purchase/purchaseUpdate"].includes(zenReq.body?.context?.event)
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    zenRes = await purchaseCreate(zenReq);
   }
 
   return zenRes;

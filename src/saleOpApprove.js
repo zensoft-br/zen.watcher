@@ -29,6 +29,8 @@ export async function saleOpApprove(zenReq) {
     const stockList = await dataService.dataSourceOpRead({
       code: "/material/report/stockCube",
       parameters: {
+        STATUS_LIST: "{\"FREE\", \"FUTURE\"}",
+        TYPE_LIST: "{\"REGULAR\"}",
         STOCK_CLUSTER_IDS: `{${sale.company.stockCluster.id}}`,
         PRODUCT_PACKING_IDS: `{${saleItem.productPacking.id}}`,
       },
