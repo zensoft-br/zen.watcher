@@ -8,10 +8,10 @@ export async function receivableOpApprove(zenReq) {
 
   if (zenReq.body?.context?.event === "/financial/receivableOpApprove" && (zenReq.body?.context?.tags ?? []).includes("after")) {
     // const zenClient = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
-    const zenClient = Z.createFromToken("http://localhost:8080/ZenErpWs", zenReq.body.context.token);
+    const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
-    const accountingService = new Z.api.financial.accounting.AccountingService(zenClient);
-    const financialService = new Z.api.financial.FinancialService(zenClient);
+    const accountingService = new Z.api.financial.accounting.AccountingService(z);
+    const financialService = new Z.api.financial.FinancialService(z);
 
     const receivable = await financialService.receivableReadById(zenReq.body.args.id);
 

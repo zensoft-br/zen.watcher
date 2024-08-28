@@ -40,7 +40,7 @@ export async function incomingListOpPrepare(zenReq) {
 
       // Check if all keys and values are equal
       for (const key of keys1) {
-        if (obj1[key] !== obj2[key]) {
+        if (mapIncomingList[key] !== mapIncomingInvoice[key]) {
           throw new Error("O romaneio de entrada contém inconsistências");
         }
       }
