@@ -3,6 +3,7 @@
 import { saleCreate } from "./saleCreate.js";
 import { outgoingInvoiceOpPrepare } from "./outgoingInvoiceOpPrepare.js";
 import { saleOpApprove } from "./saleOpApprove.js";
+import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
 
 export async function watch(zenReq) {
   const zenRes = {
@@ -13,6 +14,11 @@ export async function watch(zenReq) {
   // Validações ao aprovar nota fiscal de saída
   if (zenReq.body?.context?.event === "/fiscal/outgoingInvoiceOpPrepare" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await outgoingInvoiceOpPrepare(zenReq);
+  }
+
+  // Validações ao aprovar nota fiscal de saída
+  if (zenReq.body?.context?.event === "/fiscal/outgoingInvoiceOpApprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await outgoingInvoiceOpApprove(zenReq);
   }
 
   // adicionar observação fixa ao inserir o pedido de venda
