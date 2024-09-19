@@ -8,7 +8,8 @@ export async function saleOpApprove_cloneToFS(zenReq) {
 
   const sale = await saleService.saleReadById(zenReq.body.args.id);
 
-  if (sale.company.id === 1002 && sale.saleProfile.code === "VendaCruzada") {
+  // VB, VendaCruzadaFS,
+  if (sale.company.id === 1002 && sale.saleProfile.id === 1002) {
     const items = await saleService.saleItemRead(`q=sale.id==${sale.id}`);
     const payments = await saleService.salePaymentRead(`q=sale.id==${sale.id}`);
 
@@ -24,23 +25,27 @@ export async function saleOpApprove_cloneToFS(zenReq) {
       e.sale = undefined;
     });
 
-    const tags = (sale.tags ?? "").split(",").filter(e => e);
+    // const tags = (sale.tags ?? "").split(",").filter(e => e);
 
     let sale1 = {
       ...sale,
       // TODO se passar o id o log registra neste id
       id: undefined,
+      // FS
       company: {
         id: 1001,
       },
-      person: {
-        id: 1004,
+      // VendaCruzadaVB
+      saleProfile: {
+        id: 1003,
       },
-      code: `VB:${sale.id}`,
-      tags: tags.concat("vendaCruzada").join(","),
+      // tags: tags.concat("vendaCruzada").join(","),
+      properties: {
+        ...sale.properties,
+        frigospol_sale_id: sale.id,
+      },
     };
 
-    // TODO está duplicando as formas de pagamento
     sale1 = await saleService.saleOpCreate({
       sale: sale1,
       items: items,
