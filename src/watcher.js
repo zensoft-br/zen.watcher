@@ -7,6 +7,7 @@ import { normalize } from "./normalize.js";
 import { pickingOrderOpApprove } from "./pickingOrderOpApprove.js";
 import { print } from "./print.js";
 import { saleOpApprove } from "./saleOpApprove.js";
+import { a } from "./brTaxationCompensation.js";
 
 export async function watch(zenReq) {
   let zenRes = {
@@ -51,6 +52,10 @@ export async function watch(zenReq) {
   else if (zenReq.path === "/system/databaseOpOptimize") {
     zenRes = await databaseOpOptimize(zenReq);
   }
+
+  // else if (zenReq.body?.context?.event == "/fiscal/taxation/taxationCreate") {
+  //   zenRes = await a(zenReq);
+  // }
 
   return zenRes;
 }

@@ -31,12 +31,12 @@ watch({
 export async function watch(zenReq) {
   if (zenReq.body?.context?.event === "/sale/saleUpdate" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     // O bean vem informado no body nas operações de CRUD
-    const sale = zenReq.body.args.bean;
+    const bean = zenReq.body.args.bean;
 
     // Se o valor total do pedido de venda for < 10000, adiciona uma observação no pedido de venda
-    if (sale.totalValue < 10000) {
-      sale.properties = {
-        ...sale.properties,
+    if (bean.totalValue < 10000) {
+      bean.properties = {
+        ...bean.properties,
         comments: "ATENÇÃO! O valor da venda é menor do que R$ 10.000",
       };
 
@@ -44,7 +44,7 @@ export async function watch(zenReq) {
       return {
         body: {
           args: {
-            bean: sale,
+            bean: bean,
           },
         },
       };
