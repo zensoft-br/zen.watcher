@@ -3,7 +3,7 @@ import { incomingListOpPrepare } from "./incomingListOpPrepare.js";
 import { instructionRequestOpCreateRegister } from "./instructionRequestOpCreateRegister.js";
 import { personCreate } from "./personCreate.js";
 import { purchaseCreate } from "./purchaseCreate.js";
-import { receivableOpApprove } from "./receivableOpApprove.js";
+import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
 import { saleOpApprove } from "./saleOpApprove.js";
 
 export async function watch(zenReq) {
@@ -17,11 +17,11 @@ export async function watch(zenReq) {
   }
 
   if (zenReq.body?.context?.event === "/financial/receivableOpApprove" && (zenReq.body?.context?.tags ?? []).includes("after")) {
-    zenRes = await receivableOpApprove(zenReq);
+    zenRes = await instructionRequestOpCreateRegister(zenReq);
   }
 
-  if (zenReq.body?.context?.event === "/financial/receivableOpApprove" && (zenReq.body?.context?.tags ?? []).includes("after")) {
-    zenRes = await instructionRequestOpCreateRegister(zenReq);
+  if (zenReq.body?.context?.event === "/fiscal/outgoingInvoiceOpApprove" && (zenReq.body?.context?.tags ?? []).includes("after")) {
+    zenRes = await outgoingInvoiceOpApprove(zenReq);
   }
 
   if (zenReq.body?.context?.event === "/material/incomingListCreate" && (zenReq.body?.context?.tags ?? []).includes("before")) {
