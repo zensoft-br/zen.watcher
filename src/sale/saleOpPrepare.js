@@ -29,68 +29,70 @@ export async function saleOpPrepare(zenReq) {
   }
 
   // Comissao
-  const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
+  // {
+  //   const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
 
-  for (const saleItem of saleItemList) {
-    const priceListValue = (antecipado ? Math.round(saleItem.priceListValue * 0.96 * 100) / 100 : saleItem.priceListValue);
-    let salesCommission = 6;
+  //   for (const saleItem of saleItemList) {
+  //     const priceListValue = (antecipado ? Math.round(saleItem.priceListValue * 0.96 * 100) / 100 : saleItem.priceListValue);
+  //     let salesCommission = 6;
 
-    if (priceListValue > saleItem.unitValue) {
-      const discountValue = Math.round((priceListValue - saleItem.unitValue) / priceListValue * 10000) / 100;
+  //     if (priceListValue > saleItem.unitValue) {
+  //       const discountValue = Math.round((priceListValue - saleItem.unitValue) / priceListValue * 10000) / 100;
 
-      if (discountValue > 20)
-        salesCommission = 0;
-      else if (discountValue > 19)
-        salesCommission = 1;
-      else if (discountValue > 18)
-        salesCommission = 1;
-      else if (discountValue > 17)
-        salesCommission = 1;
-      else if (discountValue > 16)
-        salesCommission = 1;
-      else if (discountValue > 15)
-        salesCommission = 1;
-      else if (discountValue > 14)
-        salesCommission = 1.5;
-      else if (discountValue > 13)
-        salesCommission = 1.8;
-      else if (discountValue > 12)
-        salesCommission = 2.1;
-      else if (discountValue > 11)
-        salesCommission = 2.4;
-      else if (discountValue > 10)
-        salesCommission = 2.7;
-      else if (discountValue > 9)
-        salesCommission = 3;
-      else if (discountValue > 8)
-        salesCommission = 3.3;
-      else if (discountValue > 7)
-        salesCommission = 3.6;
-      else if (discountValue > 6)
-        salesCommission = 3.9;
-      else if (discountValue > 5)
-        salesCommission = 4.2;
-      else if (discountValue > 4)
-        salesCommission = 4.5;
-      else if (discountValue > 3)
-        salesCommission = 4.8;
-      else if (discountValue > 2)
-        salesCommission = 5.1;
-      else if (discountValue > 1)
-        salesCommission = 5.4;
-      else if (discountValue > 0)
-        salesCommission = 5.7;
-    }
+  //       if (discountValue > 20)
+  //         salesCommission = 0;
+  //       else if (discountValue > 19)
+  //         salesCommission = 1;
+  //       else if (discountValue > 18)
+  //         salesCommission = 1;
+  //       else if (discountValue > 17)
+  //         salesCommission = 1;
+  //       else if (discountValue > 16)
+  //         salesCommission = 1;
+  //       else if (discountValue > 15)
+  //         salesCommission = 1;
+  //       else if (discountValue > 14)
+  //         salesCommission = 1.5;
+  //       else if (discountValue > 13)
+  //         salesCommission = 1.8;
+  //       else if (discountValue > 12)
+  //         salesCommission = 2.1;
+  //       else if (discountValue > 11)
+  //         salesCommission = 2.4;
+  //       else if (discountValue > 10)
+  //         salesCommission = 2.7;
+  //       else if (discountValue > 9)
+  //         salesCommission = 3;
+  //       else if (discountValue > 8)
+  //         salesCommission = 3.3;
+  //       else if (discountValue > 7)
+  //         salesCommission = 3.6;
+  //       else if (discountValue > 6)
+  //         salesCommission = 3.9;
+  //       else if (discountValue > 5)
+  //         salesCommission = 4.2;
+  //       else if (discountValue > 4)
+  //         salesCommission = 4.5;
+  //       else if (discountValue > 3)
+  //         salesCommission = 4.8;
+  //       else if (discountValue > 2)
+  //         salesCommission = 5.1;
+  //       else if (discountValue > 1)
+  //         salesCommission = 5.4;
+  //       else if (discountValue > 0)
+  //         salesCommission = 5.7;
+  //     }
 
-    // const properties = saleItem.properties == null ? {} : saleItem.properties;
-    // properties.salesCommission = salesCommission;
-    // saleItem.properties = properties;
+  //     // const properties = saleItem.properties == null ? {} : saleItem.properties;
+  //     // properties.salesCommission = salesCommission;
+  //     // saleItem.properties = properties;
 
-    saleItem.properties = {
-      ...saleItem.properties,
-      salesCommission: salesCommission,
-    };
+  //     saleItem.properties = {
+  //       ...saleItem.properties,
+  //       salesCommission: salesCommission,
+  //     };
 
-    await saleService.saleItemUpdate(saleItem);
-  }
+  //     await saleService.saleItemUpdate(saleItem);
+  //   }
+  // }
 }
