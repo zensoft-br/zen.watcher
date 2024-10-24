@@ -49,7 +49,7 @@ export async function notifyBackloggedSales(zenReq) {
 
       sale.tags = tags.join(",");
 
-      sale = await saleService.saleOpUpdate(sale);
+      sale = await saleService.saleOpUpdatePrepared(sale);
 
       console.log(`Pedido de venda ${sale.id}, tag "${severity} incluída"`);
     }
