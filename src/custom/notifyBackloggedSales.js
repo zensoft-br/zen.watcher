@@ -28,6 +28,8 @@ export async function notifyBackloggedSales(zenReq) {
 
     for (const workpieceNode of workpieceNodeList) {
       let sale = await saleService.saleReadById(workpieceNode.workpiece.source.split(":")[1]);
+      if (!sale)
+        continue;
 
       if (["CANCELED", "FINISHED"].includes(sale.status))
         continue;
