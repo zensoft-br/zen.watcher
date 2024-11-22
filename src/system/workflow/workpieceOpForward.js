@@ -25,7 +25,7 @@ export async function workpieceOpForward(zenReq) {
     .join(",") || undefined;
   if (tags !== sale.tags) {
     sale.tags = tags;
-    sale = await saleService.saleOpUpdate(sale);
+    sale = await saleService.saleOpUpdatePrepared(sale);
 
     console.log(`Pedido de venda ${sale.id}, tags "atrasado" e "urgente" removidas`);
 

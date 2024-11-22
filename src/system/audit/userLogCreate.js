@@ -54,7 +54,7 @@ export async function userLogCreate(zenReq) {
   const mailService = new Z.api.system.mail.MailService(client);
 
   // Sending the message via the mail service
-  await mailService.messageOpSend(null, null, message);
+  await mailService.messageOpSend(null, "pamela", message);
 
   return {
     statusCode: 200,
