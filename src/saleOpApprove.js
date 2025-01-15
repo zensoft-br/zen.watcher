@@ -22,7 +22,7 @@ export async function saleOpApprove(zenReq) {
     return;
 
   // outgoingInvoice
-  const outgoingInvoice = await saleService.saleOpForwardAuto(zenReq.body.args.id, {});
+  let outgoingInvoice = await saleService.saleOpForwardAuto(zenReq.body.args.id, {});
 
   outgoingInvoice = await fiscalService.outgoingInvoiceOpPrepare(outgoingInvoice.id);
   outgoingInvoice = await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice.id);

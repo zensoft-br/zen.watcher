@@ -6,7 +6,6 @@ import { logOpDeleteExpired } from "./logOpDeleteExpired.js";
 import { normalize } from "./normalize.js";
 import { pickingOrderOpApprove } from "./pickingOrderOpApprove.js";
 import { print } from "./print.js";
-import { saleOpApprove } from "./saleOpApprove.js";
 import { a } from "./brTaxationCompensation.js";
 
 export async function watch(zenReq) {
@@ -19,6 +18,17 @@ export async function watch(zenReq) {
   // if (zenReq.path === "/autoForward") {
   //   zenRes = await autoForward(zenReq);
   // }
+
+  if (zenReq.path === "/hello") {
+    const sleep = (ms) => {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
+    await sleep(1000);
+    return {
+      statusCode: 200,
+      body: {},
+    };
+  }
 
   if (zenReq.path === "/email") {
     zenRes = await email(zenReq);
