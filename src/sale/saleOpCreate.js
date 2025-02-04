@@ -55,12 +55,19 @@ export async function saleOpCreate(zenReq) {
     const person = await personService.personReadById(args.sale.person.id);
     if (person.properties?.outgoingInvoicePriority) {
       const priority = `Prioridade: ${person.properties?.outgoingInvoicePriority}`;
+
       let comments = args.sale.properties?.comments ?? "";
       comments = !comments || comments.endsWith("\n") ? comments + priority : `${comments}\n${priority}`;
       args.sale.properties = {
         ...args.sale.properties,
         comments,
       };
+
+      args.sale.tags = (args.sale.tags ?? "")
+        .split(",")
+        .filter(e => e)
+        .concat(`prioridade${person.properties?.outgoingInvoicePriority}`)
+        .join(",");
     }
   }
 
