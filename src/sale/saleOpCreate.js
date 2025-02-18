@@ -50,14 +50,14 @@ export async function saleOpCreate(zenReq) {
     }
   }
 
-  // Adiciona a prioridade nas observações
+  // Adiciona a prioridade nas observações e verifica se o prazo do pedido está diferente do prazo do cliente
   {
     const person = await personService.personReadById(args.sale.person.id);
     if (person.properties?.outgoingInvoicePriority) {
       const priority = `Prioridade: ${person.properties?.outgoingInvoicePriority}`;
 
       let comments = args.sale.properties?.comments ?? "";
-      comments = !comments || comments.endsWith("\n") ? comments + priority : `${comments}\n${priority}`;
+      comments = `${priority}\n${comments}`;
       args.sale.properties = {
         ...args.sale.properties,
         comments,
@@ -67,6 +67,22 @@ export async function saleOpCreate(zenReq) {
         .split(",")
         .filter(e => e)
         .concat(`prioridade${person.properties?.outgoingInvoicePriority}`)
+        .join(",");
+    }
+
+    if (person.properties?.paymentMethods !== args.sale.properties?.paymentMethods) {
+      let paymentMethods = `Prazo cadastrado no cliente: ${person.properties?.paymentMethods}`;
+      let comments = args.sale.properties?.comments ?? "";
+      comments = `${paymentMethods}\n${comments}`;
+      args.sale.properties = {
+        ...args.sale.properties,
+        comments,
+      };
+
+      args.sale.tags = (args.sale.tags ?? "")
+        .split(",")
+        .filter(e => e)
+        .concat('PZ')
         .join(",");
     }
   }
