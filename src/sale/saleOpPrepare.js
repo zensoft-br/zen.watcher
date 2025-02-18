@@ -25,74 +25,79 @@ export async function saleOpPrepare(zenReq) {
     sale.tags = (sale.tags ?? "").split(",").filter((e) => e).concat("antecipado").join(",");
     antecipado = true;
 
+    // if ((sale.priceList.code === 'ATA') || (sale.priceList.code === 'CON')) {
+    //   delete sale.properties.salesCommission;
+    // }
+
     await saleService.saleUpdate(sale);
   }
 
-  // Comissao
-  // {
-  //   const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
-
-  //   for (const saleItem of saleItemList) {
-  //     const priceListValue = (antecipado ? Math.round(saleItem.priceListValue * 0.96 * 100) / 100 : saleItem.priceListValue);
-  //     let salesCommission = 6;
-
-  //     if (priceListValue > saleItem.unitValue) {
-  //       const discountValue = Math.round((priceListValue - saleItem.unitValue) / priceListValue * 10000) / 100;
-
-  //       if (discountValue > 20)
-  //         salesCommission = 0;
-  //       else if (discountValue > 19)
-  //         salesCommission = 1;
-  //       else if (discountValue > 18)
-  //         salesCommission = 1;
-  //       else if (discountValue > 17)
-  //         salesCommission = 1;
-  //       else if (discountValue > 16)
-  //         salesCommission = 1;
-  //       else if (discountValue > 15)
-  //         salesCommission = 1;
-  //       else if (discountValue > 14)
-  //         salesCommission = 1.5;
-  //       else if (discountValue > 13)
-  //         salesCommission = 1.8;
-  //       else if (discountValue > 12)
-  //         salesCommission = 2.1;
-  //       else if (discountValue > 11)
-  //         salesCommission = 2.4;
-  //       else if (discountValue > 10)
-  //         salesCommission = 2.7;
-  //       else if (discountValue > 9)
-  //         salesCommission = 3;
-  //       else if (discountValue > 8)
-  //         salesCommission = 3.3;
-  //       else if (discountValue > 7)
-  //         salesCommission = 3.6;
-  //       else if (discountValue > 6)
-  //         salesCommission = 3.9;
-  //       else if (discountValue > 5)
-  //         salesCommission = 4.2;
-  //       else if (discountValue > 4)
-  //         salesCommission = 4.5;
-  //       else if (discountValue > 3)
-  //         salesCommission = 4.8;
-  //       else if (discountValue > 2)
-  //         salesCommission = 5.1;
-  //       else if (discountValue > 1)
-  //         salesCommission = 5.4;
-  //       else if (discountValue > 0)
-  //         salesCommission = 5.7;
-  //     }
-
-  //     // const properties = saleItem.properties == null ? {} : saleItem.properties;
-  //     // properties.salesCommission = salesCommission;
-  //     // saleItem.properties = properties;
-
-  //     saleItem.properties = {
-  //       ...saleItem.properties,
-  //       salesCommission: salesCommission,
-  //     };
-
-  //     await saleService.saleItemUpdate(saleItem);
-  //   }
+  // const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
+  
+  // for (const saleItem of saleItemList) {
+  //   const priceListValue = (antecipado ? Math.round(saleItem.priceListValue * 0.96 * 100) / 100 : saleItem.priceListValue);
+  //   if (saleItem.sale.priceList.code === 'ATA')
+  //     saleItem.properties["salesCommission"] = await getComission('ATA', saleItem.unitValue, priceListValue);
+  //   else if (saleItem.sale.priceList.code === 'CON')
+  //     saleItem.properties["salesCommission"] = await getComission('CON', saleItem.unitValue, priceListValue);
+  //   else
+  //     return;
+    
+  //   await saleService.saleItemUpdate(saleItem);
   // }
 }
+
+// async function getComission(type, unitValue, priceListValue) {
+//   const discountValue = Math.round((priceListValue - unitValue) / priceListValue * 10000) / 100;
+//   if (type === 'ATA') {
+//     if (discountValue > 10)
+//       return 0;
+//     else if (discountValue > 9)
+//       return 1;
+//     else if (discountValue > 8)
+//       return 1.1;
+//     else if (discountValue > 7)
+//       return 1.2;
+//     else if (discountValue > 6)
+//       return 1.3;
+//     else if (discountValue > 5)
+//       return 1.4;
+//     else if (discountValue > 4)
+//       return 1.5;
+//     else if (discountValue > 3)
+//       return 1.8;
+//     else if (discountValue > 2)
+//       return 2.1;
+//     else if (discountValue > 1)
+//       return 2.4;
+//     else if (discountValue > 0)
+//       return 2.7;
+//     else
+//       return 3;
+//   } else if (type === 'CON') {
+//     if (discountValue > 10)
+//       return 0;
+//     else if (discountValue > 9)
+//       return 3;
+//     else if (discountValue > 8)
+//       return 3.3;
+//     else if (discountValue > 7)
+//       return 3.6;
+//     else if (discountValue > 6)
+//       return 3.9;
+//     else if (discountValue > 5)
+//       return 4.2;
+//     else if (discountValue > 4)
+//       return 4.5;
+//     else if (discountValue > 3)
+//       return 4.8;
+//     else if (discountValue > 2)
+//       return 5.1;
+//     else if (discountValue > 1)
+//       return 5.4;
+//     else if (discountValue > 0)
+//       return 5.7;
+//     else
+//       return 6;
+//   }    
+// }
