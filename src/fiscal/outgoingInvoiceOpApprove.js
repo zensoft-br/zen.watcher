@@ -46,31 +46,46 @@ export async function outgoingInvoiceOpApprove(zenReq) {
     //   tags: tags.concat([`VB:${outgoingInvoice.id}`, "vendaCruzada"]).join(","),
     // };
 
-    let incomingInvoice = {
+    let incomingInvoice1 = {
       ...outgoingInvoice,
       // TODO se passar o id o log registra neste id
       id: undefined,
       company: saleOriginal.company,
       person: outgoingInvoice.company.person,
+      invoiceSeries: undefined,
       number: undefined,
       properties: {
         ...outgoingInvoice.properties,
         frigospol_outgoingInvoice_id_original: outgoingInvoice.id,
       },
     };
-    incomingInvoice = await fiscalService.incomingInvoiceOpCreate({
-      invoice: incomingInvoice,
-      itemList: items,
+    incomingInvoice1 = await fiscalService.incomingInvoiceOpCreate({
+      invoice: incomingInvoice1,
+      itemList: items.map(e => ({
+        invoiceItem: e,
+      })),
       paymentList: payments,
     });
 
-    // // TODO está duplicando as formas de pagamento
-    // outgoingInvoice1 = await fiscalService.outgoingInvoiceOpCreate({
-    //   outgoingInvoice: outgoingInvoice1,
-    //   items: items,
-    //   payments: payments,
-    // });
-    // outgoingInvoice1 = await fiscalService.outgoingInvoiceOpPrepare(outgoingInvoice1.id);
-    // outgoingInvoice1 = await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice1.id);
+    let outgoingInvoice1 = {
+      ...outgoingInvoice,
+      // TODO se passar o id o log registra neste id
+      id: undefined,
+      company: saleOriginal.company,
+      person: saleOriginal.person,
+      invoiceSeries: undefined,
+      number: undefined,
+      properties: {
+        ...outgoingInvoice.properties,
+        frigospol_outgoingInvoice_id_original: outgoingInvoice.id,
+      },
+    };
+    outgoingInvoice1 = await fiscalService.outgoingInvoiceOpCreate({
+      invoice: outgoingInvoice1,
+      itemList: items.map(e => ({
+        invoiceItem: e,
+      })),
+      paymentList: payments,
+    });
   }
 }
