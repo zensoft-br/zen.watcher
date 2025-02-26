@@ -13,9 +13,12 @@ export async function emailReceivable(zenReq) {
 
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
+  const i18n = await z.i18n;
+
   const billingService = new Z.api.financial.billing.BillingService(z);
   const personService = new Z.api.catalog.person.PersonService(z);
-  const i18n = await z.i18n;
+  const mailService = new Z.api.system.mail.MailService(z);
+  const reportService = new Z.api.system.report.ReportService(z);
 
   // Load NFe
   const instructionResponse = await billingService.instructionResponseReadById(zenReq.body.args.id);
@@ -55,20 +58,14 @@ export async function emailReceivable(zenReq) {
   if (!personContactList.length)
     return;
 
-  // Fetch XML and DANFE
-  const result = await z.web.fetchJson("/system/report/reportOpPrint", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
+  const report = await reportService.reportOpPrint({
+    code: "/financial/report/receivableForm",
+    parameters: {
+      ids: [bean.id],
     },
-    body: JSON.stringify({
-      code: "/financial/report/receivableForm",
-      format: "PDF",
-      parameters: {
-        ids: [bean.id],
-      },
-    }),
+    format: "PDF",
   });
+  console.log(`${new Date().toISOString()} reportService.reportOpPrint()`);
 
   const sp = new URLSearchParams();
   if (zenReq.mailerConfigMap?.[bean.company.code])
@@ -76,52 +73,55 @@ export async function emailReceivable(zenReq) {
   else if (bean.company.mailerConfig)
     sp.set("mailerConfigId", bean.company.mailerConfig.id);
 
-  // Send the e-mails
-  await z.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      from: {
-        description: bean.company.person.name,
-      },
-      to: personContactList
-        .map(e => ({
-          address: zenReq.query?.email ?? e.description,
-          description: e.person.name,
-        }),
-        ),
-      subject: `O seu boleto chegou! Número ${bean.code ?? bean.id
-      }, vencimento ${i18n.formatDate(bean.dueDate)}`,
-      content: `
-      Você está recebendo um boleto.
+  const mailerConfigCode = bean.company.code.startsWith("L/") ? "LUCIN/BOLETO" : "NOVAX/BOLETO";
 
-      Emitente: ${bean.company.person.name}
-      CNPJ: ${bean.company.person.documentNumber}
-
-      Destinatário: ${bean.person.name}
-      CNPJ: ${bean.person.documentNumber}
-
-      Número: ${bean.code}
-      Emissão: ${i18n.formatDate(bean.issueDate)}
-      Vencimento: ${i18n.formatDate(bean.dueDate)}
-      Valor: ${i18n.formatCurrency(bean.value)}
-
-      Nota fiscal: ${bean.outgoingInvoice?.number ?? ""}
-      Valor: ${i18n.formatCurrency(bean.outgoingInvoice?.totalValue ?? null) ?? ""}
-
-      Zen ERP ®
-      `,
-      mimeType: "text/plain;charset=utf-8",
-      attachments: [
-        {
-          identifier: `${bean.code ?? bean.id }.pdf`,
-          bytes: result.content,
-          mimeType: result.contentType,
-        },
-      ],
-      source: `/financial/receivable:${bean.id}`,
+  const to = personContactList
+    .map(e => ({
+      address: zenReq.query?.email ?? e.description,
+      description: e.person.name,
     }),
+    );
+
+  // Send the e-mails
+  await mailService.messageOpSend(null, mailerConfigCode, {
+    from: {
+      description: bean.company.person.name,
+    },
+    to,
+    // TODO
+    bcc: [{
+      address: "fabiano.bonin@personalsoft.com.br",
+    }],
+    subject: `O seu boleto chegou! Número ${bean.code ?? bean.id}, vencimento ${i18n.formatDate(bean.dueDate)}`,
+    content: `
+    Você está recebendo um boleto.
+
+    Emitente: ${bean.company.person.name}
+    CNPJ: ${bean.company.person.documentNumber}
+
+    Destinatário: ${bean.person.name}
+    CNPJ: ${bean.person.documentNumber}
+
+    Número: ${bean.code}
+    Emissão: ${i18n.formatDate(bean.issueDate)}
+    Vencimento: ${i18n.formatDate(bean.dueDate)}
+    Valor: ${i18n.formatCurrency(bean.value)}
+
+    Nota fiscal: ${bean.outgoingInvoice?.number ?? ""}
+    Valor: ${i18n.formatCurrency(bean.outgoingInvoice?.totalValue ?? null) ?? ""}
+
+    Zen ERP ®
+    `,
+    mimeType: "text/plain;charset=utf-8",
+    attachments: [
+      {
+        identifier: `${bean.code ?? bean.id}.pdf`,
+        bytes: report.content,
+        mimeType: report.contentType,
+      },
+    ],
+    source: `/financial/receivable:${bean.id}`,
   });
+
+  console.log(`${new Date().toISOString()} mailService.messageOpSend()`);
 }

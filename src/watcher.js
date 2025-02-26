@@ -7,6 +7,7 @@ import { normalize } from "./normalize.js";
 import { pickingOrderOpApprove } from "./pickingOrderOpApprove.js";
 import { print } from "./print.js";
 import { a } from "./brTaxationCompensation.js";
+import { queueOpReadMessageZenMail } from "./system/integration/queueOpReadMessageZenMail.js";
 
 export async function watch(zenReq) {
   let zenRes = {
@@ -32,6 +33,10 @@ export async function watch(zenReq) {
 
   if (zenReq.path === "/email") {
     zenRes = await email(zenReq);
+  }
+
+  if (zenReq.path === "/zenmail") {
+    zenRes = await queueOpReadMessageZenMail(zenReq);
   }
 
   else if (zenReq.path === "/fiscal/br/out/authorize" && zenReq.body?.context?.event == "/fiscal/outgoingInvoiceOpApprove") {

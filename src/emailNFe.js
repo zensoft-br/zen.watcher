@@ -101,7 +101,7 @@ export async function emailNFe(zenReq) {
         Para maiores detalhes, consulte esta nota fiscal eletrônica no link:
         https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=completa&tipoConteudo=7PhJ+gAVw2g=
   
-        Zen Erp ®
+        Zen ERP ®
         `,
       mimeType: "text/plain;charset=utf-8",
       attachments: [

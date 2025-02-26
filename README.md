@@ -45,7 +45,7 @@ Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.
 * **path**: O endpoint acessado que resultou no evento.
 * **quary**: Parâmetros de consulta que podem acompanhar a solicitação.
 * **headers**: Informações sobre o tipo de conteúdo e outras metadatas da solicitação.
-* **body**: Contém informações essenciais sobre o evento do Zen Erp, incluindo:
+* **body**: Contém informações essenciais sobre o evento do Zen ERP, incluindo:
   * **context**: O contexto em que o evento ocorreu
     * **tenant** O tenant (locatário) sob o qual o evento ocorreu.
     * **event** O evento específico que foi disparado.
@@ -126,7 +126,7 @@ Suponha que o webservice esteja operacional no endereço IP `10.0.0.10`. Ao real
 }
 ```
 
-## Configuração do monitoramento de enventos no Zen Erp
+## Configuração do monitoramento de enventos no Zen ERP
 
 Para configurar o monitoramento de eventos e garantir que ações automáticas sejam realizadas em resposta a eventos específicos, siga o procedimento abaixo. Esse processo envolve a inclusão de observadores de eventos através da interface de usuário do Zen ERP, definindo quais eventos devem ser monitorados e como o sistema deve reagir a eles.
 
