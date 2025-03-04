@@ -28,39 +28,42 @@ export async function saleOpPrepare(zenReq) {
   if (productPackingNotFound.length)
     throw new Error(`Valor unitário de custo não encontrado para os produtos ${productPackingNotFound.join(",")}`);
 
-  const productValue = saleItemList.reduce((red, e) => red + e.productValue, 0);
-  const costValue = saleItemList.reduce((red, e) => red + priceListItemList.filter(e1 => e1.productPacking.id == e.productPacking.id)[0].unitValue * e.quantity, 0);
-  const contributionMargin = round(productValue - costValue, 2);
-  const contributionMarginPercent = round(contributionMargin / costValue * 100, 2);
+  const { costValue, productValue, contributionMargin, markup  } = saleItemList.reduce((red, e) => {
+    red.productValue = round(red.productValue + e.productValue, 2);
+    red.costValue = round(red.costValue + (e.quantity * e.costUnitValue), 2);
+    red.contributionMargin = (red.productValue - red.costValue) / red.productValue * 100;
+    red.markup = (red.productValue / red.costValue) * 100 - 100;
+    return red;
+  }, { productValue: 0, costValue: 0 });
 
   let salesCommission = 0;
-  if (contributionMarginPercent >= 30 && contributionMarginPercent <= 35)
+  if (markup >= 30 && markup <= 35)
     salesCommission = 1;
-  else if (contributionMarginPercent > 35 && contributionMarginPercent <= 40)
+  else if (markup > 35 && markup <= 40)
     salesCommission = 2;
-  else if (contributionMarginPercent > 40 && contributionMarginPercent <= 45)
+  else if (markup > 40 && markup <= 45)
     salesCommission = 3;
-  else if (contributionMarginPercent > 45 && contributionMarginPercent <= 55)
+  else if (markup > 45 && markup <= 55)
     salesCommission = 4;
-  else if (contributionMarginPercent > 55 && contributionMarginPercent <= 65)
+  else if (markup > 55 && markup <= 65)
     salesCommission = 5;
-  else if (contributionMarginPercent > 65 && contributionMarginPercent <= 75)
+  else if (markup > 65 && markup <= 75)
     salesCommission = 6;
-  else if (contributionMarginPercent > 75 && contributionMarginPercent <= 85)
+  else if (markup > 75 && markup <= 85)
     salesCommission = 7;
-  else if (contributionMarginPercent > 85 && contributionMarginPercent <= 95)
+  else if (markup > 85 && markup <= 95)
     salesCommission = 8;
-  else if (contributionMarginPercent > 95 && contributionMarginPercent <= 105)
+  else if (markup > 95 && markup <= 105)
     salesCommission = 9;
-  else if (contributionMarginPercent > 105)
+  else if (markup > 105)
     salesCommission = 10;
 
   sale.properties = {
     ...sale.properties,
-    productValue,
     costValue,
+    productValue,
     contributionMargin,
-    contributionMarginPercent,
+    markup,
     salesCommission,
   };
 
