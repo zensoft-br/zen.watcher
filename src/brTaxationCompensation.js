@@ -1,3 +1,5 @@
+// DEPRECATED?
+
 import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 

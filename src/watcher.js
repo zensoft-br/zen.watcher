@@ -1,4 +1,3 @@
-import { autoForward } from "./autoForward.js";
 import { databaseOpOptimize } from "./databaseOpOptimize.js";
 import { dfeNfeProcOutOpAuthorize } from "./dfeNfeProcOutOpAuthorize.js";
 import { email } from "./email.js";
@@ -6,8 +5,7 @@ import { logOpDeleteExpired } from "./logOpDeleteExpired.js";
 import { normalize } from "./normalize.js";
 import { pickingOrderOpApprove } from "./pickingOrderOpApprove.js";
 import { print } from "./print.js";
-import { a } from "./brTaxationCompensation.js";
-import { queueOpReadMessageZenMail } from "./system/integration/queueOpReadMessageZenMail.js";
+import { mail } from "./system/integration/mail.js";
 
 export async function watch(zenReq) {
   let zenRes = {
@@ -35,12 +33,12 @@ export async function watch(zenReq) {
     zenRes = await email(zenReq);
   }
 
-  if (zenReq.path === "/zenmail") {
-    zenRes = await queueOpReadMessageZenMail(zenReq);
-  }
-
   else if (zenReq.path === "/fiscal/br/out/authorize" && zenReq.body?.context?.event == "/fiscal/outgoingInvoiceOpApprove") {
     zenRes = await dfeNfeProcOutOpAuthorize(zenReq);
+  }
+
+  if (zenReq.requestContext?.http?.path.startsWith("/mail")) {
+    return mail(zenReq);
   }
 
   else if (zenReq.body?.context?.event == "/material/pickingOrderOpApprove") {

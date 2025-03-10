@@ -3,10 +3,16 @@ import { watch } from "../../../src/watcher.js";
 
 watch({
   method: "POST",
-  path: "/zenmail",
+  path: "/mail/queue",
   body: {
     context: {
       tenant: process.env.tenant,
+    },
+  },
+  requestContext: {
+    http: {
+      method: "POST",
+      path: "/mail/queue",
     },
   },
 });

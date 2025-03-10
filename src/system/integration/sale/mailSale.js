@@ -7,11 +7,9 @@ import * as Z from "@zensoftbr/zenerpclient";
  * recipients: company,person,salesperson,shipping (many)
  * email: force e-mail
  */
-export async function emailSale(zenReq) {
+export async function mailSale(z, id, args) {
   // Recipients who should receive e-mails
-  const recipients = (zenReq.query?.recipients ?? "person,salesperson").toLowerCase().split(",");
-
-  const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
+  const recipients = (args?.recipients ?? "person,salesperson").toLowerCase().split(",");
 
   const i18n = await z.i18n;
 
@@ -20,7 +18,7 @@ export async function emailSale(zenReq) {
   const reportService = new Z.api.system.report.ReportService(z);
   const saleService = new Z.api.sale.SaleService(z);
 
-  const sale = await saleService.saleReadById(zenReq.body.args.id);
+  const sale = await saleService.saleReadById(id);
 
   // Let's load all personContact's in just on read
   const personIds = [];
@@ -51,11 +49,11 @@ export async function emailSale(zenReq) {
   if (!personContactList.length)
     return;
 
-  const sp = new URLSearchParams();
-  if (zenReq.mailerConfigMap?.[sale.company.code])
-    sp.set("mailerConfigCode", zenReq.mailerConfigMap[sale.company.code]);
-  else if (sale.company.mailerConfig)
-    sp.set("mailerConfigId", sale.company.mailerConfig.id);
+  let mailerConfig_code = undefined;
+  if (sale.company.properties?.mailerConfig_fiscal_outgoingInvoice) {
+    const mailerConfig = await mailService.mailerConfigReadById(sale.company.properties?.mailerConfig_fiscal_outgoingInvoice);
+    mailerConfig_code = mailerConfig?.code;
+  }
 
   const report = await reportService.reportOpPrint({
     code: "/sale/report/saleForm",
@@ -64,20 +62,17 @@ export async function emailSale(zenReq) {
     },
     format: "PDF",
   });
-  console.log(`${new Date().toISOString()} reportService.reportOpPrint()`);
-
-  const mailerConfigCode = "PEDIDOS";
 
   const to = personContactList
     .map(e => ({
-      address: zenReq.query?.email ?? e.description,
+      address: e.description,
       description: e.person.name,
     }),
     );
 
   // Send the e-mails
   // TODO
-  await mailService.messageOpSend(null, mailerConfigCode, {
+  await mailService.messageOpSend(null, mailerConfig_code, {
     from: {
       description: sale.company.person.name,
     },
@@ -117,6 +112,4 @@ export async function emailSale(zenReq) {
     ],
     source: `/sale/sale:${sale.id}`,
   });
-
-  console.log(`${new Date().toISOString()} mailService.messageOpSend()`);
 }

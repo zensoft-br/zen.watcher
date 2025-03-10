@@ -8,6 +8,7 @@ export const handler = async (event) => {
 
   // Convert AWS Lambda event to zenReq
   const zenReq = {
+    ...event,
     method: event.requestContext?.http?.method ?? "POST",
     path: event.requestContext?.http?.path ?? "/",
     query: event.queryStringParameters ?? {},
