@@ -18,16 +18,18 @@ export async function mailSale(z, id, args) {
   const reportService = new Z.api.system.report.ReportService(z);
   const saleService = new Z.api.sale.SaleService(z);
 
-  const sale = await saleService.saleReadById(id);
+  const bean = await saleService.saleReadById(id);
+  if (!bean)
+    return;
 
   // Let's load all personContact's in just on read
   const personIds = [];
   if (recipients.includes("company"))
-    personIds.push(sale.company.person.id);
+    personIds.push(bean.company.person.id);
   if (recipients.includes("person"))
-    personIds.push(sale.person.id);
-  if (recipients.includes("salesperson") && sale.personSalesperson)
-    personIds.push(sale.personSalesperson.id);
+    personIds.push(bean.person.id);
+  if (recipients.includes("salesperson") && bean.personSalesperson)
+    personIds.push(bean.personSalesperson.id);
   if (!personIds.length)
     throw new Error("Empty recipients");
 
@@ -50,15 +52,15 @@ export async function mailSale(z, id, args) {
     return;
 
   let mailerConfig_code = undefined;
-  if (sale.company.properties?.mailerConfig_fiscal_outgoingInvoice) {
-    const mailerConfig = await mailService.mailerConfigReadById(sale.company.properties?.mailerConfig_fiscal_outgoingInvoice);
+  if (bean.company.properties?.mailerConfig_commercial_sale) {
+    const mailerConfig = await mailService.mailerConfigReadById(bean.company.properties?.mailerConfig_commercial_sale);
     mailerConfig_code = mailerConfig?.code;
   }
 
   const report = await reportService.reportOpPrint({
     code: "/sale/report/saleForm",
     parameters: {
-      ids: [sale.id],
+      ids: [bean.id],
     },
     format: "PDF",
   });
@@ -71,45 +73,35 @@ export async function mailSale(z, id, args) {
     );
 
   // Send the e-mails
-  // TODO
   await mailService.messageOpSend(null, mailerConfig_code, {
     from: {
-      description: sale.company.person.name,
+      description: bean.company.person.name,
     },
     to,
-    // TODO
-    bcc: [{
-      address: "fabiano.bonin@personalsoft.com.br",
-    }],
-    // TODO
-    // subject: i18n.format(
-    //   "@@:/fiscal/outgoingInvoice/identified",
-    //   sale.number,
-    // ),
-    subject: `Confirmação de recebimento do pedido ${sale.code ?? sale.id}`,
+    subject: `Confirmação de recebimento do pedido ${bean.code ?? bean.id}`,
     content: `
-      Prezado(a) ${sale.person.name},
+      Prezado(a) ${bean.person.name},
 
-      Recebemos o seu pedido ${sale.code ?? sale.id} em ${i18n.formatDate(sale.date)} e já estamos processando.
+      Recebemos o seu pedido ${bean.code ?? bean.id} em ${i18n.formatDate(bean.date)} e já estamos processando.
 
       Caso tenha alguma dúvida, entre em contato conosco.
 
       Agradecemos a sua preferência!
 
       Atenciosamente,
-      ${sale.company.person.name}
-      CNPJ: ${sale.company.person.documentNumber}
+      ${bean.company.person.name}
+      CNPJ: ${bean.company.person.documentNumber}
       
       Zen ERP ®
       `,
     mimeType: "text/plain;charset=utf-8",
     attachments: [
       {
-        identifier: `${i18n.format("/sale/sale/identified", sale.id)}.pdf`,
+        identifier: `${i18n.format("/sale/sale/identified", bean.id)}.pdf`,
         bytes: report.content,
         mimeType: report.contentType,
       },
     ],
-    source: `/sale/sale:${sale.id}`,
+    source: `/sale/sale:${bean.id}`,
   });
 }

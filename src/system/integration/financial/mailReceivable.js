@@ -7,25 +7,19 @@ import * as Z from "@zensoftbr/zenerpclient";
  * recipients: company,person,salesperson,shipping (many)
  * email: force e-mail
  */
-export async function emailReceivable(zenReq) {
+export async function mailReceivable(z, id, args) {
   // Recipients who should receive e-mails
-  const recipients = (zenReq.query?.recipients ?? "company,person").toLowerCase().split(",");
-
-  const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
+  const recipients = (args?.recipients ?? "person").toLowerCase().split(",");
 
   const i18n = await z.i18n;
 
-  const billingService = new Z.api.financial.billing.BillingService(z);
+  const financialService = new Z.api.financial.FinancialService(z);
   const personService = new Z.api.catalog.person.PersonService(z);
   const mailService = new Z.api.system.mail.MailService(z);
   const reportService = new Z.api.system.report.ReportService(z);
 
-  // Load NFe
-  const instructionResponse = await billingService.instructionResponseReadById(zenReq.body.args.id);
-  if (instructionResponse.type !== "REGISTERED")
-    return;
-
-  const bean = instructionResponse.billingTitle;
+  // Load receivable
+  const bean = await financialService.receivableReadById(id);
   if (!bean)
     return;
 
@@ -58,6 +52,12 @@ export async function emailReceivable(zenReq) {
   if (!personContactList.length)
     return;
 
+  let mailerConfig_code = undefined;
+  if (bean.company.properties?.mailerConfig_financial_receivable) {
+    const mailerConfig = await mailService.mailerConfigReadById(bean.company.properties?.mailerConfig_financial_receivable);
+    mailerConfig_code = mailerConfig?.code;
+  }
+
   const report = await reportService.reportOpPrint({
     code: "/financial/report/receivableForm",
     parameters: {
@@ -65,33 +65,20 @@ export async function emailReceivable(zenReq) {
     },
     format: "PDF",
   });
-  console.log(`${new Date().toISOString()} reportService.reportOpPrint()`);
-
-  const sp = new URLSearchParams();
-  if (zenReq.mailerConfigMap?.[bean.company.code])
-    sp.set("mailerConfigCode", zenReq.mailerConfigMap[bean.company.code]);
-  else if (bean.company.mailerConfig)
-    sp.set("mailerConfigId", bean.company.mailerConfig.id);
-
-  const mailerConfigCode = bean.company.code.startsWith("L/") ? "LUCIN/BOLETO" : "NOVAX/BOLETO";
 
   const to = personContactList
     .map(e => ({
-      address: zenReq.query?.email ?? e.description,
+      address: e.description,
       description: e.person.name,
     }),
     );
 
   // Send the e-mails
-  await mailService.messageOpSend(null, mailerConfigCode, {
+  await mailService.messageOpSend(null, mailerConfig_code, {
     from: {
       description: bean.company.person.name,
     },
     to,
-    // TODO
-    bcc: [{
-      address: "fabiano.bonin@personalsoft.com.br",
-    }],
     subject: `O seu boleto chegou! Número ${bean.code ?? bean.id}, vencimento ${i18n.formatDate(bean.dueDate)}`,
     content: `
     Você está recebendo um boleto.
@@ -122,6 +109,4 @@ export async function emailReceivable(zenReq) {
     ],
     source: `/financial/receivable:${bean.id}`,
   });
-
-  console.log(`${new Date().toISOString()} mailService.messageOpSend()`);
 }

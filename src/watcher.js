@@ -37,7 +37,7 @@ export async function watch(zenReq) {
     zenRes = await dfeNfeProcOutOpAuthorize(zenReq);
   }
 
-  if (zenReq.requestContext?.http?.path.startsWith("/mail")) {
+  if (zenReq.path.startsWith("/mail")) {
     return mail(zenReq);
   }
 

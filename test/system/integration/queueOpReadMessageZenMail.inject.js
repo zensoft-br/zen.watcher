@@ -9,10 +9,4 @@ watch({
       tenant: process.env.tenant,
     },
   },
-  requestContext: {
-    http: {
-      method: "POST",
-      path: "/mail/queue",
-    },
-  },
 });

@@ -1,3 +1,4 @@
+import { HttpError } from "../../HttpError.js";
 import { mailDirect } from "./mailDirect.js";
 import { mailQueue } from "./mailQueue.js";
 import { mailWatcher } from "./mailWatcher.js";
@@ -8,22 +9,22 @@ import { mailWatcher } from "./mailWatcher.js";
  * @param {*} event
  */
 export async function mail(event) {
-  if (event.requestContext?.http?.method === "POST") {
+  if (event.method === "POST") {
     // Direct e-mails for entities
-    if (event.requestContext?.http?.path === "/mail/direct") {
+    if (event.path === "/mail/direct") {
       return mailDirect(event);
     }
 
     // E-mails from queues
-    if (event.requestContext?.http?.path === "/mail/queue") {
+    if (event.path === "/mail/queue") {
       return mailQueue(event);
     }
 
     // E-mails from Zen ERP watchers
-    if (event.requestContext?.http?.path === "/mail/watcher") {
+    if (event.path === "/mail/watcher") {
       return mailWatcher(event);
     }
   }
 
-  return { statusCode: 400 };
+  throw new HttpError(404, "Not found");
 }
