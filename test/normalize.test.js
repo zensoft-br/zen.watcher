@@ -1,4 +1,4 @@
-import { titleCase } from "./normalize";
+import { titleCase } from "../src/normalize.js";
 
 test("", () => {
   expect(titleCase("foo bar")).toBe("Foo Bar");

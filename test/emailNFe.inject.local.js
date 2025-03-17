@@ -1,26 +1,26 @@
 import "dotenv/config";
 
-import { watch } from "./watcher.js";
+import { watch } from "../src/watcher.js";
 
 watch({
   method: "POST",
   path: "/email",
   query: {
-    email: process.env.to ?? "test@zensoft.com.br",
-    // mailerConfig: "ACT=ACT/NFE,MP=MP/NFE",
+    email: "teste@zensoft.com.br",
+    mailerConfig: "ACT=ACT/NFE,MP=MP/NFE",
   },
   headers: {
     "content-type": "application/json",
   },
   body: {
     context: {
-      event: "/financial/billing/instructionResponseOpProcess",
+      event: "/fiscal/br/dfeNfeProcOutOpConfirm",
       tenant: process.env.tenant,
       token: process.env.token,
       tags: ["after"],
     },
     args: {
-      id: 12656,
+      id: 3838,
     },
   },
 });

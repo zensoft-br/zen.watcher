@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { watch } from "./watcher.js";
+import { watch } from "../src/watcher.js";
 
 const zenRes = await watch({
   method: "POST",

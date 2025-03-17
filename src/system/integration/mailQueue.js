@@ -10,7 +10,7 @@ export async function mailQueue(event) {
   const integrationService = new Z.api.system.integration.IntegrationService(z);
 
   const messageList = await integrationService.queueOpReadMessage("ZEN/MAIL", {
-    maxMessages: 100,
+    maxMessages: 50,
   });
   for (const message of messageList) {
     try {
