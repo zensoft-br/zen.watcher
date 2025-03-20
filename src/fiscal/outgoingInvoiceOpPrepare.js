@@ -6,6 +6,7 @@ export async function outgoingInvoiceOpPrepare(zenReq) {
 
   const fiscalService = new Z.api.fiscal.FiscalService(z);
   const saleService = new Z.api.sale.SaleService(z);
+  const purchaseService = new Z.api.supply.purchase.PurchaseService(z);
 
   let outgoingInvoice = await fiscalService.outgoingInvoiceReadById(zenReq.body.args.id);
 
@@ -17,12 +18,30 @@ export async function outgoingInvoiceOpPrepare(zenReq) {
 
     // Substitui a pessoa pela empresa vendedora
     outgoingInvoice.person = saleOriginal.company.person;
-
-    // TODO Altera os valores unitários
-
-    // TODO Formas de pagamento
-
     outgoingInvoice = await fiscalService.outgoingInvoiceUpdate(outgoingInvoice);
+
+    // Altera os valores unitários para o preço de custo
+    const outgoingInvoiceItemList = await fiscalService.outgoingInvoiceItemRead(`q=outgoingInvoice.id==${outgoingInvoice.id}`);
+    for (const outgoingInvoiceItem of outgoingInvoiceItemList) {
+      const [priceListItem] = await purchaseService.priceListItemRead(`q=priceList.id=1001;productPacking.id==${outgoingInvoiceItem.productPacking.id}`);
+      if (priceListItem) {
+        outgoingInvoiceItem.unitValue = priceListItem.unitValue;
+        await fiscalService.outgoingInvoiceItemUpdate(outgoingInvoiceItem);
+      }
+    }
+
+    outgoingInvoice = await fiscalService.outgoingInvoiceReadById(outgoingInvoice.id);
+
+    // Altera as formas de pagamento
+    const outgoingInvoicePaymentList = await fiscalService.outgoingInvoicePaymentRead(`q=outgoingInvoice.id==${outgoingInvoice.id}`);
+    for (const outgoingInvoicePayment of outgoingInvoicePaymentList) {
+      await fiscalService.outgoingInvoicePaymentDelete(outgoingInvoicePayment);
+    }
+    fiscalService.outgoingInvoicePaymentCreate({
+      invoice: outgoingInvoice,
+      type: "PAYMENT",
+      value: outgoingInvoice.totalValue,
+    });
 
     // Recalcula a tributação
     outgoingInvoice = await fiscalService.outgoingInvoiceOpTaxationCalc(outgoingInvoice.id);
