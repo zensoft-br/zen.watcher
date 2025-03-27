@@ -53,8 +53,8 @@ export async function saleOpCreate(zenReq) {
   // Adiciona a prioridade nas observações e verifica se o prazo do pedido está diferente do prazo do cliente
   {
     const person = await personService.personReadById(args.sale.person.id);
-    if (person.properties?.outgoingInvoicePriority) {
-      const priority = `Prioridade: ${person.properties?.outgoingInvoicePriority}`;
+    if (person.category2) {
+      const priority = `Prioridade: ${person.category2.code}`;
 
       let comments = args.sale.properties?.comments ?? "";
       comments = `${priority}\n${comments}`;
@@ -66,12 +66,12 @@ export async function saleOpCreate(zenReq) {
       args.sale.tags = (args.sale.tags ?? "")
         .split(",")
         .filter(e => e)
-        .concat(`prioridade${person.properties?.outgoingInvoicePriority}`)
+        .concat(`prioridade${person.category2.code}`)
         .join(",");
     }
 
     if (person.properties?.paymentMethods !== args.sale.properties?.paymentMethods) {
-      let paymentMethods = `Prazo cadastrado no cliente: ${person.properties?.paymentMethods}`;
+      const paymentMethods = `Prazo cadastrado no cliente: ${person.properties?.paymentMethods}`;
       let comments = args.sale.properties?.comments ?? "";
       comments = `${paymentMethods}\n${comments}`;
       args.sale.properties = {
@@ -82,7 +82,7 @@ export async function saleOpCreate(zenReq) {
       args.sale.tags = (args.sale.tags ?? "")
         .split(",")
         .filter(e => e)
-        .concat('PZ')
+        .concat("PZ")
         .join(",");
     }
   }
