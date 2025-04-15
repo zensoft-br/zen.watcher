@@ -1,7 +1,7 @@
 import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
-export async function saleOpApprove(zenReq) {
+export async function saleOpApprove_before(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
   const saleService = new Z.api.sale.SaleService(z);
