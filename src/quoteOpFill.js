@@ -28,7 +28,9 @@ export async function quoteOpFill(zenReq) {
     message.source = `/sale/quote:${bean.id}`;
     message.from = { description: bean.company.person.fantasyName ?? bean.company.person.name };
     message.to = [{ address: bean.personSalesperson.email }];
-    message.bcc = [{ address: "novaes@squib.com.br" }, { address: "rodrigo@squib.com.br" }];
+    message.bcc = [{ address: "novaes@squib.com.br" },
+    { address: "rodrigo@squib.com.br" },
+    { address: "castro@squib.com.br" }];
     message.subject = (await z.i18n).format("/sale/quote/identified", bean.person?.name ?? bean.properties?.personName);
     message.body = "Zen Erp ®";
     message.attachments = [{

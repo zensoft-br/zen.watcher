@@ -26,6 +26,10 @@ export async function watch(zenReq) {
     zenRes = await saleOpApprove_after(zenReq);
   }
 
+  if (zenReq.body?.context?.event === "/sale/saleOpApproveUnconditionally" && (zenReq.body?.context?.tags ?? []).includes("after")) {
+    zenRes = await saleOpApprove_after(zenReq);
+  }
+
   if (zenReq.body?.context?.event === "/sale/saleOpApprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     zenRes = await saleOpApprove_before(zenReq);
   }
