@@ -15,6 +15,10 @@ export async function saleOpPrepare(zenReq) {
   const saleService = new Z.api.sale.SaleService(z);
 
   const sale = await saleService.saleReadById(id);
+
+  if (sale.priceList.code === '1004')
+    return;
+
   const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
 
   let saleUpdate = false;
