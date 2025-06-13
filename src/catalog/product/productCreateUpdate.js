@@ -36,6 +36,10 @@ export async function productCreateUpdate(zenReq) {
       bean.properties.ps_gramatura_y = bean.properties.textileGramWeight;
     }
 
+    if (!bean.properties.textileGramWeight) {
+      bean.properties.textileGramWeight = bean.properties.ps_gramatura_y;
+    }
+
     if (bean.unit.code === "kg") {
       bean.netWeightKg = 1;
       bean.grossWeightKg = 1;
