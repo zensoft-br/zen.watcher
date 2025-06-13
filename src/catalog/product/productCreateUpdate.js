@@ -12,11 +12,29 @@ export async function productCreateUpdate(zenReq) {
 
     bean.properties = bean.properties ?? {};
 
-    bean.properties.textileWidth = round((bean.properties.ps_largura_pol ?? 0) * 2.54 / 100, 4);
-    bean.properties.textileYield = round(1000 / (bean.properties.textileWidth * bean.properties.textileGramWeight), 2);
+    /* TODO
+    if (!bean.fiscalProfileProduct) {
+      bean.fiscalProfileProduct = { id: 1252 };
+      bean.properties.fiscal_br_NCM = "00000000"
+    }*/
 
+    /* campo alterado: ps_largura_pol */
+    bean.properties.textileWidth = round((bean.properties.ps_largura_pol ?? 0) * 2.54 / 100, 2);
+    bean.properties.textileYield = round(1000 / (bean.properties.textileWidth * bean.properties.textileGramWeight), 2);
     bean.properties.ps_largura_cm = round((bean.properties.textileWidth ?? 0) * 100, 2);
     bean.properties.ps_gramatura_ml = round((bean.properties.textileWidth ?? 0) * (bean.properties.textileGramWeight ?? 0), 4);
+
+    /* campo alterado: ps_largura_util_pol */
+    bean.properties.ps_largura_util_cm = round((bean.properties.ps_largura_util_pol ?? 0) * 2.54 / 100, 2);
+
+    /* campos da amostra original */
+    if (!bean.properties.ps_largura_y) {
+      bean.properties.ps_largura_y = bean.properties.textileWidth;
+    }
+
+    if (!bean.properties.ps_gramatura_y) {
+      bean.properties.ps_gramatura_y = bean.properties.textileGramWeight;
+    }
 
     if (bean.unit.code === "kg") {
       bean.netWeightKg = 1;
