@@ -19,7 +19,8 @@ export async function saleOpCreate(zenReq) {
   // Obtém a primeira programação disponível
   const purchaseItem = args.items.filter(e => e.schedule)[0]?.schedule;
   if (purchaseItem) {
-    const purchase = (await purchaseService.purchaseItemReadById(purchaseItem.id)).purchase;
+    const purchase = (await purchaseService.purchaseItemReadById(purchaseItem.id))?.purchase;
+    if (!purchase) return;
     // BOOK
     if (purchase.purchaseProfile.id === 1002) {
       // PRE_VENDA
