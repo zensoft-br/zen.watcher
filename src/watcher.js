@@ -1,3 +1,4 @@
+import { personRead } from "./catalog/person/personRead.js";
 import { productCreateUpdate } from "./catalog/product/productCreateUpdate.js";
 import { productPackingCreate } from "./catalog/product/productPackingCreate.js";
 import { payableRead } from "./financial/payableRead.js";
@@ -9,6 +10,10 @@ export async function watch(zenReq) {
     statusCode: 200,
     body: {},
   };
+
+  if (zenReq.body.context.event === "/catalog/person/personRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await personRead(zenReq);
+  }
 
   if (zenReq.body.context.event === "/catalog/product/productCreate"
     || zenReq.body.context.event === "/catalog/product/productUpdate") {
