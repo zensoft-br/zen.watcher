@@ -21,5 +21,9 @@ Para executar este projeto como uma função `AWS Lambda`:
   - Create function URL
     - Auth type: NONE
     - **Save**
+- Configuration > General configuration
+  - **IMPORTANTE**
+  - Timeout: 1m
+  - Memory: ?
 - Configuration > Environment variables
   - Add variable **token**
