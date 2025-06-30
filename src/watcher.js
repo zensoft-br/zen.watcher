@@ -2,8 +2,12 @@ import { personRead } from "./catalog/person/personRead.js";
 import { productCreateUpdate } from "./catalog/product/productCreateUpdate.js";
 import { productPackingCreate } from "./catalog/product/productPackingCreate.js";
 import { payableRead } from "./financial/payableRead.js";
+import { receivableRead } from "./financial/receivableRead.js";
+import { incomingInvoiceRead } from "./fiscal/incomingInvoiceRead.js";
+import { outgoingInvoiceRead } from "./fiscal/outgoingInvoiceRead.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 import { saleOpCreate } from "./sale/saleOpCreate.js";
+import { purchaseRead } from "./supply/purchase/purchaseRead.js";
 
 export async function watch(zenReq) {
   const zenRes = {
@@ -30,12 +34,28 @@ export async function watch(zenReq) {
     return await payableRead(zenReq);
   }
 
+  if (zenReq.body.context.event === "/financial/receivableRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await receivableRead(zenReq);
+  }
+
+  if (zenReq.body.context.event === "/fiscal/incomingInvoiceRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await incomingInvoiceRead(zenReq);
+  }
+
+  if (zenReq.body.context.event === "/fiscal/outgoingInvoiceRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await outgoingInvoiceRead(zenReq);
+  }
+
   if (zenReq.body.context.event === "/sale/saleOpApprove" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await saleOpApprove(zenReq);
   }
 
   if (zenReq.body.context.event === "/sale/saleOpCreate") {
     return await saleOpCreate(zenReq);
+  }
+
+  if (zenReq.body.context.event === "/supply/purchase/purchaseRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await purchaseRead(zenReq);
   }
 
   return zenRes;
