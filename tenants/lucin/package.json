@@ -1,0 +1,9 @@
+{
+    "name": "lucin",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "build": "esbuild src/index.js --bundle --platform=node --outfile=dist/index.js",
+        "deploy": "echo Deploy to AWS Lambda"
+    }
+}
