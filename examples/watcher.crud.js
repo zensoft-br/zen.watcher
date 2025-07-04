@@ -28,7 +28,7 @@ watch({
   },
 });
 
-export async function watch(zenReq) {
+export async function watcher(zenReq) {
   if (zenReq.body?.context?.event === "/sale/saleUpdate" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     // O bean vem informado no body nas operações de CRUD
     const sale = zenReq.body.args.bean;

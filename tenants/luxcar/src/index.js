@@ -6,7 +6,7 @@ import { purchaseCreate } from "./purchaseCreate.js";
 import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
 import { saleOpApprove } from "./saleOpApprove.js";
 
-export async function watch(zenReq) {
+export async function watcher(zenReq) {
   let zenRes = {
     statusCode: 200,
     body: {},
@@ -43,3 +43,5 @@ export async function watch(zenReq) {
 
   return zenRes;
 }
+
+export const handler = createLambdaHandler(watcher);

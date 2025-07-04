@@ -7,7 +7,7 @@ import { pickingOrderOpApprove } from "./pickingOrderOpApprove.js";
 import { print } from "./print.js";
 import { mail } from "./system/integration/mail.js";
 
-export async function watch(zenReq) {
+export async function watcher(zenReq) {
   let zenRes = {
     statusCode: 200,
     body: {},
@@ -72,3 +72,5 @@ export async function watch(zenReq) {
 
   return zenRes;
 }
+
+export const handler = createLambdaHandler(watcher);

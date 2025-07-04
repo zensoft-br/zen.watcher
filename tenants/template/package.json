@@ -5,5 +5,8 @@
     "scripts": {
         "build": "esbuild src/index.js --bundle --platform=node --outfile=dist/index.js",
         "deploy": "echo Deploy to AWS Lambda"
+    },
+    "dependencies": {
+        "@zensoftbr/zenerpclient": "^1.0.30"
     }
 }

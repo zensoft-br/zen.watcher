@@ -20,7 +20,7 @@ watch({
   },
 });
 
-export async function watch(zenReq) {
+export async function watcher(zenReq) {
   if (zenReq.body?.context?.event === "/sale/saleOpPrepare" && (zenReq.body?.context?.tags ?? []).includes("before")) {
     // Instancia o cliente Zen
     // Se for executar com o mesmo usuário do operador, utilize zenReq.body.context.token

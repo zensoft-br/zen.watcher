@@ -6,7 +6,7 @@ import { saleOpApprove } from "./saleOpApprove.js";
 import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
 import { creditLineOpInactivate } from "./financial/credit/creditLineOpInactivate.js";
 
-export async function watch(zenReq) {
+export async function watcher(zenReq) {
   const zenRes = {
     statusCode: 200,
     body: {},
@@ -38,3 +38,5 @@ export async function watch(zenReq) {
 
   return zenRes;
 }
+
+export const handler = createLambdaHandler(watcher);

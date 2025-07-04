@@ -3,7 +3,7 @@ import { outgoingInvoiceOpPrepare } from "./fiscal/outgoingInvoiceOpPrepare.js";
 import { incomingListItemCreate } from "./incomingListItemCreate.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 
-export async function watch(zenReq) {
+export async function watcher(zenReq) {
   const zenRes = {
     statusCode: 200,
     body: {},
@@ -35,3 +35,5 @@ export async function watch(zenReq) {
 
   return zenRes;
 }
+
+export const handler = createLambdaHandler(watcher);
