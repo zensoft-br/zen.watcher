@@ -1,3 +1,4 @@
+import { createFromToken } from "@zensoftbr/zenerpclient";
 import { FiscalBrService } from "@zensoftbr/zenerpclient/api/fiscal/br/FiscalBrService";
 
 export async function dfeNfeProcOutOpAuthorize(zenReq) {

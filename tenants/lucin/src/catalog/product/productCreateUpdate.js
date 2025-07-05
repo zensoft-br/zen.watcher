@@ -1,4 +1,3 @@
-import * as Z from "@zensoftbr/zenerpclient";
 
 // When a productPacking is created, if code is empty
 // and variant is set, we will auto assign a code

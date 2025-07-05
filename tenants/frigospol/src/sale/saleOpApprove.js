@@ -56,6 +56,7 @@ export async function saleOpApprove(zenReq) {
       payments: payments,
     });
     sale1 = await saleService.saleOpPrepare(sale1.id);
-    sale1 = await saleService.saleOpApprove(sale1.id);
+    // sale1 = 
+    await saleService.saleOpApprove(sale1.id);
   }
 }

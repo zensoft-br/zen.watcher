@@ -1,18 +1,19 @@
-import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
-import { mailSale } from "./sale/mailSale.js";
-import { mailDfeNfeProcOut } from "./fiscal/br/mailDfeNfeProcOut.js";
+import "dotenv/config";
+import { HttpError } from "../../../../../shared/src/HttpError.js";
 import { mailReceivable } from "./financial/mailReceivable.js";
+import { mailDfeNfeProcOut } from "./fiscal/br/mailDfeNfeProcOut.js";
+import { mailSale } from "./sale/mailSale.js";
 
 export async function mailWatcher(event) {
   const z = Z.createFromToken(event.body.context.tenant, process.env.token);
 
   if (event.body?.context?.event === "/financial/billing/instructionResponseOpProcess") {
-    const id = event.body.args.id;
+    // const id = event.body.args.id;
 
     const instructionResponse = event.body.result;
 
-    if (result.type === "REGISTERED" && instructionResponse.billingTitle) {
+    if (instructionResponse.type === "REGISTERED" && instructionResponse.billingTitle) {
       return await mailReceivable(z, instructionResponse.billingTitle.id);
     }
   }

@@ -1,6 +1,5 @@
-import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
-import { OutgoingInvoicePayment } from "@zensoftbr/zenerpclient/api/fiscal/OutgoingInvoicePayment";
+import "dotenv/config";
 
 export async function outgoingInvoiceOpApprove(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);

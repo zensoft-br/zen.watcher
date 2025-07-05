@@ -25,7 +25,8 @@ export async function pickingOrderOpApprove(zenReq) {
   // reservation
   let reservation = pickingOrder.reservation;
   reservation = await materialService.reservationOpStart(reservation.id);
-  reservation = await materialService.reservationOpAllocateAuto(reservation.id);
+  // reservation = 
+  await materialService.reservationOpAllocateAuto(reservation.id);
 
   // outgoingList
   let outgoingList = pickingOrder.outgoingList;
@@ -37,7 +38,8 @@ export async function pickingOrderOpApprove(zenReq) {
   let outgoingInvoice = await materialService.outgoingListOpOutgoingInvoiceCreate(outgoingList.id, {
   });
   outgoingInvoice = await fiscalService.outgoingInvoiceOpPrepare(outgoingInvoice.id);
-  outgoingInvoice = await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice.id);
+  // outgoingInvoice =
+  await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice.id);
 
   // dfe
   // let dfe = await fiscalBrService.dfeNfeProcOutOpCreate(outgoingInvoice.id);

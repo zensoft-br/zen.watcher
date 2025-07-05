@@ -12,8 +12,8 @@ export async function saleOpApprove_before(zenReq) {
   let totalValuePriceList = 0;
   let totalValue = 0;
   for (const saleItem of saleItemList) {
-    totalValuePriceList += saleItemList[0].quantity * (saleItemList[0].properties.unitValuePriceList ?? saleItemList[0].unitValue);
-    totalValue += saleItemList[0].quantity * saleItemList[0].unitValue;
+    totalValuePriceList += saleItem.quantity * (saleItem.properties.unitValuePriceList ?? saleItem.unitValue);
+    totalValue += saleItem.quantity * saleItem.unitValue;
   }
   if (totalValue / totalValuePriceList < 0.85)
     throw new Error(`O desconto concedido no pedido ${id} está acima do limite permitido. Solicite aprovação especial`);

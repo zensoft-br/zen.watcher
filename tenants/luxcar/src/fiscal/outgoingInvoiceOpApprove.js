@@ -1,11 +1,6 @@
 import * as Z from "@zensoftbr/zenerpclient";
 
 export async function outgoingInvoiceOpApprove(zenReq) {
-  const zenRes = {
-    statusCode: 200,
-    body: {},
-  };
-
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
   const financialService = new Z.api.financial.FinancialService(z);

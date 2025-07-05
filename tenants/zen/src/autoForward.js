@@ -1,5 +1,3 @@
-// DEPRECATED?
-
 import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 import { SaleService } from "@zensoftbr/zenerpclient/api/sale/SaleService";
@@ -21,64 +19,64 @@ async function autoForwardSaleOpApprove(zenReq) {
 
   const sale = await saleService.saleReadById(zenReq.body.args.id);
 
-  if ((sale.saleProfile.tags ?? "").split(",").includes("saleOpPickingOrderCreateAuto")) {
-    const pickingOrder = await saleService.saleOpPickingOrderCreate(sale.id, {
-      pickingProfileId: sale.saleProfile.pickingProfile?.id,
-      // addressId:
-      shipmentId: sale.shipment?.id,
-      volumeCount: sale.properties?.volumeCount,
-      tags: sale.tags,
-      // properties:
-      // items:
-    });
-  } else
+  if (!(sale.saleProfile.tags ?? "").split(",").includes("saleOpPickingOrderCreateAuto"))
     return;
+
+  let pickingOrder = await saleService.saleOpPickingOrderCreate(sale.id, {
+    pickingProfileId: sale.saleProfile.pickingProfile?.id,
+    // addressId:
+    shipmentId: sale.shipment?.id,
+    volumeCount: sale.properties?.volumeCount,
+    tags: sale.tags,
+    // properties:
+    // items:
+  });
 
   const pickingProfileTags = (pickingOrder.pickingProfile.tags ?? "").split(",");
 
-  if (pickingProfileTags.includes("reservationOpStartAuto")) {
-    await materialService.reservationOpStart(pickingOrder.reservation.id);
-  } else
+  if (!pickingProfileTags.includes("reservationOpStartAuto"))
+    return
+
+  await materialService.reservationOpStart(pickingOrder.reservation.id);
+
+  if (!pickingProfileTags.includes("reservationOpAllocateAuto"))
     return;
 
-  if (pickingProfileTags.includes("reservationOpAllocateAuto")) {
-    await materialService.reservationOpAllocateAuto(pickingOrder.reservation.id);
-  } else
-    return;
+  await materialService.reservationOpAllocateAuto(pickingOrder.reservation.id);
 
   const outgoingListList = await materialService.outgoingListRead(`q=pickingOrder.id==${pickingOrder.id}`);
 
-  if (pickingProfileTags.includes("volumeOpCreateAuto")) {
-    for (const outgoingList of outgoingListList) {
-      await materialService.outgoingListOpVolumeCreateAuto(outgoingList.id, {
-        quantity: pickingOrder.properties?.volumeCount ?? 1,
-      });
-      // await materialService.outgoingListOpPacked(outgoingList.id);
-    }
-  } else
+  if (!pickingProfileTags.includes("volumeOpCreateAuto"))
     return;
+
+  for (const outgoingList of outgoingListList) {
+    await materialService.outgoingListOpVolumeCreateAuto(outgoingList.id, {
+      quantity: pickingOrder.properties?.volumeCount ?? 1,
+    });
+    // await materialService.outgoingListOpPacked(outgoingList.id);
+  }
 
   const outgoingInvoiceList = [];
 
-  if (pickingProfileTags.includes("outgoingListOpOutgoingInvoiceCreateAuto")) {
-    for (const outgoingList of outgoingListList) {
-      outgoingInvoiceList.push( await materialService.outgoingListOpOutgoingInvoiceCreate(outgoingList.id, {
-      }));
-    }
-  } else
+  if (!pickingProfileTags.includes("outgoingListOpOutgoingInvoiceCreateAuto"))
     return;
 
-  if (pickingProfileTags.includes("outgoingInvoiceOpPrepareAuto")) {
-    for (const outgoingInvoice of outgoingInvoiceList) {
-      await fiscalService.outgoingInvoiceOpPrepare(outgoingInvoice.id);
-    }
-  } else
+  for (const outgoingList of outgoingListList) {
+    outgoingInvoiceList.push(await materialService.outgoingListOpOutgoingInvoiceCreate(outgoingList.id, {
+    }));
+  }
+
+  if (!pickingProfileTags.includes("outgoingInvoiceOpPrepareAuto"))
     return;
 
-  if (pickingProfileTags.includes("outgoingInvoiceOpApproveAuto")) {
-    for (const outgoingInvoice of outgoingInvoiceList) {
-      await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice.id);
-    }
-  } else
+  for (const outgoingInvoice of outgoingInvoiceList) {
+    await fiscalService.outgoingInvoiceOpPrepare(outgoingInvoice.id);
+  }
+
+  if (pickingProfileTags.includes("outgoingInvoiceOpApproveAuto"))
     return;
+
+  for (const outgoingInvoice of outgoingInvoiceList) {
+    await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice.id);
+  }
 }

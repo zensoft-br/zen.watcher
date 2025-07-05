@@ -1,7 +1,7 @@
 import "dotenv/config.js";
-import { watch } from "../index.js";
+import { watch } from "../src/index.js";
 
-const zenRes = await watch({
+await watch({
   method: "POST",
   path: "/",
   query: {},

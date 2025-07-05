@@ -11,18 +11,18 @@ export async function a(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
   let item = undefined;
-  let master = undefined;
+  // let master = undefined;
   if (source.startsWith("/fiscal/incomingInvoiceItem:")) {
     const fiscalService = new Z.api.fiscal.FiscalService(z);
 
     item = await fiscalService.incomingInvoiceItemReadById(Number(source.split(":")[1]));
-    master = item.incomingInvoice;
+    // master = item.incomingInvoice;
   }
   else if (source.startsWith("/supply/purchase/purchaseItem:")) {
     const purchaseService = new Z.api.supply.purchase.PurchaseService(z);
 
     item = await purchaseService.purchaseItemReadById(source.split(":")[1]);
-    master = item.purchase;
+    // master = item.purchase;
   }
 
   if (item) {

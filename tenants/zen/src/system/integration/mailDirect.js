@@ -1,7 +1,8 @@
-import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
-import { mailDfeNfeProcOut } from "./fiscal/br/mailDfeNfeProcOut.js";
+import "dotenv/config";
+import { HttpError } from "../../../../../shared/src/HttpError.js";
 import { mailReceivable } from "./financial/mailReceivable.js";
+import { mailDfeNfeProcOut } from "./fiscal/br/mailDfeNfeProcOut.js";
 import { mailSale } from "./sale/mailSale.js";
 
 export async function mailDirect(event) {
