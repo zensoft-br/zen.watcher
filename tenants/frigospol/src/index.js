@@ -1,6 +1,6 @@
 import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
 import { outgoingInvoiceOpPrepare } from "./fiscal/outgoingInvoiceOpPrepare.js";
-import { incomingListItemCreate } from "./incomingListItemCreate.js";
+import { incomingListItemCreate } from "./material/incomingListItemCreate.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 
 export async function watcher(zenReq) {

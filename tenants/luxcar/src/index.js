@@ -1,10 +1,10 @@
-import { incomingListCreate } from "./incomingListCreate.js";
-import { incomingListOpPrepare } from "./incomingListOpPrepare.js";
-import { instructionRequestOpCreateRegister } from "./instructionRequestOpCreateRegister.js";
-import { personCreate } from "./personCreate.js";
-import { purchaseCreate } from "./purchaseCreate.js";
-import { outgoingInvoiceOpApprove } from "./outgoingInvoiceOpApprove.js";
-import { saleOpApprove } from "./saleOpApprove.js";
+import { incomingListCreate } from "./material/incomingListCreate.js";
+import { incomingListOpPrepare } from "./material/incomingListOpPrepare.js";
+import { instructionRequestOpCreateRegister } from "./financial/billing/instructionRequestOpCreateRegister.js";
+import { personCreate } from "./catalog/person/personCreate.js";
+import { purchaseCreate } from "./supply/purchase/purchaseCreate.js";
+import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
+import { saleOpApprove } from "./sale/saleOpApprove.js";
 
 export async function watcher(zenReq) {
   let zenRes = {

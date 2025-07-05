@@ -1,7 +1,7 @@
 import { productPackingCreate } from "./catalog/product/productPackingCreate.js";
 import { notifyBackloggedSales } from "./custom/notifyBackloggedSales.js";
 import { saleOpPrepare } from "./sale/saleOpPrepare.js";
-import { saleCreate } from "./saleCreate.js";
+import { saleCreate } from "./sale/saleCreate.js";
 import { userLogCreate } from "./system/audit/userLogCreate.js";
 import { workpieceOpForward } from "./system/workflow/workpieceOpForward.js";
 

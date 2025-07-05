@@ -1,4 +1,4 @@
-export const createLambdaHandler = (watch) => {
+export const createLambdaHandler = (watcher) => {
   return async (event) => {
     // Normalizar e validar content-type
     const contentType = event.headers?.["content-type"] ?? event.headers?.["Content-Type"] ?? "";
@@ -27,7 +27,7 @@ export const createLambdaHandler = (watch) => {
     };
 
     try {
-      let result = await watch(zenReq);
+      let result = await watcher(zenReq);
 
       // Garante statusCode e body stringificado
       result = {

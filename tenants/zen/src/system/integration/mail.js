@@ -1,4 +1,4 @@
-import { HttpError } from "../../HttpError.js";
+import { HttpError } from "../../../../../shared/src/HttpError.js";
 import { mailDirect } from "./mailDirect.js";
 import { mailQueue } from "./mailQueue.js";
 import { mailWatcher } from "./mailWatcher.js";
