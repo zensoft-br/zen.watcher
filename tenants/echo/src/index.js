@@ -1,4 +1,4 @@
-import { createLambdaHandler } from "../../../shared/src/lambdaHandler.js";
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 
 export const watcher = async (zenReq) => {
   return {

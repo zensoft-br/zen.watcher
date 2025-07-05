@@ -1,3 +1,5 @@
+import { HttpError } from "./HttpError.js";
+
 export const createLambdaHandler = (watcher) => {
   return async (event) => {
     // Normalizar e validar content-type
@@ -42,6 +44,20 @@ export const createLambdaHandler = (watcher) => {
       return result;
     } catch (error) {
       console.error("Lambda handler error:", error);
+
+      if (error instanceof HttpError) {
+        return {
+          statusCode: error.statusCode,
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "error",
+            message: error.message,
+            ...(Object.keys(error.payload ?? {}).length > 0 && { payload: error.payload }),
+          }),
+        };
+      }
 
       return {
         statusCode: 500,

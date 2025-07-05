@@ -124,7 +124,7 @@ export async function mailDfeNfeProcOut(z, id, args) {
 
 // const z = Z.createFromToken("lucin", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzMWM5NzM4YS02NTg5LTRiNDYtOWQ1Ny0yY2RjZDc5NTM4MWIiLCJzdWIiOiJzdXBwb3J0QHBlcnNvbmFsc29mdC5jb20uYnIiLCJuYmYiOjE3NDE0MTQwNDEsImlhdCI6MTc0MTQxNDA0MSwiZXhwIjoxNzQxNTAwNDQxLCJsb2NhbGUiOiJwdC1CUiIsInRpbWVab25lIjoiQW1lcmljYS9TYW9fUGF1bG8ifQ.d6o7u5JfIbNDL_3iJ9G7SpTwJuftrJIH9ReIjAD5OWY");
 // const idList = [
-//   1237, 1238, 1242, 1450, 1640, 1869, 1870, 1885, 4628, 4722, 4773, 4951, 5145, 5146, 5147, 5151, 
+//   1237, 1238, 1242, 1450, 1640, 1869, 1870, 1885, 4628, 4722, 4773, 4951, 5145, 5146, 5147, 5151,
 // ];
 // console.log(idList.length);
 // for (const id of idList) {

@@ -32,24 +32,24 @@ export async function saleOpPrepare(zenReq) {
   let oldComission = -1;
   let newComission = 0;
   let saleComissionUpdate = true;
-  
+
   for (const saleItem of saleItemList) {
     const priceListValue = (antecipado ? Math.round(saleItem.priceListValue * 0.96 * 100) / 100 : saleItem.priceListValue);
-    if (saleItem.sale.priceList.code === 'ATACADO')
-      newComission = await getComission('ATA', saleItem.unitValue, priceListValue);
-    else if (saleItem.sale.priceList.code === 'CONFECCAO')
-      newComission = await getComission('CON', saleItem.unitValue, priceListValue);
-    else 
+    if (saleItem.sale.priceList.code === "ATACADO")
+      newComission = await getComission("ATA", saleItem.unitValue, priceListValue);
+    else if (saleItem.sale.priceList.code === "CONFECCAO")
+      newComission = await getComission("CON", saleItem.unitValue, priceListValue);
+    else
       return;
 
     if (oldComission == -1)
       oldComission = newComission;
 
     if (oldComission != newComission)
-      saleComissionUpdate = false;    
+      saleComissionUpdate = false;
 
     saleItem.properties["salesCommission"] = newComission;
-    
+
     await saleService.saleItemUpdate(saleItem);
   }
 
@@ -58,7 +58,7 @@ export async function saleOpPrepare(zenReq) {
     saleUpdate = true;
   }
   else {
-    if ((sale.priceList.code === 'ATACADO') || (sale.priceList.code === 'CONFECCAO')) {
+    if ((sale.priceList.code === "ATACADO") || (sale.priceList.code === "CONFECCAO")) {
       delete sale.properties.salesCommission;
       saleUpdate = true;
     }
@@ -70,7 +70,7 @@ export async function saleOpPrepare(zenReq) {
 
 async function getComission(type, unitValue, priceListValue) {
   const discountValue = Math.round((priceListValue - unitValue) / priceListValue * 10000) / 100;
-  if (type === 'ATA') {
+  if (type === "ATA") {
     if (discountValue > 10)
       return 0;
     else if (discountValue > 9)
@@ -95,7 +95,7 @@ async function getComission(type, unitValue, priceListValue) {
       return 2.7;
     else
       return 3;
-  } else if (type === 'CON') {
+  } else if (type === "CON") {
     if (discountValue > 15)
       return 0;
     else if (discountValue > 13.5)

@@ -1,3 +1,4 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { databaseOpOptimize } from "./databaseOpOptimize.js";
 import { dfeNfeProcOutOpAuthorize } from "./dfeNfeProcOutOpAuthorize.js";
 import { email } from "./email.js";

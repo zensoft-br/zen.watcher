@@ -1,6 +1,6 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { corpen } from "./system/integration/corpen/corpen.js";
 
-// eslint-disable-next-line no-unused-vars
 export async function watcher(zenReq) {
   const zenRes = {
     statusCode: 200,

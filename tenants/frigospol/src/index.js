@@ -1,3 +1,4 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
 import { outgoingInvoiceOpPrepare } from "./fiscal/outgoingInvoiceOpPrepare.js";
 import { incomingListItemCreate } from "./material/incomingListItemCreate.js";

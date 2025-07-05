@@ -8,7 +8,7 @@ import { outgoingInvoiceRead } from "./fiscal/outgoingInvoiceRead.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 import { saleOpCreate } from "./sale/saleOpCreate.js";
 import { purchaseRead } from "./supply/purchase/purchaseRead.js";
-import { createLambdaHandler } from "../../../shared/src/lambdaHandler.js";
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 
 export async function watcher(zenReq) {
   const zenRes = {

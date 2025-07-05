@@ -1,10 +1,11 @@
 // import * as Z from "@zensoftbr/zenerpclient";
 
-import { saleCreate } from "./sale/saleCreate.js";
-import { outgoingInvoiceOpPrepare } from "./fiscal/outgoingInvoiceOpPrepare.js";
-import { saleOpApprove } from "./sale/saleOpApprove.js";
-import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { creditLineOpInactivate } from "./financial/credit/creditLineOpInactivate.js";
+import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
+import { outgoingInvoiceOpPrepare } from "./fiscal/outgoingInvoiceOpPrepare.js";
+import { saleCreate } from "./sale/saleCreate.js";
+import { saleOpApprove } from "./sale/saleOpApprove.js";
 
 export async function watcher(zenReq) {
   const zenRes = {

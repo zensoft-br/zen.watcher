@@ -16,7 +16,7 @@ export async function saleOpPrepare(zenReq) {
 
   const sale = await saleService.saleReadById(id);
 
-  if (sale.priceList.code === '1004')
+  if (sale.priceList.code === "1004")
     return;
 
   const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
@@ -25,7 +25,7 @@ export async function saleOpPrepare(zenReq) {
   let oldComission = -1;
   let newComission = 0;
   let saleComissionUpdate = true;
-  
+
   for (const saleItem of saleItemList) {
     const priceListValue = saleItem.priceListValue;
     newComission = await getComission(saleItem.unitValue, priceListValue);
@@ -34,9 +34,9 @@ export async function saleOpPrepare(zenReq) {
       oldComission = newComission;
 
     if (oldComission != newComission)
-      saleComissionUpdate = false;    
+      saleComissionUpdate = false;
 
-    saleItem.properties["salesCommission"] = newComission;    
+    saleItem.properties["salesCommission"] = newComission;
     await saleService.saleItemUpdate(saleItem);
   }
 
@@ -46,7 +46,7 @@ export async function saleOpPrepare(zenReq) {
   }
   else {
     delete sale.properties.salesCommission;
-    saleUpdate = true;    
+    saleUpdate = true;
   }
 
   if (saleUpdate)
@@ -61,9 +61,10 @@ async function getComission(unitValue, priceListValue) {
     let i = 9;
     while (i >= 3) {
       newPriceListValue = Math.round(newPriceListValue / 1.03 * 100) / 100;
-      if (unitValue >= newPriceListValue) return i;
+      if (unitValue >= newPriceListValue)
+        return i;
       i--;
     }
     return 0;
-  }  
+  }
 }

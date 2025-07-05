@@ -85,7 +85,7 @@ export async function corpen(zenReq) {
       // IETIQ_MK: "N",
       // ORDER_ID_MK: "",
       // ECT_TPSERV: "PAC",
-      CGCDEST: sale.person.documentNumber.replaceAll(/\D/g, ''),
+      CGCDEST: sale.person.documentNumber.replaceAll(/\D/g, ""),
       IEDEST: sale.person.document2Number ?? "ISENTO",
       NOMEDEST: sale.person.name,
       CEPDEST: sale.person.zipcode,

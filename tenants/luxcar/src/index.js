@@ -1,10 +1,11 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
+import { personCreate } from "./catalog/person/personCreate.js";
+import { instructionRequestOpCreateRegister } from "./financial/billing/instructionRequestOpCreateRegister.js";
+import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
 import { incomingListCreate } from "./material/incomingListCreate.js";
 import { incomingListOpPrepare } from "./material/incomingListOpPrepare.js";
-import { instructionRequestOpCreateRegister } from "./financial/billing/instructionRequestOpCreateRegister.js";
-import { personCreate } from "./catalog/person/personCreate.js";
-import { purchaseCreate } from "./supply/purchase/purchaseCreate.js";
-import { outgoingInvoiceOpApprove } from "./fiscal/outgoingInvoiceOpApprove.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
+import { purchaseCreate } from "./supply/purchase/purchaseCreate.js";
 
 export async function watcher(zenReq) {
   let zenRes = {

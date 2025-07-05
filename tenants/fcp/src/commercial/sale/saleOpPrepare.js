@@ -28,7 +28,7 @@ export async function saleOpPrepare(zenReq) {
   if (productPackingNotFound.length)
     throw new Error(`Valor unitário de custo não encontrado para os produtos ${productPackingNotFound.join(",")}`);
 
-  const { costValue, productValue, contributionMargin, markup  } = saleItemList.reduce((red, e) => {
+  const { costValue, productValue, contributionMargin, markup } = saleItemList.reduce((red, e) => {
     red.productValue = round(red.productValue + e.productValue, 2);
     red.costValue = round(red.costValue + (e.quantity * e.costUnitValue), 2);
     red.contributionMargin = (red.productValue - red.costValue) / red.productValue * 100;

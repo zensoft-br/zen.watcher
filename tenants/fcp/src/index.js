@@ -1,6 +1,6 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { saleOpPrepare } from "./commercial/sale/saleOpPrepare.js";
 
-// eslint-disable-next-line no-unused-vars
 export async function watcher(zenReq) {
   const zenRes = {
     statusCode: 200,
