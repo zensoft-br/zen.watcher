@@ -7,7 +7,7 @@
   "license": "AGPL-version-3.0",
   "private": false,
   "workspaces": [
-    "tenants/*",
+    "subprojects/*",
     "shared"
   ],
   "packageManager": "npm@8.19.2",

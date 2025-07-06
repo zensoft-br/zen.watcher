@@ -1,6 +1,6 @@
 import { HttpError } from "./HttpError.js";
 
-export const createLambdaHandler = (watcher) => {
+export const createLambdaHandler = ({ watcher, schema }) => {
   return async (event) => {
     // Normalizar e validar content-type
     const contentType = event.headers?.["content-type"] ?? event.headers?.["Content-Type"] ?? "";
@@ -29,6 +29,17 @@ export const createLambdaHandler = (watcher) => {
     };
 
     try {
+      if (zenReq.path === "/schema") {
+        // If the path is /schema, return the schema of the watcher
+        return {
+          statusCode: 200,
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(schema ?? {
+            message: "No schema defined for this watcher.",
+          }),
+        };
+      }
+
       let result = await watcher(zenReq);
 
       // Garante statusCode e body stringificado

@@ -4,28 +4,40 @@ import express from "express";
 const app = express();
 const port = 8090;
 
-// Load tenant name from environment variable
-const tenantName = process.env.TENANT_NAME;
-if (!tenantName) {
-  throw new Error("Set TENANT_NAME env var to select client subproject");
+const subproject = process.env.SUBPROJECT;
+if (!subproject) {
+  throw new Error("Set SUBPROJECT env var to select subproject");
 }
 
 let watcher;
+let schema;
 
 try {
-  // Importa dinamicamente o watch do cliente escolhido
-  watcher = (await import(`./tenants/${tenantName}/src/index.js`)).watcher;
+  const mod = await import(`./subprojects/${subproject}/src/index.js`);
+  watcher = mod.watcher;
+  schema = mod.schema;
+
   if (typeof watcher !== "function") {
-    throw new Error(`Client ${tenantName} does not export 'watch' function`);
+    throw new Error(`Client ${subproject} does not export 'watcher' function`);
   }
 } catch (err) {
-  console.error("Failed to load client watch function:", err);
+  console.error("Failed to load client module:", err);
   process.exit(1);
 }
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+
+app.all("/schema", async (_, res, next) => {
+  try {
+    res.status(200).json(schema ?? {
+      message: "No schema defined for this watcher.",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.all("*", async (req, res, next) => {
   try {
@@ -47,25 +59,22 @@ app.all("*", async (req, res, next) => {
       statusCode: result?.statusCode ?? 200,
     };
 
-    if (result.statusCode)
-      res.status(result.statusCode);
-    res.type(result.contentType ?? "application/json");
-    res.send(result.body ?? {});
+    res.status(result.statusCode)
+      .type(result.contentType ?? "application/json")
+      .send(result.body ?? {});
   } catch (error) {
     next(error);
   }
 });
 
-app.use((err, req, res, next) => {
-  res.status(500)
-    .contentType("application/json")
-    .send({
-      type: "error",
-      message: err.message,
-      stack: process.env.NODE_ENV === "production" ? {} : err.stack,
-    });
+app.use((err, req, res) => {
+  res.status(500).json({
+    type: "error",
+    message: err.message,
+    stack: process.env.NODE_ENV === "production" ? {} : err.stack,
+  });
 });
 
 app.listen(port, () => {
-  console.log(`zen.watcher running on port ${port}, client=${tenantName}`);
+  console.log(`zen.watcher running on port ${port}, client=${subproject}`);
 });
