@@ -1,6 +1,6 @@
-import { watch } from "../src/watcher";
+import { watcher } from "../subprojects/echo/dist/index.js";
 
-const zenRes = await watch({
+const zenRes = await watcher({
   method: "POST",
   path: "/path",
   query: {

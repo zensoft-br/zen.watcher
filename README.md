@@ -43,7 +43,7 @@ Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.
 
 * **method**: Identifica o tipo de solicitação feita (e.g., POST, PUT).
 * **path**: O endpoint acessado que resultou no evento.
-* **quary**: Parâmetros de consulta que podem acompanhar a solicitação.
+* **query**: Parâmetros de consulta que podem acompanhar a solicitação.
 * **headers**: Informações sobre o tipo de conteúdo e outras metadatas da solicitação.
 * **body**: Contém informações essenciais sobre o evento do Zen Erp, incluindo:
   * **context**: O contexto em que o evento ocorreu
@@ -52,33 +52,33 @@ Quando um evento é disparado no Zen ERP, a função `watch` dentro de `watcher.
     * **token** Um token JWT para autenticação e autorização.
   * **args** Argumentos adicionais que podem incluir identificadores e dados relevantes ao evento.
 
-Exemplo:
+Exemplo `zenReq`:
 
 ```json
-const zenReq = {
+{
   "method": "POST",
   "path": "/",
   "query": {
-    // "p1": "v1",
-    // "p2": "v2",
+    "p1": "v1",
+    "p2": "v2"
   },
   "headers": {
-    "content-type": "application/json",
+    "content-type": "application/json"
   },
   "body": {
     "context": {
       "tenant": "tenant",
       "event": "/module/operation",
-      "token": "jwt",
+      "token": "jwt"
     },
     "args": {
-      // "id": 9999,
-      // "bean": {
-      //   "id": 9999,
-      // },
-    },
-  },
-};
+      "id": 9999,
+      "bean": {
+        "id": 9999,
+      }
+    }
+  }
+}
 ```
 
 ### Análise e resposta aos eventos
