@@ -7,6 +7,52 @@ import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 import { userLogCreate } from "./system/audit/userLogCreate.js";
 import { workpieceOpForward } from "./system/workflow/workpieceOpForward.js";
 
+export const schema = {
+  version: "1.0",
+  watchers: [
+    {
+      description: "Watch for sale creation to prepare the sale operation",
+      events: ["/catalog/product/productPackingCreate"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
+      description: "Watch for user log creation to perform additional actions",
+      events: ["/system/audit/userLogCreate"],
+      path: "/",
+      tags: ["after"],
+    },
+    {
+      description: "Notify about backlogged sales by updating their tags",
+      path: "/custom/notifyBackloggedSales",
+    },
+    {
+      description: "Watch for workpiece operation forwarding to perform additional actions",
+      events: ["/system/workflow/workpieceOpForward"],
+      path: "/",
+      tags: ["after"],
+    },
+    {
+      description: "Read financial payable data before processing",
+      events: ["/financial/payableRead"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
+      description: "Prepare sale operation before creating a sale",
+      events: ["/sale/saleCreate"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
+      description: "Prepare sale operation before processing sale operations",
+      events: ["/sale/saleOpPrepare"],
+      path: "/",
+      tags: ["before"],
+    },
+  ]
+};
+
 export async function watcher(zenReq) {
   let zenRes = {
     statusCode: 200,
@@ -56,11 +102,13 @@ export async function watcher(zenReq) {
     }
   }
 
-  if (zenReq.body.context.event === "/financial/payableRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+  if (zenReq.body.context.event === "/financial/payableRead"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await payableRead(zenReq);
   }
 
-  if (zenReq.body?.context?.event === "/sale/saleCreate" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+  if (zenReq.body?.context?.event === "/sale/saleCreate"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
     zenRes = await saleCreate(zenReq);
   }
 
@@ -78,4 +126,4 @@ export async function watcher(zenReq) {
   return zenRes;
 }
 
-export const handler = createLambdaHandler({ watcher });
+export const handler = createLambdaHandler({ watcher, schema });
