@@ -1,6 +1,7 @@
 import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { productPackingCreate } from "./catalog/product/productPackingCreate.js";
 import { notifyBackloggedSales } from "./custom/notifyBackloggedSales.js";
+import { payableRead } from "./financial/payableRead.js";
 import { saleCreate } from "./sale/saleCreate.js";
 import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 import { userLogCreate } from "./system/audit/userLogCreate.js";
@@ -53,6 +54,10 @@ export async function watcher(zenReq) {
         ...result,
       };
     }
+  }
+
+  if (zenReq.body.context.event === "/financial/payableRead" && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await payableRead(zenReq);
   }
 
   if (zenReq.body?.context?.event === "/sale/saleCreate" && (zenReq.body?.context?.tags ?? []).includes("before")) {
