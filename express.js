@@ -29,8 +29,11 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-app.all("/schema", async (_, res, next) => {
+app.all("/schema", async (req, res, next) => {
   try {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     res.status(200).json(schema ?? {
       message: "No schema defined for this watcher.",
     });
