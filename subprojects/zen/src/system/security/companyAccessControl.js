@@ -9,9 +9,7 @@ export async function companyAccessControl(zenReq) {
   const session = await securityService.sessionOpGetCurrent();
 
   const companyIds = 
-    (session.user.properties?.companyIds ?? session.user.accessProfile?.properties?.companyIds ?? "")
-      .split(",")
-      .filter(id => id);
+    (session.user.properties?.companyIds ?? session.user.accessProfile?.properties?.companyIds ?? []);
 
   if (!companyIds.length) {
     return;
