@@ -24,7 +24,10 @@ export async function productCreateUpdate(zenReq) {
     bean.properties.ps_gramatura_ml = round((bean.properties.textileWidth ?? 0) * (bean.properties.textileGramWeight ?? 0), 4);
 
     /* campo alterado: ps_largura_util_pol */
-    bean.properties.ps_largura_util_cm = round((bean.properties.ps_largura_util_pol ?? 0) * 2.54 / 100, 2);
+    bean.properties.ps_largura_util_cm = round((bean.properties.ps_largura_util_pol ?? 0) * 2.54, 2);
+
+    if (!bean.properties.textileWidthM_usable) {
+      bean.properties.textileWidthM_usable = round((bean.properties.ps_largura_util_pol ?? 0) * 2.54 / 100, 2);
 
     /* campos da amostra original */
     if (!bean.properties.ps_largura_y) {
