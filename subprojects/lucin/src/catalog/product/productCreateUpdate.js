@@ -28,6 +28,7 @@ export async function productCreateUpdate(zenReq) {
 
     if (!bean.properties.textileWidthM_usable) {
       bean.properties.textileWidthM_usable = round((bean.properties.ps_largura_util_pol ?? 0) * 2.54 / 100, 2);
+    }
 
     /* campos da amostra original */
     if (!bean.properties.ps_largura_y) {
