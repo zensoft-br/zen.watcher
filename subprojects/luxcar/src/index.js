@@ -7,6 +7,11 @@ import { incomingListOpPrepare } from "./material/incomingListOpPrepare.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 import { purchaseCreate } from "./supply/purchase/purchaseCreate.js";
 
+export const schema = {
+  version: "1.0",
+  watchers: [],
+};
+
 export async function watcher(zenReq) {
   let zenRes = {
     statusCode: 200,
@@ -45,4 +50,4 @@ export async function watcher(zenReq) {
   return zenRes;
 }
 
-export const handler = createLambdaHandler({ watcher });
+export const handler = createLambdaHandler({ watcher, schema });

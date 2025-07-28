@@ -7,6 +7,11 @@ import { outgoingInvoiceOpPrepare } from "./fiscal/outgoingInvoiceOpPrepare.js";
 import { saleCreate } from "./sale/saleCreate.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 
+export const schema = {
+  version: "1.0",
+  watchers: [],
+};
+
 export async function watcher(zenReq) {
   const zenRes = {
     statusCode: 200,
@@ -40,4 +45,4 @@ export async function watcher(zenReq) {
   return zenRes;
 }
 
-export const handler = createLambdaHandler({ watcher });
+export const handler = createLambdaHandler({ watcher, schema });

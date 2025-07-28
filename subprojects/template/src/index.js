@@ -1,5 +1,10 @@
 import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 
+export const schema = {
+  version: "1.0",
+  watchers: [],
+};
+
 export const watcher = async (zenReq) => {
   // Your business logic goes here
   if (zenReq.path === "/hello") {
@@ -8,4 +13,4 @@ export const watcher = async (zenReq) => {
   return { statusCode: 404, body: "Not found" };
 };
 
-export const handler = createLambdaHandler({ watcher });
+export const handler = createLambdaHandler({ watcher, schema });

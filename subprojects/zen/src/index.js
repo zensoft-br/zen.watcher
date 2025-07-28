@@ -56,7 +56,7 @@ export const schema = {
       action: (zenReq) => databaseOpOptimize(zenReq),
     },
     {
-      description: "Optimize database operations",
+      description: "Restrict access to company-related data",
       path: "/system/security/companyAccessControl",
       events: [
         '/commercial/contract/contractRead',
@@ -218,4 +218,4 @@ export async function watcher(zenReq) {
   return zenRes;
 }
 
-export const handler = createLambdaHandler({ watcher });
+export const handler = createLambdaHandler({ watcher, schema });

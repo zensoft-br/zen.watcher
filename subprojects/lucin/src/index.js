@@ -139,4 +139,4 @@ export async function watcher(zenReq) {
   return zenRes;
 }
 
-export const handler = createLambdaHandler({ watcher });
+export const handler = createLambdaHandler({ watcher, schema });
