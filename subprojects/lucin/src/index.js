@@ -9,6 +9,7 @@ import { saleOpApprove } from "./sale/saleOpApprove.js";
 import { saleOpCreate } from "./sale/saleOpCreate.js";
 import { purchaseRead } from "./supply/purchase/purchaseRead.js";
 import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
+import { receivableCreate } from "./financial/receivableCreate.js";
 
 export const schema = {
   version: "1.0",
@@ -37,6 +38,12 @@ export const schema = {
     {
       description: "Restrict financial payable read access based on custom conditions",
       events: ["/financial/payableRead"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
+      description: "Custom logic for financial receivable creation",
+      events: ["/financial/receivableCreate"],
       path: "/",
       tags: ["before"],
     },
@@ -104,6 +111,11 @@ export async function watcher(zenReq) {
   if (zenReq.body.context.event === "/financial/payableRead"
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await payableRead(zenReq);
+  }
+
+  if (zenReq.body.context.event === "/financial/receivableCreate"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await receivableCreate(zenReq);
   }
 
   if (zenReq.body.context.event === "/financial/receivableRead"

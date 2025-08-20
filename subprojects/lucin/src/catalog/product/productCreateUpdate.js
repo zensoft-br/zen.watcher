@@ -1,8 +1,29 @@
+import { api, createFromToken } from "@zensoftbr/zenerpclient";
 
-// When a productPacking is created, if code is empty
-// and variant is set, we will auto assign a code
+// Custom logic for product creation/update
 export async function productCreateUpdate(zenReq) {
   const bean = zenReq.body.args.bean;
+
+  // Custom logic for product creation/update
+  if (zenReq.body.context.event === "/catalog/product/productCreate") {
+    // If keywords is present and code is missing, assign a sequence to code
+    if (bean.keywords && !bean.code) {
+      const z = createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
+
+      const productService = new api.catalog.product.ProductService(z);
+      const [product] = await productService.productRead(`q=keywords==${bean.keywords}`);
+      if (product) {
+        throw new Error(`Já existe um produto com a palavra-chave ${bean.keywords}`);
+      }
+
+      const storageService = new api.system.storage.StorageService(z);
+      const lastSeq = (await storageService.getNumber("/custom/lucin/catalog/product/lastSeq")) || 0;
+
+      bean.code = `${String(lastSeq + 1).padStart(6, "0")}`;
+
+      await storageService.putNumber("/custom/lucin/catalog/product/lastSeq", lastSeq + 1);
+    }
+  }
 
   try {
     if (!bean.category3) {
