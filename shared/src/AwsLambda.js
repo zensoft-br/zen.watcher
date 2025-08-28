@@ -1,86 +1,79 @@
 import { HttpError } from "./HttpError.js";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
+  "Access-Control-Allow-Credentials": "true", // optional
+};
+
+function buildResponse(statusCode, body, extraHeaders = {}) {
+  return {
+    statusCode,
+    headers: { ...corsHeaders, ...extraHeaders, "content-type": "application/json" },
+    body: typeof body === "string" ? body : JSON.stringify(body ?? null),
+  };
+}
+
 export const createLambdaHandler = ({ watcher, schema }) => {
   return async (event) => {
-    // Normalizar e validar content-type
-    const contentType = event.headers?.["content-type"] ?? event.headers?.["Content-Type"] ?? "";
-    if (contentType.toLowerCase().trim().startsWith("application/json")) {
-      try {
-        event.body = JSON.parse(event.body);
-      } catch (parseError) {
-        return {
-          statusCode: 400,
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
+    try {
+      const method = event.requestContext?.http?.method ?? "POST";
+
+      // Handle CORS preflight
+      if (method === "OPTIONS") {
+        return buildResponse(200, { ok: true });
+      }
+
+      // Parse JSON if applicable
+      const contentType = event.headers?.["content-type"] ?? event.headers?.["Content-Type"] ?? "";
+      if (contentType.toLowerCase().trim().startsWith("application/json") && event.body) {
+        try {
+          event.body = JSON.parse(event.body);
+        } catch (parseError) {
+          return buildResponse(400, {
             type: "error",
             message: "Invalid JSON body",
             details: parseError.message,
-          }),
-        };
+          });
+        }
       }
-    }
 
-    const zenReq = {
-      method: event.requestContext?.http?.method ?? "POST",
-      path: event.requestContext?.http?.path ?? "/",
-      query: event.queryStringParameters ?? {},
-      headers: event.headers ?? {},
-      body: event.body ?? {},
-    };
+      const zenReq = {
+        method,
+        path: event.requestContext?.http?.path ?? "/",
+        query: event.queryStringParameters ?? {},
+        headers: event.headers ?? {},
+        body: event.body ?? {},
+      };
 
-    try {
       if (zenReq.path === "/schema") {
-        // If the path is /schema, return the schema of the watcher
-        return {
-          statusCode: 200,
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(schema ?? {
-            message: "No schema defined for this watcher.",
-          }),
-        };
+        return buildResponse(200, schema ?? { message: "No schema defined for this watcher." });
       }
 
       let result = await watcher(zenReq);
 
-      // Garante statusCode e body stringificado
-      result = {
-        ...result,
-        statusCode: result?.statusCode ?? 200,
-      };
-
-      if (typeof result.body !== "string") {
-        result.body = JSON.stringify(result.body ?? null);
-      }
-
-      return result;
+      return buildResponse(
+        result?.statusCode ?? 200,
+        result?.body,
+        result?.headers
+      );
     } catch (error) {
       console.error("Lambda handler error:", error);
 
       if (error instanceof HttpError) {
-        return {
-          statusCode: error.statusCode,
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            type: "error",
-            message: error.message,
-            ...(Object.keys(error.payload ?? {}).length > 0 && { payload: error.payload }),
-          }),
-        };
+        return buildResponse(error.statusCode, {
+          type: "error",
+          message: error.message,
+          ...(Object.keys(error.payload ?? {}).length > 0 && { payload: error.payload }),
+        });
       }
 
-      return {
-        statusCode: 500,
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "error",
-          message: error?.message ?? "Unknown error",
-          stackTrace: process.env.NODE_ENV === "production" ? {} : error?.stack ?? "",
-        }),
-      };
+      return buildResponse(500, {
+        type: "error",
+        message: error?.message ?? "Unknown error",
+        stackTrace: process.env.NODE_ENV === "production" ? {} : error?.stack ?? "",
+      });
     }
   };
 };

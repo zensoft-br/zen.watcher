@@ -19,18 +19,18 @@ export async function emailNFe(zenReq) {
 
   // Load NFe
   const dfeNfeProcOut = await fiscalBrService.dfeNfeProcOutReadById(zenReq.body.args.id);
-  const bean = dfeNfeProcOut.outgoingInvoice;
+  const invoice = (dfeNfeProcOut.invoice ?? dfeNfeProcOut.outgoingInvoice);
 
   // Let's load all personContact's in just on read
   const personIds = [];
   if (recipients.includes("company"))
-    personIds.push(bean.company.person.id);
+    personIds.push(invoice.company.person.id);
   if (recipients.includes("person"))
-    personIds.push(bean.person.id);
-  if (recipients.includes("salesperson") && bean.personSalesperson)
-    personIds.push(bean.personSalesperson.id);
-  if (recipients.includes("shipping") && bean.personShipping)
-    personIds.push(bean.personShipping.id);
+    personIds.push(invoice.person.id);
+  if (recipients.includes("salesperson") && invoice.personSalesperson)
+    personIds.push(invoice.personSalesperson.id);
+  if (recipients.includes("shipping") && invoice.personShipping)
+    personIds.push(invoice.personShipping.id);
   if (!personIds.length)
     throw new Error("Empty recipients");
 
@@ -61,10 +61,10 @@ export async function emailNFe(zenReq) {
   const danfeBytes = Buffer.from(await danfe.arrayBuffer()).toString("base64");
 
   const sp = new URLSearchParams();
-  if (zenReq.mailerConfigMap?.[bean.company.code])
-    sp.set("mailerConfigCode", zenReq.mailerConfigMap[bean.company.code]);
-  else if (bean.company.mailerConfig)
-    sp.set("mailerConfigId", bean.company.mailerConfig.id);
+  if (zenReq.mailerConfigMap?.[invoice.company.code])
+    sp.set("mailerConfigCode", zenReq.mailerConfigMap[invoice.company.code]);
+  else if (invoice.company.mailerConfig)
+    sp.set("mailerConfigId", invoice.company.mailerConfig.id);
 
   // Send the e-mails
   await z.web.fetchOk(`/system/mail/messageOpSend?${sp.toString()}`, {
@@ -74,7 +74,7 @@ export async function emailNFe(zenReq) {
     },
     body: JSON.stringify({
       from: {
-        description: bean.company.person.name,
+        description: invoice.company.person.name,
       },
       to: personContactList
         .map(e => ({
@@ -84,18 +84,18 @@ export async function emailNFe(zenReq) {
         ),
       subject: i18n.format(
         "@@:/fiscal/outgoingInvoice/identified",
-        bean.number,
+        invoice.number,
       ),
       content: `
         Você está recebendo uma nota fiscal eletrônica.
   
-        Emitente: ${bean.company.person.name}
-        CNPJ: ${bean.company.person.documentNumber}
+        Emitente: ${invoice.company.person.name}
+        CNPJ: ${invoice.company.person.documentNumber}
 
-        Destinatário: ${bean.person.name}
-        CNPJ: ${bean.person.documentNumber}
+        Destinatário: ${invoice.person.name}
+        CNPJ: ${invoice.person.documentNumber}
 
-        Número: ${bean.number}
+        Número: ${invoice.number}
         Chave de acesso: ${dfeNfeProcOut?.chNFe}
   
         Para maiores detalhes, consulte esta nota fiscal eletrônica no link:
@@ -116,7 +116,7 @@ export async function emailNFe(zenReq) {
           mimeType: "application/xml",
         },
       ],
-      source: `/fiscal/outgoingInvoice:${bean.id}`,
+      source: `/fiscal/outgoingInvoice:${invoice.id}`,
     }),
   });
 }

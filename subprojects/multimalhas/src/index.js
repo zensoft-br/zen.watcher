@@ -3,7 +3,14 @@ import { saleOpApprove } from "./sale/saleOpApprove.js";
 
 export const schema = {
   version: "1.0",
-  watchers: [],
+  watchers: [
+    {
+      description: "Quando um pedido de venda é aprovado, os itens do pedido são alimentados no estoque",
+      path: "/",
+      events: ["/sale/saleOpApprove"],
+      tags: ["after"],
+    },
+  ],
 };
 
 export async function watcher(zenReq) {
