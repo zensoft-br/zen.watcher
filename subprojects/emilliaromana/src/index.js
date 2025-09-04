@@ -1,0 +1,30 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
+import { saleOpPrepare } from "./sale/saleOpPrepare.js";
+
+export const schema = {
+  version: "1.0",
+  watchers: [
+    {
+      description: "Prepare sale operation before processing sale operations",
+      path: "/",
+      events: ["/sale/saleOpPrepare"],
+      tags: ["before"],
+    },
+  ]
+};
+
+export async function watcher(zenReq) {
+  const zenRes = {
+    statusCode: 200,
+    body: {},
+  };
+
+  if (zenReq.body?.context?.event === "/sale/saleOpPrepare"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    const result = await saleOpPrepare(zenReq);
+  }
+
+  return zenRes;
+}
+
+export const handler = createLambdaHandler({ watcher, schema });
