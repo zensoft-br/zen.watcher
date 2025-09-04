@@ -12,7 +12,7 @@ export const schema = [
     //   }
     // },
     // tags: [],
-  }
+  },
 ];
 
 export const watcher = async (zenReq) => {

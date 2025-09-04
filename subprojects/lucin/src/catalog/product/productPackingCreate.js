@@ -1,11 +1,13 @@
 // When a productPacking is created, if code is empty
 // and variant is set, we will auto assign a code
 export async function productPackingCreate(zenReq) {
-  if (zenReq.body?.context?.event !== "/catalog/product/productPackingCreate")
+  if (zenReq.body?.context?.event !== "/catalog/product/productPackingCreate") {
     return;
+  }
 
-  if (!(zenReq.body?.context?.tags ?? []).includes("before"))
+  if (!(zenReq.body?.context?.tags ?? []).includes("before")) {
     return;
+  }
 
   const bean = zenReq.body.args.bean;
 

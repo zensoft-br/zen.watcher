@@ -19,8 +19,9 @@ async function autoForwardSaleOpApprove(zenReq) {
 
   const sale = await saleService.saleReadById(zenReq.body.args.id);
 
-  if (!(sale.saleProfile.tags ?? "").split(",").includes("saleOpPickingOrderCreateAuto"))
+  if (!(sale.saleProfile.tags ?? "").split(",").includes("saleOpPickingOrderCreateAuto")) {
     return;
+  }
 
   let pickingOrder = await saleService.saleOpPickingOrderCreate(sale.id, {
     pickingProfileId: sale.saleProfile.pickingProfile?.id,
@@ -34,20 +35,23 @@ async function autoForwardSaleOpApprove(zenReq) {
 
   const pickingProfileTags = (pickingOrder.pickingProfile.tags ?? "").split(",");
 
-  if (!pickingProfileTags.includes("reservationOpStartAuto"))
-    return
+  if (!pickingProfileTags.includes("reservationOpStartAuto")) {
+    return;
+  }
 
   await materialService.reservationOpStart(pickingOrder.reservation.id);
 
-  if (!pickingProfileTags.includes("reservationOpAllocateAuto"))
+  if (!pickingProfileTags.includes("reservationOpAllocateAuto")) {
     return;
+  }
 
   await materialService.reservationOpAllocateAuto(pickingOrder.reservation.id);
 
   const outgoingListList = await materialService.outgoingListRead(`q=pickingOrder.id==${pickingOrder.id}`);
 
-  if (!pickingProfileTags.includes("volumeOpCreateAuto"))
+  if (!pickingProfileTags.includes("volumeOpCreateAuto")) {
     return;
+  }
 
   for (const outgoingList of outgoingListList) {
     await materialService.outgoingListOpVolumeCreateAuto(outgoingList.id, {
@@ -58,23 +62,26 @@ async function autoForwardSaleOpApprove(zenReq) {
 
   const outgoingInvoiceList = [];
 
-  if (!pickingProfileTags.includes("outgoingListOpOutgoingInvoiceCreateAuto"))
+  if (!pickingProfileTags.includes("outgoingListOpOutgoingInvoiceCreateAuto")) {
     return;
+  }
 
   for (const outgoingList of outgoingListList) {
     outgoingInvoiceList.push(await materialService.outgoingListOpOutgoingInvoiceCreate(outgoingList.id, {
     }));
   }
 
-  if (!pickingProfileTags.includes("outgoingInvoiceOpPrepareAuto"))
+  if (!pickingProfileTags.includes("outgoingInvoiceOpPrepareAuto")) {
     return;
+  }
 
   for (const outgoingInvoice of outgoingInvoiceList) {
     await fiscalService.outgoingInvoiceOpPrepare(outgoingInvoice.id);
   }
 
-  if (pickingProfileTags.includes("outgoingInvoiceOpApproveAuto"))
+  if (pickingProfileTags.includes("outgoingInvoiceOpApproveAuto")) {
     return;
+  }
 
   for (const outgoingInvoice of outgoingInvoiceList) {
     await fiscalService.outgoingInvoiceOpApprove(outgoingInvoice.id);

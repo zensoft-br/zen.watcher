@@ -10,7 +10,7 @@ export const schema = {
       events: ["/sale/saleOpPrepare"],
       tags: ["before"],
     },
-  ]
+  ],
 };
 
 export async function watcher(zenReq) {

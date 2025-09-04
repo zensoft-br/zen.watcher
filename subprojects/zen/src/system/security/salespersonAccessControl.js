@@ -38,11 +38,11 @@ async function handleDataSourceOpRead(zenReq, z, session) {
   args.args.parameters = {
     ...args.args.parameters,
     SALESPERSON_IDS: [salespersonId],
-  }
+  };
 
   return {
     body: {
-      args
+      args,
     },
   };
 }

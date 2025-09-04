@@ -25,8 +25,9 @@ export async function saleOpPrepare(zenReq) {
 
   // Make sure a cost was found for each productPacking
   const productPackingNotFound = saleItemList.filter(e => !priceListItemList.find(e1 => e1.productPacking.id == e.productPacking.id)).map(e => e.productPacking.code);
-  if (productPackingNotFound.length)
+  if (productPackingNotFound.length) {
     throw new Error(`Valor unitário de custo não encontrado para os produtos ${productPackingNotFound.join(",")}`);
+  }
 
   const { costValue, productValue, contributionMargin, markup } = saleItemList.reduce((red, e) => {
     red.productValue = round(red.productValue + e.productValue, 2);
@@ -37,26 +38,27 @@ export async function saleOpPrepare(zenReq) {
   }, { productValue: 0, costValue: 0 });
 
   let salesCommission = 0;
-  if (markup >= 30 && markup <= 35)
+  if (markup >= 30 && markup <= 35) {
     salesCommission = 1;
-  else if (markup > 35 && markup <= 40)
+  } else if (markup > 35 && markup <= 40) {
     salesCommission = 2;
-  else if (markup > 40 && markup <= 45)
+  } else if (markup > 40 && markup <= 45) {
     salesCommission = 3;
-  else if (markup > 45 && markup <= 55)
+  } else if (markup > 45 && markup <= 55) {
     salesCommission = 4;
-  else if (markup > 55 && markup <= 65)
+  } else if (markup > 55 && markup <= 65) {
     salesCommission = 5;
-  else if (markup > 65 && markup <= 75)
+  } else if (markup > 65 && markup <= 75) {
     salesCommission = 6;
-  else if (markup > 75 && markup <= 85)
+  } else if (markup > 75 && markup <= 85) {
     salesCommission = 7;
-  else if (markup > 85 && markup <= 95)
+  } else if (markup > 85 && markup <= 95) {
     salesCommission = 8;
-  else if (markup > 95 && markup <= 105)
+  } else if (markup > 95 && markup <= 105) {
     salesCommission = 9;
-  else if (markup > 105)
+  } else if (markup > 105) {
     salesCommission = 10;
+  }
 
   sale.properties = {
     ...sale.properties,

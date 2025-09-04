@@ -23,22 +23,27 @@ export async function notifyBackloggedSales(zenReq) {
     sp.set("order", "dateTimeStart");
 
     const workpieceNodeList = await workflowService.workpieceNodeRead(sp.toString());
-    if (!workpieceNodeList.length)
+    if (!workpieceNodeList.length) {
       break;
+    }
 
     for (const workpieceNode of workpieceNodeList) {
       let sale = await saleService.saleReadById(workpieceNode.workpiece.source.split(":")[1]);
-      if (!sale)
+      if (!sale) {
         continue;
+      }
 
-      if (["CANCELED", "FINISHED"].includes(sale.status))
+      if (["CANCELED", "FINISHED"].includes(sale.status)) {
         continue;
+      }
 
-      if (!sale.workpiece?.workflowNode)
+      if (!sale.workpiece?.workflowNode) {
         continue;
+      }
 
-      if ((sale.workpiece?.workflowNode.tags ?? "").includes("no-backlog"))
+      if ((sale.workpiece?.workflowNode.tags ?? "").includes("no-backlog")) {
         continue;
+      }
 
       const hours = Math.floor((new Date() - new Date(workpieceNode.dateTimeStart)) / 3600000);
 
@@ -46,8 +51,9 @@ export async function notifyBackloggedSales(zenReq) {
 
       const tags = sale.tags ? sale.tags.split(",") : [];
       tags.push("atrasado");
-      if (hours >= 72)
+      if (hours >= 72) {
         tags.push("urgente");
+      }
 
       sale.tags = tags.join(",");
 

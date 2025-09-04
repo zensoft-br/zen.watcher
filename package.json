@@ -31,7 +31,8 @@
   "scripts": {
     "build": "turbo run build",
     "deploy": "turbo run deploy",
-    "express": "node ./express.js"
+    "express": "node ./express.js",
+    "lint": "eslint . --ext .js --fix"
   },
   "devDependencies": {
     "@zensoftbr/eslint-config": "^1.0.1",

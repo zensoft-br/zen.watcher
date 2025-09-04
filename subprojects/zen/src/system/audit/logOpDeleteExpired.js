@@ -7,7 +7,7 @@ export async function logOpDeleteExpired(zenReq) {
 
   const auditService = new Z.api.system.audit.AuditService(z);
 
-  // Perform log operation to delete expired entries (do not wait for it to finish)  
+  // Perform log operation to delete expired entries (do not wait for it to finish)
   auditService.logOpDeleteExpired();
 
   // Wait for a short period to ensure the operation is initiated

@@ -2,23 +2,27 @@ import * as Z from "@zensoftbr/zenerpclient";
 
 export async function userLogCreate(zenReq) {
   // Checks if the event is related to user log creation and if it's the "after" event.
-  if (zenReq.body?.context?.event !== "/system/audit/userLogCreate")
+  if (zenReq.body?.context?.event !== "/system/audit/userLogCreate") {
     return;
+  }
 
-  if (!(zenReq.body?.context?.tags ?? []).includes("after"))
+  if (!(zenReq.body?.context?.tags ?? []).includes("after")) {
     return;
+  }
 
   // Extracting necessary information from the request body
   const body = zenReq.body;
   const args = body.args.args;
 
   // Checking if the "notify-commercial" tag is present in the arguments, if not, return early
-  if (!(args.tags ?? []).includes("notify-commercial"))
+  if (!(args.tags ?? []).includes("notify-commercial")) {
     return;
+  }
 
   // Checking if the source starts with "/sale/sale:", if not, return early
-  if (!args.source?.startsWith("/sale/sale:"))
+  if (!args.source?.startsWith("/sale/sale:")) {
     return;
+  }
 
   // Creating a client using token information from the request context
   const client = Z.createFromToken(body.context.tenant, process.env.token);
@@ -30,8 +34,9 @@ export async function userLogCreate(zenReq) {
   const sale = await saleService.saleReadById(args.source.substring(11));
 
   // If sale details or the email of the salesperson associated with the sale is not available, return early
-  if (!sale?.personSalesperson?.email)
+  if (!sale?.personSalesperson?.email) {
     return;
+  }
 
   // Creating a security service instance
   const securityService = new Z.api.system.security.SecurityService(client);

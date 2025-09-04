@@ -15,9 +15,9 @@ export async function incomingListItemCreate(zenReq) {
 
     if (!bean.lot && (productPacking.product.productProfile.tags ?? "").split(",").includes("stock.lot")) {
       const incomingListItemTemplate = (await materialService.incomingListItemRead(`q=incomingList.id==${bean.incomingList.id};productPacking.id==${bean.productPacking.id}`))[0];
-      if (incomingListItemTemplate)
+      if (incomingListItemTemplate) {
         bean.lot = incomingListItemTemplate.lot;
-      else {
+      } else {
         const lot = await materialService.lotCreate({});
         bean.lot = lot;
       }

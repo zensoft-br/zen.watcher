@@ -25,16 +25,21 @@ export async function emailNFe(zenReq) {
 
   // Let's load all personContact's in just on read
   const personIds = [];
-  if (recipients.includes("company"))
+  if (recipients.includes("company")) {
     personIds.push(invoice.company.person.id);
-  if (recipients.includes("person"))
+  }
+  if (recipients.includes("person")) {
     personIds.push(invoice.person.id);
-  if (recipients.includes("salesperson") && invoice.personSalesperson)
+  }
+  if (recipients.includes("salesperson") && invoice.personSalesperson) {
     personIds.push(invoice.personSalesperson.id);
-  if (recipients.includes("shipping") && invoice.personShipping)
+  }
+  if (recipients.includes("shipping") && invoice.personShipping) {
     personIds.push(invoice.personShipping.id);
-  if (!personIds.length)
+  }
+  if (!personIds.length) {
     throw new Error("Empty recipients");
+  }
 
   // Get personContact's
   let personContactList = await personService.personContactRead(`q=type==EMAIL;(${personIds.map(e => `person.id==${e}`).join(",")})`);
@@ -51,8 +56,9 @@ export async function emailNFe(zenReq) {
     // Or contacts with "#default" tag if there is no contact with "invoice" tag for the person
     || (!arr.find(e1 => e1.person.id == e.person.id && e1.tags.includes("invoice")) && e.tags.includes("#default")));
 
-  if (!personContactList.length)
+  if (!personContactList.length) {
     return;
+  }
 
   // Fetch XML and DANFE
   const xml = await fetch(dfeNfeProcOut.file.url);
@@ -63,10 +69,11 @@ export async function emailNFe(zenReq) {
   const danfeBytes = Buffer.from(await danfe.arrayBuffer()).toString("base64");
 
   const sp = new URLSearchParams();
-  if (zenReq.mailerConfigMap?.[invoice.company.code])
+  if (zenReq.mailerConfigMap?.[invoice.company.code]) {
     sp.set("mailerConfigCode", zenReq.mailerConfigMap[invoice.company.code]);
-  else if (invoice.company.mailerConfig)
+  } else if (invoice.company.mailerConfig) {
     sp.set("mailerConfigId", invoice.company.mailerConfig.id);
+  }
 
   const mailerConfigCode = dfeNfeProcOut.company.code.startsWith("L/") ? "LUCIN/NFE" : "NOVAX/NFE";
 

@@ -59,42 +59,42 @@ export const schema = {
       description: "Restrict access to company-related data",
       path: "/system/security/companyAccessControl",
       events: [
-        '/commercial/contract/contractRead',
-        '/financial/accounting/journalEntryRead',
-        '/financial/accounting/ledgerItemRead',
-        '/financial/accounting/ledgerItemBalanceRead',
-        '/financial/billing/walletRead',
-        '/financial/payableRead',
-        '/financial/payableSettlementRead',
-        '/financial/receivableRead',
-        '/financial/receivableSettlementRead',
-        '/financial/treasury/accountStatementRead',
-        '/fiscal/br/dfeRead',
-        '/fiscal/br/dfeNfeProcInRead',
-        '/fiscal/br/dfeNfeProcOutRead',
-        '/fiscal/br/dfeProcEventoNFeInRead',
-        '/fiscal/br/dfeProcEventoNFeOutRead',
-        '/fiscal/br/dfeProcInutNFeRead',
-        '/fiscal/br/dfeResEventoRead',
-        '/fiscal/br/dfeResNFeInRead',
-        '/fiscal/fiscalYearRead',
-        '/fiscal/incomingInvoiceRead',
-        '/fiscal/invoiceSeriesRead',
-        '/fiscal/outgoingInvoiceRead',
-        '/logistic/shippingRead',
-        '/material/incomingListRead',
-        '/material/inventoryRead',
-        '/material/movingOrderRead',
-        '/material/outgoingListRead',
-        '/material/pickingOrderRead',
-        '/material/reservationRead',
-        '/material/stockAvailabilityRead',
-        '/sale/quoteRead',
-        '/sale/saleRead',
-        '/shipping/shipmentRead',
-        '/supply/production/productionOrderRead',
-        '/supply/purchase/purchaseRead',
-        '/supply/purchase/quoteRead'
+        "/commercial/contract/contractRead",
+        "/financial/accounting/journalEntryRead",
+        "/financial/accounting/ledgerItemRead",
+        "/financial/accounting/ledgerItemBalanceRead",
+        "/financial/billing/walletRead",
+        "/financial/payableRead",
+        "/financial/payableSettlementRead",
+        "/financial/receivableRead",
+        "/financial/receivableSettlementRead",
+        "/financial/treasury/accountStatementRead",
+        "/fiscal/br/dfeRead",
+        "/fiscal/br/dfeNfeProcInRead",
+        "/fiscal/br/dfeNfeProcOutRead",
+        "/fiscal/br/dfeProcEventoNFeInRead",
+        "/fiscal/br/dfeProcEventoNFeOutRead",
+        "/fiscal/br/dfeProcInutNFeRead",
+        "/fiscal/br/dfeResEventoRead",
+        "/fiscal/br/dfeResNFeInRead",
+        "/fiscal/fiscalYearRead",
+        "/fiscal/incomingInvoiceRead",
+        "/fiscal/invoiceSeriesRead",
+        "/fiscal/outgoingInvoiceRead",
+        "/logistic/shippingRead",
+        "/material/incomingListRead",
+        "/material/inventoryRead",
+        "/material/movingOrderRead",
+        "/material/outgoingListRead",
+        "/material/pickingOrderRead",
+        "/material/reservationRead",
+        "/material/stockAvailabilityRead",
+        "/sale/quoteRead",
+        "/sale/saleRead",
+        "/shipping/shipmentRead",
+        "/supply/production/productionOrderRead",
+        "/supply/purchase/purchaseRead",
+        "/supply/purchase/quoteRead",
       ],
       tags: ["before"],
       action: (zenReq) => companyAccessControl(zenReq),
@@ -113,8 +113,8 @@ export const schema = {
         "/system/data/dataSourceOpRead",
       ],
       tags: ["before"],
-      action: (zenReq) => salespersonAccessControl(zenReq)
-    }
+      action: (zenReq) => salespersonAccessControl(zenReq),
+    },
   ],
 };
 
@@ -126,75 +126,63 @@ export async function watcher(zenReq) {
 
   if (zenReq.path === "/email") {
     zenRes = await email(zenReq);
-  }
-
-  else if (zenReq.path === "/fiscal/br/out/authorize" 
+  } else if (zenReq.path === "/fiscal/br/out/authorize"
     && zenReq.body?.context?.event == "/fiscal/outgoingInvoiceOpApprove") {
     zenRes = await dfeNfeProcOutOpAuthorize(zenReq);
   }
 
   if (zenReq.path.startsWith("/mail")) {
     return mail(zenReq);
-  }
-
-  else if (zenReq.body?.context?.event == "/material/pickingOrderOpApprove") {
+  } else if (zenReq.body?.context?.event == "/material/pickingOrderOpApprove") {
     zenRes = await pickingOrderOpApprove(zenReq);
-  }
-
-  else if (zenReq.path === "/normalize") {
+  } else if (zenReq.path === "/normalize") {
     zenRes = normalize(zenReq);
-  }
-
-  else if (zenReq.path === "/print") {
+  } else if (zenReq.path === "/print") {
     zenRes = await print(zenReq);
-  }
-
-  else if (zenReq.path === "/system/audit/logOpDeleteExpired") {
+  } else if (zenReq.path === "/system/audit/logOpDeleteExpired") {
     zenRes = await logOpDeleteExpired(zenReq);
-  }
-
-  else if (zenReq.path === "/system/databaseOpOptimize") {
+  } else if (zenReq.path === "/system/databaseOpOptimize") {
     zenRes = await databaseOpOptimize(zenReq);
   }
 
   if (zenReq.path === "/system/security/companyAccessControl" &&
     [
-      '/commercial/contract/contractRead',
-      '/financial/accounting/journalEntryRead',
-      '/financial/accounting/ledgerItemRead',
-      '/financial/accounting/ledgerItemBalanceRead',
-      '/financial/billing/walletRead',
-      '/financial/payableRead',
-      '/financial/payableSettlementRead',
-      '/financial/receivableRead',
-      '/financial/receivableSettlementRead',
-      '/financial/treasury/accountStatementRead',
-      '/fiscal/br/dfeRead',
-      '/fiscal/br/dfeNfeProcInRead',
-      '/fiscal/br/dfeNfeProcOutRead',
-      '/fiscal/br/dfeProcEventoNFeInRead',
-      '/fiscal/br/dfeProcEventoNFeOutRead',
-      '/fiscal/br/dfeProcInutNFeRead',
-      '/fiscal/br/dfeResEventoRead',
-      '/fiscal/br/dfeResNFeInRead',
-      '/fiscal/fiscalYearRead',
-      '/fiscal/incomingInvoiceRead',
-      '/fiscal/invoiceSeriesRead',
-      '/fiscal/outgoingInvoiceRead',
-      '/logistic/shippingRead',
-      '/material/incomingListRead',
-      '/material/inventoryRead',
-      '/material/movingOrderRead',
-      '/material/outgoingListRead',
-      '/material/pickingOrderRead',
-      '/material/reservationRead',
-      '/material/stockAvailabilityRead',
-      '/sale/quoteRead',
-      '/sale/saleRead',
-      '/shipping/shipmentRead',
-      '/supply/production/productionOrderRead',
-      '/supply/purchase/purchaseRead',
-      '/supply/purchase/quoteRead'
+      "/commercial/contract/contractRead",
+      "/financial/accounting/journalEntryRead",
+      "/financial/accounting/ledgerItemRead",
+      "/financial/accounting/ledgerItemBalanceRead",
+      "/financial/billing/walletRead",
+      "/financial/payableRead",
+      "/financial/payableSettlementRead",
+      "/financial/receivableRead",
+      "/financial/receivableSettlementRead",
+      "/financial/treasury/accountStatementRead",
+      "/fiscal/br/dfeRead",
+      "/fiscal/br/dfeNfeProcInRead",
+      "/fiscal/br/dfeNfeProcOutRead",
+      "/fiscal/br/dfeProcEventoNFeInRead",
+      "/fiscal/br/dfeProcEventoNFeOutRead",
+      "/fiscal/br/dfeProcInutNFeRead",
+      "/fiscal/br/dfeResEventoRead",
+      "/fiscal/br/dfeResNFeInRead",
+      "/fiscal/fiscalYearRead",
+      "/fiscal/incomingInvoiceRead",
+      "/fiscal/invoiceSeriesRead",
+      "/fiscal/outgoingInvoiceRead",
+      "/logistic/shippingRead",
+      "/material/incomingListRead",
+      "/material/inventoryRead",
+      "/material/movingOrderRead",
+      "/material/outgoingListRead",
+      "/material/pickingOrderRead",
+      "/material/reservationRead",
+      "/material/stockAvailabilityRead",
+      "/sale/quoteRead",
+      "/sale/saleRead",
+      "/shipping/shipmentRead",
+      "/supply/production/productionOrderRead",
+      "/supply/purchase/purchaseRead",
+      "/supply/purchase/quoteRead",
     ].includes(zenReq.body.context.event)
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return companyAccessControl(zenReq);
@@ -205,11 +193,11 @@ export async function watcher(zenReq) {
       "/catalog/person/personRead",
       "/financial/payableRead",
       "/financial/receivableRead",
-      "/fiscal/incomingInvoiceRead", 
+      "/fiscal/incomingInvoiceRead",
       "/fiscal/outgoingInvoiceRead",
       "/sale/quoteRead",
       "/sale/saleRead",
-      "/system/data/dataSourceOpRead"
+      "/system/data/dataSourceOpRead",
     ].includes(zenReq.body.context.event)
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return salespersonAccessControl(zenReq);

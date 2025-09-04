@@ -20,23 +20,23 @@ export async function saleOpApprove(zenReq) {
   tags.push(`saleID:${sale.id}`);
   properties["saleID"] = sale.id;
   let incomingList = {
-    company: {id: sale.company.id},
-    person: {id: sale.company.person.id},
+    company: { id: sale.company.id },
+    person: { id: sale.company.person.id },
     tags: tags.join(),
-    properties
+    properties,
   };
 
   // insere o cabeçalho do romaneio
   incomingList = await materialService.incomingListCreate(incomingList);
-  
+
   // insere os itens do romaneio
   const saleItems = await saleService.saleItemRead(`q=sale.id==${sale.id}`);
   for (const e of saleItems) {
     let incomingListItem = {
       incomingList,
       productPacking: e.productPacking,
-      quantity: e.quantity
-    }    
+      quantity: e.quantity,
+    };
     incomingListItem = await materialService.incomingListItemCreate(incomingListItem);
   };
 
@@ -49,16 +49,16 @@ export async function saleOpApprove(zenReq) {
     fiscalProfileOperationId: 1077,
     priceListId: 1001,
     group: false,
-  }
+  };
   incomingInvoice = await fiscalService.incomingInvoiceOpCreateFromIncomingList(incomingInvoice);
   // atribui o ID do romaneio como número da nota
-  incomingInvoice.number = incomingList.id; 
+  incomingInvoice.number = incomingList.id;
   incomingInvoice = await fiscalService.incomingInvoiceUpdate(incomingInvoice);
 
   // altera a CFOP dos itens da nota
   const incomingInvoiceItems = await fiscalService.incomingInvoiceItemRead(`q=invoice.id==${incomingInvoice.id}`);
   for (const e of incomingInvoiceItems) {
-    e.taxationOperation = {id: 1001};
+    e.taxationOperation = { id: 1001 };
     await fiscalService.incomingInvoiceItemUpdate(e);
   }
 

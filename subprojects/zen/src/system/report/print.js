@@ -4,12 +4,15 @@ import * as Z from "@zensoftbr/zenerpclient";
 export async function print(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, process.env.token);
 
-  if (!zenReq.query.report)
+  if (!zenReq.query.report) {
     throw new Error("Missing query.report");
-  if (!zenReq.query.printer)
+  }
+  if (!zenReq.query.printer) {
     throw new Error("Missing query.printer");
-  if (!zenReq.body.args.id)
+  }
+  if (!zenReq.body.args.id) {
     throw new Error("Missing args.id");
+  }
 
   const reportService = new Z.api.system.report.ReportService(z);
 
@@ -27,8 +30,9 @@ export async function print(zenReq) {
     },
   });
 
-  if (!zenReq.body.context.tags?.includes("async"))
+  if (!zenReq.body.context.tags?.includes("async")) {
     await promise;
-  else
+  } else {
     await new Promise(resolve => setTimeout(resolve, 200));
+  }
 }

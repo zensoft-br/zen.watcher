@@ -16,14 +16,12 @@ export async function mailWatcher(event) {
     if (instructionResponse.type === "REGISTERED" && instructionResponse.billingTitle) {
       return await mailReceivable(z, instructionResponse.billingTitle.id);
     }
-  }
-  else if (["/fiscal/br/dfeNfeProcOutOpTransmit","/fiscal/br/dfeNfeProcOutOpConfirm"]
+  } else if (["/fiscal/br/dfeNfeProcOutOpTransmit","/fiscal/br/dfeNfeProcOutOpConfirm"]
     .includes(event.body?.context?.event)) {
     const id = event.body.args.id;
 
     return mailDfeNfeProcOut(z, id);
-  }
-  else if (event.body?.context?.event === "/sale/saleOpApprove") {
+  } else if (event.body?.context?.event === "/sale/saleOpApprove") {
     const id = event.body.args.id;
 
     return mailSale(z, id);

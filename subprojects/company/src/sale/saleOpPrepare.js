@@ -2,11 +2,13 @@ import "dotenv/config";
 import * as Z from "@zensoftbr/zenerpclient";
 
 export async function saleOpPrepare(zenReq) {
-  if (zenReq.body?.context?.event !== "/sale/saleOpPrepare")
+  if (zenReq.body?.context?.event !== "/sale/saleOpPrepare") {
     return;
+  }
 
-  if (!(zenReq.body?.context?.tags ?? []).includes("before"))
+  if (!(zenReq.body?.context?.tags ?? []).includes("before")) {
     return;
+  }
 
   const id = zenReq.body.args.id;
 
@@ -35,18 +37,21 @@ export async function saleOpPrepare(zenReq) {
 
   for (const saleItem of saleItemList) {
     const priceListValue = (antecipado ? Math.round(saleItem.priceListValue * 0.96 * 100) / 100 : saleItem.priceListValue);
-    if (saleItem.sale.priceList.code === "ATACADO")
+    if (saleItem.sale.priceList.code === "ATACADO") {
       newComission = await getComission("ATA", saleItem.unitValue, priceListValue);
-    else if (saleItem.sale.priceList.code === "CONFECCAO")
+    } else if (saleItem.sale.priceList.code === "CONFECCAO") {
       newComission = await getComission("CON", saleItem.unitValue, priceListValue);
-    else
+    } else {
       return;
+    }
 
-    if (oldComission == -1)
+    if (oldComission == -1) {
       oldComission = newComission;
+    }
 
-    if (oldComission != newComission)
+    if (oldComission != newComission) {
       saleComissionUpdate = false;
+    }
 
     saleItem.properties["salesCommission"] = newComission;
 
@@ -56,69 +61,71 @@ export async function saleOpPrepare(zenReq) {
   if (saleComissionUpdate) {
     sale.properties.salesCommission = newComission;
     saleUpdate = true;
-  }
-  else {
+  } else {
     if ((sale.priceList.code === "ATACADO") || (sale.priceList.code === "CONFECCAO")) {
       delete sale.properties.salesCommission;
       saleUpdate = true;
     }
   }
 
-  if (saleUpdate)
+  if (saleUpdate) {
     await saleService.saleUpdate(sale);
+  }
 }
 
 async function getComission(type, unitValue, priceListValue) {
   const discountValue = Math.round((priceListValue - unitValue) / priceListValue * 10000) / 100;
   if (type === "ATA") {
-    if (discountValue > 10)
+    if (discountValue > 10) {
       return 0;
-    else if (discountValue > 9)
+    } else if (discountValue > 9) {
       return 1;
-    else if (discountValue > 8)
+    } else if (discountValue > 8) {
       return 1.1;
-    else if (discountValue > 7)
+    } else if (discountValue > 7) {
       return 1.2;
-    else if (discountValue > 6)
+    } else if (discountValue > 6) {
       return 1.3;
-    else if (discountValue > 5)
+    } else if (discountValue > 5) {
       return 1.4;
-    else if (discountValue > 4)
+    } else if (discountValue > 4) {
       return 1.5;
-    else if (discountValue > 3)
+    } else if (discountValue > 3) {
       return 1.8;
-    else if (discountValue > 2)
+    } else if (discountValue > 2) {
       return 2.1;
-    else if (discountValue > 1)
+    } else if (discountValue > 1) {
       return 2.4;
-    else if (discountValue > 0)
+    } else if (discountValue > 0) {
       return 2.7;
-    else
+    } else {
       return 3;
+    }
   } else if (type === "CON") {
-    if (discountValue > 15)
+    if (discountValue > 15) {
       return 0;
-    else if (discountValue > 13.5)
+    } else if (discountValue > 13.5) {
       return 1;
-    else if (discountValue > 12)
+    } else if (discountValue > 12) {
       return 1.5;
-    else if (discountValue > 10.5)
+    } else if (discountValue > 10.5) {
       return 2;
-    else if (discountValue > 9)
+    } else if (discountValue > 9) {
       return 2.5;
-    else if (discountValue > 7.5)
+    } else if (discountValue > 7.5) {
       return 3;
-    else if (discountValue > 6)
+    } else if (discountValue > 6) {
       return 3.5;
-    else if (discountValue > 4.5)
+    } else if (discountValue > 4.5) {
       return 4;
-    else if (discountValue > 3)
+    } else if (discountValue > 3) {
       return 4.5;
-    else if (discountValue > 1.5)
+    } else if (discountValue > 1.5) {
       return 5;
-    else if (discountValue > 0)
+    } else if (discountValue > 0) {
       return 5.5;
-    else
+    } else {
       return 6;
+    }
   }
 }

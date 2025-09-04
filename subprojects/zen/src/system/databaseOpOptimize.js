@@ -7,7 +7,7 @@ export async function databaseOpOptimize(zenReq) {
 
   const systemService = new Z.api.system.SystemService(z);
 
-  // Perform database optimization (do not wait for it to finish) 
+  // Perform database optimization (do not wait for it to finish)
   systemService.databaseOpOptimize();
 
   // Wait for a short period to ensure the operation is initiated

@@ -66,8 +66,9 @@ export async function corpen(zenReq) {
       },
       body: JSON.stringify(json),
     });
-    if (!response.ok)
+    if (!response.ok) {
       throw new Error(await response.text());
+    }
   }
 
   let seq = 0;
@@ -141,6 +142,7 @@ export async function corpen(zenReq) {
     },
     body: JSON.stringify(json),
   });
-  if (!response.ok)
+  if (!response.ok) {
     throw new Error(await response.text());
+  }
 }

@@ -12,7 +12,6 @@ export async function incomingListOpPrepare(zenReq) {
   const [incomingInvoice] = await fiscalService.incomingInvoiceRead(`q=incomingList.id==${incomingList.id}`);
 
   if (incomingInvoice) {
-
     /*
      * Verifica se o romaneio de entrada possui inconsistências
      */

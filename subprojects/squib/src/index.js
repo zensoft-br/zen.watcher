@@ -50,8 +50,8 @@ export const schema = {
       path:"/sale/quoteItem",
       events: ["/sale/quoteItemCreate", "/sale/quoteItemUpdate"],
       tags: ["before"],
-    }
-  ]
+    },
+  ],
 };
 
 export async function watcher(zenReq) {
@@ -68,8 +68,8 @@ export async function watcher(zenReq) {
     zenRes = await quoteItemProposalCreate(zenReq);
   }
 
-  if (zenReq.path === "/sale/quoteItem" 
-    && ["/sale/quoteItemCreate", "/sale/quoteItemUpdate"].includes(zenReq.body?.context?.event) 
+  if (zenReq.path === "/sale/quoteItem"
+    && ["/sale/quoteItemCreate", "/sale/quoteItemUpdate"].includes(zenReq.body?.context?.event)
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return quoteItemCreateUpdate(zenReq);
   }

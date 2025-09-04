@@ -38,8 +38,9 @@ export async function saleOpApprove(zenReq) {
 
     const quantityAvailable = stockList[0]?.quantity - saleList[0]?.sum_quantity;
 
-    if (quantityAvailable - saleItem.quantity < 0)
+    if (quantityAvailable - saleItem.quantity < 0) {
       throw new Error(`Estoque insuficiente para o produto ${saleItem.productPacking.code}, estoque ${stockList[0]?.quantity}, pedidos de venda ${saleList[0]?.sum_quantity}, disponível ${quantityAvailable}, solicitado ${saleItem.quantity}`);
+    }
   }
 
   return zenRes;

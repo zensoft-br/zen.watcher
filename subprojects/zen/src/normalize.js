@@ -49,7 +49,8 @@ export function titleCase(s) {
         const lowerWord = word.toLowerCase();
         if (reservedWords.includes(lowerWord)) {
           return lowerWord;
-        }}
+        }
+      }
       return word;
     })
     .join(" ");

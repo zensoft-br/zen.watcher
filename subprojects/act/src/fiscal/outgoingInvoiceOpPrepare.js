@@ -13,8 +13,9 @@ export async function outgoingInvoiceOpPrepare(zenReq) {
 
   // Check if the user is privileged
   const privileged = await securityService.accessPointOpValidate("$act/aprovarNotasFiscaisDeSaidaComRestricoes");
-  if (privileged)
+  if (privileged) {
     return;
+  }
 
   // If today is a monday, consider past friday as the base date
   var date = new Date();
@@ -26,6 +27,7 @@ export async function outgoingInvoiceOpPrepare(zenReq) {
   const receivableList = await financialService.receivableRead(
     `q=person.id==${outgoingInvoice.person.id};status==APPROVED;dueDate<${date.toISOString().substring(0, 10)}`,
   );
-  if (receivableList.length)
+  if (receivableList.length) {
     throw new Error(`O cliente possui ${receivableList.length} título(s) vencido(s)\nSolicite aprovação de um operador com a permissão $act/aprovarNotasFiscaisDeSaidaComRestricoes`);
+  }
 }

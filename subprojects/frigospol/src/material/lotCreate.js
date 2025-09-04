@@ -4,8 +4,9 @@ import * as Z from "@zensoftbr/zenerpclient";
 export async function lotCreate_setCodeSequence(zenReq) {
   const lot = zenReq.body.args.bean;
 
-  if (lot.code)
+  if (lot.code) {
     return;
+  }
 
   const datePart = new Date().toISOString().substring(2, 10).replace(/-/g, "");
 

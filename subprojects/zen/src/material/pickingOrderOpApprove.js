@@ -19,13 +19,14 @@ export async function pickingOrderOpApprove(zenReq) {
   const pickingOrder = await materialService.pickingOrderReadById(zenReq.body.args.id);
 
   // Check pickingProfile tag pickingOrderForwardAuto
-  if (!(pickingOrder.pickingProfile.tags ?? "").split(",").includes("pickingOrderForwardAuto"))
+  if (!(pickingOrder.pickingProfile.tags ?? "").split(",").includes("pickingOrderForwardAuto")) {
     return;
+  }
 
   // reservation
   let reservation = pickingOrder.reservation;
   reservation = await materialService.reservationOpStart(reservation.id);
-  // reservation = 
+  // reservation =
   await materialService.reservationOpAllocateAuto(reservation.id);
 
   // outgoingList

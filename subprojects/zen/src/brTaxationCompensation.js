@@ -17,8 +17,7 @@ export async function a(zenReq) {
 
     item = await fiscalService.incomingInvoiceItemReadById(Number(source.split(":")[1]));
     // master = item.incomingInvoice;
-  }
-  else if (source.startsWith("/supply/purchase/purchaseItem:")) {
+  } else if (source.startsWith("/supply/purchase/purchaseItem:")) {
     const purchaseService = new Z.api.supply.purchase.PurchaseService(z);
 
     item = await purchaseService.purchaseItemReadById(source.split(":")[1]);

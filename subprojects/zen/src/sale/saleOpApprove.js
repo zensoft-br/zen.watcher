@@ -18,8 +18,9 @@ export async function saleOpApprove(zenReq) {
   const sale = await saleService.saleReadById(zenReq.body.args.id);
 
   // Check saleProfile tag saleOpForwardAuto
-  if (!(sale.saleProfile.tags ?? "").split(",").includes("saleOpForwardAuto"))
+  if (!(sale.saleProfile.tags ?? "").split(",").includes("saleOpForwardAuto")) {
     return;
+  }
 
   // outgoingInvoice
   let outgoingInvoice = await saleService.saleOpForwardAuto(zenReq.body.args.id, {});
@@ -31,6 +32,7 @@ export async function saleOpApprove(zenReq) {
   let dfe = await fiscalBrService.dfeNfeProcOutOpCreate(outgoingInvoice.id);
   dfe = await fiscalBrService.dfeNfeProcOutOpSign(dfe.id);
   dfe = await fiscalBrService.dfeNfeProcOutOpTransmit(dfe.id);
-  if (dfe.status === "SENT")
+  if (dfe.status === "SENT") {
     await fiscalBrService.dfeNfeProcOutOpConfirm(dfe.id);
+  }
 }

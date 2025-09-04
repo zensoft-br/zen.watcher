@@ -19,25 +19,32 @@ export async function mailDfeNfeProcOut(z, id, args) {
 
   // Load NFe
   const dfeNfeProcOut = await fiscalBrService.dfeNfeProcOutReadById(id);
-  if (!dfeNfeProcOut)
+  if (!dfeNfeProcOut) {
     throw new Error(`dfeNfeProcOut ${id} not found`);
-  if (dfeNfeProcOut.status !== "PROCESSED")
+  }
+  if (dfeNfeProcOut.status !== "PROCESSED") {
     return;
+  }
 
   const invoice = dfeNfeProcOut.invoice ?? dfeNfeProcOut.outgoingInvoice;
 
   // Let's load all personContact's in just on read
   const personIds = [];
-  if (recipients.includes("company"))
+  if (recipients.includes("company")) {
     personIds.push(invoice.company.person.id);
-  if (recipients.includes("person"))
+  }
+  if (recipients.includes("person")) {
     personIds.push(invoice.person.id);
-  if (recipients.includes("salesperson") && invoice.personSalesperson)
+  }
+  if (recipients.includes("salesperson") && invoice.personSalesperson) {
     personIds.push(invoice.personSalesperson.id);
-  if (recipients.includes("shipping") && invoice.personShipping)
+  }
+  if (recipients.includes("shipping") && invoice.personShipping) {
     personIds.push(invoice.personShipping.id);
-  if (!personIds.length)
+  }
+  if (!personIds.length) {
     throw new Error("Empty recipients");
+  }
 
   // Get personContact's
   let personContactList = await personService.personContactRead(`q=type==EMAIL;(${personIds.map(e => `person.id==${e}`).join(",")})`);

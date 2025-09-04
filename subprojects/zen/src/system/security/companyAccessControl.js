@@ -5,16 +5,16 @@ export async function companyAccessControl(zenReq) {
   const z = Z.createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
   const securityService = new Z.api.system.security.SecurityService(z);
-  
+
   const session = await securityService.sessionOpGetCurrent();
 
-  const companyIds = 
+  const companyIds =
     (session.user.properties?.companyIds ?? session.user.accessProfile?.properties?.companyIds ?? []);
 
   if (!companyIds.length) {
     return;
   }
-  
+
   if (zenReq.body.context.event === "/system/data/dataSourceOpRead") {
     return handleDataSourceOpRead(zenReq, z, session);
   }

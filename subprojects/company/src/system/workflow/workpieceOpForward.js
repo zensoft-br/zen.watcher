@@ -10,8 +10,9 @@ export async function workpieceOpForward(zenReq) {
   const workpieceNode = new Z.api.system.workflow.WorkpieceNode();
   Object.assign(workpieceNode, body?.result);
 
-  if (!workpieceNode?.workpiece?.source?.startsWith("/sale/sale:"))
+  if (!workpieceNode?.workpiece?.source?.startsWith("/sale/sale:")) {
     return;
+  }
 
   const client = Z.createFromToken(body.context.tenant, process.env.token);
 

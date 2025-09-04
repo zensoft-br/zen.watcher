@@ -14,8 +14,9 @@ export async function saleOpApprove(zenReq) {
    */
   if (sale.saleProfile.id === 1002) {
     // Uma VendaCruzada na FS não será clonada
-    if (sale.company.id === 1001)
+    if (sale.company.id === 1001) {
       return;
+    }
 
     const items = await saleService.saleItemRead(`q=sale.id==${sale.id}`);
     const payments = await saleService.salePaymentRead(`q=sale.id==${sale.id}`);
@@ -56,7 +57,7 @@ export async function saleOpApprove(zenReq) {
       payments: payments,
     });
     sale1 = await saleService.saleOpPrepare(sale1.id);
-    // sale1 = 
+    // sale1 =
     await saleService.saleOpApprove(sale1.id);
   }
 }

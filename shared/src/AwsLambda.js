@@ -56,7 +56,7 @@ export const createLambdaHandler = ({ watcher, schema }) => {
       return buildResponse(
         result?.statusCode ?? 200,
         result?.body,
-        result?.headers
+        result?.headers,
       );
     } catch (error) {
       console.error("Lambda handler error:", error);

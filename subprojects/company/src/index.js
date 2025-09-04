@@ -50,7 +50,7 @@ export const schema = {
       path: "/",
       tags: ["before"],
     },
-  ]
+  ],
 };
 
 export async function watcher(zenReq) {

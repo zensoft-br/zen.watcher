@@ -19,6 +19,7 @@ export async function saleOpApprove(zenReq) {
   const receivableList = await financialService.receivableRead(
     `q=(person.id==${sale.person.id},person.personGroup.id==${sale.person.personGroup?.id ?? 0});status==APPROVED;dueDate<${date.toISOString().substring(0, 10)}`,
   );
-  if (receivableList.length)
+  if (receivableList.length) {
     throw new Error(`O cliente possui ${receivableList.length} título(s) vencido(s)\nSolicite aprovação de um operador com a permissão $act/aprovarNotasFiscaisDeSaidaComRestricoes`);
+  }
 }

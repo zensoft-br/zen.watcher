@@ -11,8 +11,9 @@ export async function outgoingInvoiceOpApprove(zenReq) {
   if (outgoingInvoice.fiscalProfileOperation.code.includes("Remessa")) {
     const invoicePaymentList = await fiscalService.outgoingInvoicePaymentRead(`q=invoice.id==${outgoingInvoice.id}`);
     for (const invoicePayment of invoicePaymentList) {
-      if (invoicePayment.type === "BILLING_TITLE")
+      if (invoicePayment.type === "BILLING_TITLE") {
         throw new Error("As formas de pagamento de notas fiscais de remessa não podem gerar títulos");
+      }
     }
   }
 }
