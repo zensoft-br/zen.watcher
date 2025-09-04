@@ -17,7 +17,8 @@ export async function mailWatcher(event) {
       return await mailReceivable(z, instructionResponse.billingTitle.id);
     }
   }
-  else if (event.body?.context?.event === "/fiscal/br/dfeNfeProcOutOpConfirm") {
+  else if (["/fiscal/br/dfeNfeProcOutOpTransmit","/fiscal/br/dfeNfeProcOutOpConfirm"]
+    .includes(event.body?.context?.event)) {
     const id = event.body.args.id;
 
     return mailDfeNfeProcOut(z, id);

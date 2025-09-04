@@ -21,8 +21,10 @@ export async function mailDfeNfeProcOut(z, id, args) {
   const dfeNfeProcOut = await fiscalBrService.dfeNfeProcOutReadById(id);
   if (!dfeNfeProcOut)
     throw new Error(`dfeNfeProcOut ${id} not found`);
+  if (dfeNfeProcOut.status !== "PROCESSED")
+    return;
 
-  const invoice = dfeNfeProcOut.outgoingInvoice;
+  const invoice = dfeNfeProcOut.invoice ?? dfeNfeProcOut.outgoingInvoice;
 
   // Let's load all personContact's in just on read
   const personIds = [];

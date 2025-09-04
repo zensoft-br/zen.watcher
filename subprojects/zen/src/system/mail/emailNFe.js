@@ -19,6 +19,9 @@ export async function emailNFe(zenReq) {
 
   // Load NFe
   const dfeNfeProcOut = await fiscalBrService.dfeNfeProcOutReadById(zenReq.body.args.id);
+  if (dfeNfeProcOut.status !== "PROCESSED")
+    return;
+  
   const invoice = (dfeNfeProcOut.invoice ?? dfeNfeProcOut.outgoingInvoice);
 
   // Let's load all personContact's in just on read

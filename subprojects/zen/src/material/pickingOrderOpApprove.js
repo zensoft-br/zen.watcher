@@ -45,5 +45,6 @@ export async function pickingOrderOpApprove(zenReq) {
   // let dfe = await fiscalBrService.dfeNfeProcOutOpCreate(outgoingInvoice.id);
   // dfe = await fiscalBrService.dfeNfeProcOutOpSign(dfe.id);
   // dfe = await fiscalBrService.dfeNfeProcOutOpTransmit(dfe.id);
-  // await fiscalBrService.dfeNfeProcOutOpConfirm(dfe.id);
+  // if (dfe.status === "SENT")
+  //   await fiscalBrService.dfeNfeProcOutOpConfirm(dfe.id);
 }

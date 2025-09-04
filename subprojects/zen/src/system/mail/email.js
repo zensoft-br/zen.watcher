@@ -25,7 +25,8 @@ query params:
     }, {});
 
   //
-  if (zenReq.body?.context?.event === "/fiscal/br/dfeNfeProcOutOpConfirm") {
+  if (["/fiscal/br/dfeNfeProcOutOpTransmit","/fiscal/br/dfeNfeProcOutOpConfirm"]
+    .includes(zenReq.body?.context?.event)) {
     return emailNFe(zenReq);
   }
 

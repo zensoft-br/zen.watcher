@@ -11,7 +11,7 @@ import { companyAccessControl } from "./system/security/companyAccessControl.js"
 import { salespersonAccessControl } from "./system/security/salespersonAccessControl.js";
 
 export const schema = {
-  version: "1.0",
+  version: "1.1",
   watchers: [
     {
       description: "Handle email operations",
