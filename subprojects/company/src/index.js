@@ -1,7 +1,10 @@
 import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { productPackingCreate } from "./catalog/product/productPackingCreate.js";
 import { notifyBackloggedSales } from "./custom/notifyBackloggedSales.js";
+import { payableCreate } from "./financial/payableCreate.js";
+import { payableOpPrepare } from "./financial/payableOpPrepare.js";
 import { payableRead } from "./financial/payableRead.js";
+import { purchaseCreate } from "./purchase/purchaseCreate.js";
 import { saleCreate } from "./sale/saleCreate.js";
 import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 import { userLogCreate } from "./system/audit/userLogCreate.js";
@@ -33,6 +36,18 @@ export const schema = {
       tags: ["after"],
     },
     {
+      description: "Verify whether an accounts payable entry already exists for the same supplier and document.",
+      events: ["/financial/payableCreate"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
+      description: "Prepare payable operation before processing sale operations",
+      events: ["/financial/payableOpCreate"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
       description: "Read financial payable data before processing",
       events: ["/financial/payableRead"],
       path: "/",
@@ -47,6 +62,12 @@ export const schema = {
     {
       description: "Prepare sale operation before processing sale operations",
       events: ["/sale/saleOpPrepare"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
+      description: "Verify whether a purchase already exists with the same vendor and document.",
+      events: ["/supply/purchase/purchaseCreate"],
       path: "/",
       tags: ["before"],
     },
@@ -102,6 +123,16 @@ export async function watcher(zenReq) {
     }
   }
 
+  if (zenReq.body.context.event === "/financial/payableCreate"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await payableCreate(zenReq);
+  }
+
+  if (zenReq.body.context.event === "/financial/payableOpPrepare"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await payableOpPrepare(zenReq);
+  }
+
   if (zenReq.body.context.event === "/financial/payableRead"
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await payableRead(zenReq);
@@ -121,6 +152,11 @@ export async function watcher(zenReq) {
         ...result,
       };
     }
+  }
+
+  if (zenReq.body.context.event === "/supply/purchase/purchaseCreate"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await purchaseCreate(zenReq);
   }
 
   return zenRes;

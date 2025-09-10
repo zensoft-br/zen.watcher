@@ -29,6 +29,14 @@ export async function saleOpPrepare(zenReq) {
     saleUpdate = true;
   }
 
+  // primeira compra do cliente
+  const [saleList] = await saleService.saleRead(`q=company.id==${sale.company.id};person.id==${sale.person.id};id!=${id}&max=1`);
+  if (!saleList) {
+    // Adiciona a tag primeiracompra
+    sale.tags = (sale.tags ?? "").split(",").filter((e) => e).concat("p1").join(",");
+    saleUpdate = true;
+  }
+
   const saleItemList = await saleService.saleItemRead(`q=sale.id==${id}`);
 
   let oldComission = -1;
@@ -42,7 +50,8 @@ export async function saleOpPrepare(zenReq) {
     } else if (saleItem.sale.priceList.code === "CONFECCAO") {
       newComission = await getComission("CON", saleItem.unitValue, priceListValue);
     } else {
-      return;
+      saleComissionUpdate = false;
+      continue;
     }
 
     if (oldComission == -1) {
