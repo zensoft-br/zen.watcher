@@ -59,9 +59,6 @@ async function getComission(unitValue, priceListValue) {
     return 0;
   } else if (discountValue > 5) {
     return 3;
-  } else if (discountValue > 0) {
-    return 4;
-  } else {
-    return 5;
-  }
+  } else  
+    return 4;  
 }
