@@ -7,6 +7,7 @@ import { incomingInvoiceRead } from "./fiscal/incomingInvoiceRead.js";
 import { outgoingInvoiceRead } from "./fiscal/outgoingInvoiceRead.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 import { saleOpCreate } from "./sale/saleOpCreate.js";
+import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 import { purchaseRead } from "./supply/purchase/purchaseRead.js";
 import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { receivableCreate } from "./financial/receivableCreate.js";
@@ -78,6 +79,12 @@ export const schema = {
       tags: ["before"],
     },
     {
+      description: "Custom logic for sale operation preparation",
+      events: ["/sale/saleOpPrepare"],
+      path: "/",
+      tags: ["before"],
+    },
+    {
       description: "Restrict purchase read access based on custom conditions",
       events: ["/supply/purchase/purchaseRead"],
       path: "/",
@@ -141,6 +148,11 @@ export async function watcher(zenReq) {
   if (zenReq.body.context.event === "/sale/saleOpCreate"
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await saleOpCreate(zenReq);
+  }
+
+  if (zenReq.body.context.event === "/sale/saleOpPrepare"
+    && (zenReq.body?.context?.tags ?? []).includes("before")) {
+    return await saleOpPrepare(zenReq);
   }
 
   if (zenReq.body.context.event === "/supply/purchase/purchaseRead"

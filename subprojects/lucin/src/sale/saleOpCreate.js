@@ -90,6 +90,38 @@ export async function saleOpCreate(zenReq) {
     }
   }
 
+  // Verifica se o pedido possui a tag "lead" e, se possuir, verifica se o cliente possui limite de crédito suficiente. Caso não possua, adiciona a tag "22" ao pedido.
+  {
+    if ((args.sale?.tags ?? []).includes("lead")) {
+      const dataService = new Z.api.system.data.DataService(z);
+      const dataSale = await dataService.dataSourceOpRead({
+        code: "/sale/report/saleCube",
+        parameters: { 
+          PERSON_IDS: `{${args.sale.person.id}}`, 
+          STATUS_LIST: "{\"PREPARING\", \"PREPARED\", \"APPROVED\", \"PICKING\"}"
+        },
+      });
+      const saleTotalValue = dataSale.reduce((acc, curr) => acc + (curr.sum_totalValue ?? 0), 0) + (args.sale.totalValue ?? 0);
+
+      const dataCreditLine = await dataService.dataSourceOpRead({
+        code: "/financial/credit/dataSource/creditLineStats",
+        parameters: { 
+          CREDIT_LINE_ID: 1003,
+          PERSON_IDS: `{${args.sale.person.id}}`
+        },
+      });
+      const creditLineValue = dataCreditLine.reduce((acc, curr) => acc + (curr.person_credit_balance ?? 0), 0);
+
+      if (saleTotalValue > creditLineValue) {
+        args.sale.tags = (args.sale.tags ?? "")
+        .split(",")
+        .filter(e => e)
+        .concat("22")
+        .join(",");
+      }
+    }
+  }
+
   zenRes.body.args = zenReq.body.args;
 
   return zenRes;
