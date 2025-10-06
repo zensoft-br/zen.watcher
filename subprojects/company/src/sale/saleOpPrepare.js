@@ -49,6 +49,8 @@ export async function saleOpPrepare(zenReq) {
       newComission = await getComission("ATA", saleItem.unitValue, priceListValue);
     } else if (saleItem.sale.priceList.code === "CONFECCAO") {
       newComission = await getComission("CON", saleItem.unitValue, priceListValue);
+    } else if ((saleItem.sale.priceList?.tags ?? []).includes("regional")) {
+      newComission = await getComission("REG", saleItem.unitValue, priceListValue);
     } else {
       saleComissionUpdate = false;
       continue;
@@ -71,7 +73,7 @@ export async function saleOpPrepare(zenReq) {
     sale.properties.salesCommission = newComission;
     saleUpdate = true;
   } else {
-    if ((sale.priceList.code === "ATACADO") || (sale.priceList.code === "CONFECCAO")) {
+    if ((sale.priceList.code === "ATACADO") || (sale.priceList.code === "CONFECCAO") || ((sale.priceList?.tags ?? []).includes("regional"))) {
       delete sale.properties.salesCommission;
       saleUpdate = true;
     }
@@ -83,7 +85,7 @@ export async function saleOpPrepare(zenReq) {
 }
 
 async function getComission(type, unitValue, priceListValue) {
-  const discountValue = Math.round((priceListValue - unitValue) / priceListValue * 10000) / 100;
+  const discountValue = Math.round((priceListValue - unitValue) / priceListValue * 1000) / 10;
   if (type === "ATA") {
     if (discountValue > 10) {
       return 0;
@@ -135,6 +137,24 @@ async function getComission(type, unitValue, priceListValue) {
       return 5.5;
     } else {
       return 6;
+    }
+  } else if (type === "REG") {
+    if (discountValue > 6) {
+      return 0;
+    } else if (discountValue > 5) {
+      return 1;
+    } else if (discountValue > 4) {
+      return 1.5;
+    } else if (discountValue > 3) {
+      return 1.8;
+    } else if (discountValue > 2) {
+      return 2.2;
+    } else if (discountValue > 1) {
+      return 2.5;
+    } else if (discountValue > 0) {
+      return 2.8;
+    } else {
+      return 3;
     }
   }
 }
