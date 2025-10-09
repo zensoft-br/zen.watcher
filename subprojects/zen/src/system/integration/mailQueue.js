@@ -25,7 +25,7 @@ export async function mailQueue(event) {
           && instructionResponse.billingTitle) {
           await mailReceivable(z, instructionResponse.billingTitle.id);
         }
-      } else if (["/fiscal/br/dfeNfeProcOutOpTransmit","/fiscal/br/dfeNfeProcOutOpConfirm"]
+      } else if (["/fiscal/br/dfeNfeProcOutOpConfirm", "/fiscal/br/dfeNfeProcOutOpTransmit"]
         .includes(message.subject)) {
         const _content = JSON.parse(content.content);
         const id = _content.args.id;
