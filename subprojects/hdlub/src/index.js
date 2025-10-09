@@ -15,7 +15,7 @@ export const schema = {
 };
 
 export async function watcher(zenReq) {
-  const zenRes = {
+  let zenRes = {
     statusCode: 200,
     body: {},
   };
