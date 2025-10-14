@@ -9,7 +9,7 @@ export async function purchaseCreate(zenReq) {
   const purchaseService = new Z.api.supply.purchase.PurchaseService(z);
   const [purchase] = await purchaseService.purchaseRead(`q=code==${bean.code};person.id==${bean.person.id}`);
 
-  if (purchase) {
+  if (purchase && !(purchase.tags ?? []).includes("#partial")) {
     throw new Error(`Já existe um pedido de compra para o fornecedor ${bean.person.name} com código ${bean.code}. (ID: ${purchase.id})`);
   }
 }
