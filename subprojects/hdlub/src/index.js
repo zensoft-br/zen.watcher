@@ -1,5 +1,4 @@
 import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
-import { corpen } from "./system/integration/corpen/corpen.js";
 import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 
 export const schema = {
@@ -30,8 +29,6 @@ export async function watcher(zenReq) {
         };
       }
     }
-
-  await corpen(zenReq);
 
   return zenRes;
 }

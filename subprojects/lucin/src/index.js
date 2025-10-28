@@ -1,16 +1,17 @@
+import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
 import { personRead } from "./catalog/person/personRead.js";
 import { productCreateUpdate } from "./catalog/product/productCreateUpdate.js";
 import { productPackingCreate } from "./catalog/product/productPackingCreate.js";
 import { payableRead } from "./financial/payableRead.js";
+import { receivableCreate } from "./financial/receivableCreate.js";
 import { receivableRead } from "./financial/receivableRead.js";
 import { incomingInvoiceRead } from "./fiscal/incomingInvoiceRead.js";
 import { outgoingInvoiceRead } from "./fiscal/outgoingInvoiceRead.js";
 import { saleOpApprove } from "./sale/saleOpApprove.js";
 import { saleOpCreate } from "./sale/saleOpCreate.js";
+import { saleOpLeadNotification } from "./sale/saleOpLeadNotification.js";
 import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 import { purchaseRead } from "./supply/purchase/purchaseRead.js";
-import { createLambdaHandler } from "../../../shared/src/AwsLambda.js";
-import { receivableCreate } from "./financial/receivableCreate.js";
 
 export const schema = {
   version: "1.0",
@@ -71,6 +72,11 @@ export const schema = {
       events: ["/sale/saleOpApprove"],
       path: "/",
       tags: ["before"],
+    },
+    {
+      description: "Custom logic for sale operation lead notification",
+      path: "/sale/saleOpLeadNotification",
+      tags: [],
     },
     {
       description: "Custom logic for sale operation creation",
@@ -148,6 +154,10 @@ export async function watcher(zenReq) {
   if (zenReq.body.context.event === "/sale/saleOpCreate"
     && (zenReq.body?.context?.tags ?? []).includes("before")) {
     return await saleOpCreate(zenReq);
+  }
+
+  if (zenReq.path === "/sale/saleOpLeadNotification") {
+    return await saleOpLeadNotification(zenReq);
   }
 
   if (zenReq.body.context.event === "/sale/saleOpPrepare"

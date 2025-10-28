@@ -6,14 +6,18 @@ export async function productCreateUpdate(zenReq) {
 
   // Custom logic for product creation/update
   if (zenReq.body.context.event === "/catalog/product/productCreate") {
-    // If keywords is present and code is missing, assign a sequence to code
-    if (bean.keywords && !bean.code) {
+    // If productProfile.id is 1002 and code is missing, assign a sequence to code
+    if (bean.productProfile?.id === 1002 && !bean.code) {
       const z = createFromToken(zenReq.body.context.tenant, zenReq.body.context.token);
 
       const productService = new api.catalog.product.ProductService(z);
-      const [product] = await productService.productRead(`q=keywords==${bean.keywords}`);
-      if (product) {
-        throw new Error(`Já existe um produto com a palavra-chave ${bean.keywords}`);
+
+      // Check for existing product with the same keywords
+      if (bean.keywords) {
+        const [product] = await productService.productRead(`q=keywords==${bean.keywords}`);
+        if (product) {
+          throw new Error(`Já existe um produto com a palavra-chave ${bean.keywords}`);
+        }
       }
 
       const storageService = new api.system.storage.StorageService(z);
@@ -27,7 +31,7 @@ export async function productCreateUpdate(zenReq) {
 
   try {
     if (!bean.category3) {
-      bean.category3 = { id: 2263 };
+      bean.category3 = { id: 2255 };
     }
 
     bean.properties = bean.properties ?? {};
