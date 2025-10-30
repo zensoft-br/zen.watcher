@@ -9,18 +9,18 @@ export async function payableRead(zenReq) {
   const securityService = new api.system.security.SecurityService(z);
 
   // Block access for users who are not granted to "/custom/company/pagar/restrito" accessPoint
-  // RSQL: accountCounterpart==null or accountCounterpart.tags!=restrito
+  // RSQL: assetTagCounterpart==null or assetTagCounterpart.tags!=restrito
   if (!await securityService.accessPointOpValidate("/custom/company/pagar/restrito")) {
     customConditions.push({
       type: "or",
       conditions: [
         {
           type: "null",
-          propertyName: "accountCounterpart",
+          propertyName: "assetTagCounterpart",
         },
         {
           type: "simple",
-          propertyName: "accountCounterpart.tags",
+          propertyName: "assetTagCounterpart.account.tags",
           op: "NE",
           value: {
             "@type": "java.lang.String",
