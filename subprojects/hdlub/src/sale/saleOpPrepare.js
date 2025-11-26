@@ -11,7 +11,7 @@ export async function saleOpPrepare(zenReq) {
 
   // Pedido abaixo do valor mínimo de R$ 1800,00
   let saleUpdate = false;
-  if (sale.totalValue < 1800) {
+  if (sale.totalValue < 900) {
     // Adiciona a tag valor mínimo
     sale.tags = (sale.tags ?? "").split(",").filter((e) => e).concat("valorminimo").join(",");
     saleUpdate = true;
