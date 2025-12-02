@@ -7,10 +7,12 @@ export async function payableOpPrepare(zenReq) {
   const id = zenReq.body.args.id;
   const payableService = new Z.api.financial.FinancialService(z);
   const systemService = new Z.api.system.file.FileService(z);
-  const payable = await payableService.payableReadById(id);
-  if (!payable || (payable?.tags ?? []).includes("#system")) {
+  const payable = await payableService.payableReadById(id);  
+
+  if (!payable || payable.tags?.split(",")?.includes("#system")) {
     return;
   }
+  
   if ((payable.incomingInvoice ?? payable.invoice) == null) {
     const [payableFile] = await systemService.fileRead(`q=source==/financial/payable:${payable.id}`);
 
