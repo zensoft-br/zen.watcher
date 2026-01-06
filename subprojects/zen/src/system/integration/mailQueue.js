@@ -14,6 +14,8 @@ export async function mailQueue(event) {
   });
   for (const message of messageList) {
     try {
+      let processed = false;
+
       const content = JSON.parse(message.content);
 
       if (message.subject === "/financial/billing/instructionResponseOpProcess") {
@@ -24,6 +26,7 @@ export async function mailQueue(event) {
         if ((instructionResponse.type === "REGISTERED" || instructionResponse.type === "CHANGED_DUE_DATE")
           && instructionResponse.billingTitle) {
           await mailReceivable(z, instructionResponse.billingTitle.id);
+          processed = true;
         }
       } else if (["/fiscal/br/dfeNfeProcOutOpConfirm", "/fiscal/br/dfeNfeProcOutOpTransmit"]
         .includes(message.subject)) {
@@ -31,18 +34,20 @@ export async function mailQueue(event) {
         const id = _content.args.id;
 
         await mailDfeNfeProcOut(z, id);
+        processed = true;
       } else if (message.subject === "/sale/saleOpApprove" || message.subject === "/sale/saleOpApproveUnconditionally") {
         const _content = JSON.parse(content.content);
         const id = _content.args.id;
 
         await mailSale(z, id);
+        processed = true;
       } else {
         return { statusCode: 400 };
       }
 
       // Delete message
       await integrationService.messageDelete(message.id);
-      console.info(`Message ${message.id} deleted`);
+      console.info(`Message ${message.id} deleted, ${processed ? "processed" : "-"}`);
     } catch (error) {
       // TODO registrar um log na mensagem
       console.error(error);

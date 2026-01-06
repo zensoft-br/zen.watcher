@@ -45,6 +45,6 @@
     "yaml": "^2.8.0"
   },
   "dependencies": {
-    "@zensoftbr/zenerpclient": "^1.0.31"
+    "@zensoftbr/zenerpclient": "^1.0.44"
   }
 }

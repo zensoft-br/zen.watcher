@@ -32,8 +32,8 @@ export async function mailReceivable(z, id, args) {
   if (recipients.includes("person")) {
     personIds.push(bean.person.id);
   }
-  if (recipients.includes("salesperson") && bean.outgoingInvoice?.personSalesperson) {
-    personIds.push(bean.personSalesperson.id);
+  if (recipients.includes("salesperson") && bean.invoice?.personSalesperson) {
+    personIds.push(bean.invoice.personSalesperson.id);
   }
   if (!personIds.length) {
     throw new Error("Empty recipients");
@@ -100,8 +100,8 @@ export async function mailReceivable(z, id, args) {
     Vencimento: ${i18n.formatDate(bean.dueDate)}
     Valor: ${i18n.formatCurrency(bean.value)}
 
-    Nota fiscal: ${bean.outgoingInvoice?.number ?? ""}
-    Valor: ${i18n.formatCurrency(bean.outgoingInvoice?.totalValue ?? null) ?? ""}
+    Nota fiscal: ${bean.invoice?.number ?? ""}
+    Valor: ${i18n.formatCurrency(bean.invoice?.totalValue ?? null) ?? ""}
 
     Zen ERP ®
     `,

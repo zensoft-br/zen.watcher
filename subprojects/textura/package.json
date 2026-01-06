@@ -7,6 +7,6 @@
         "deploy": "echo Deploy to AWS Lambda"
     },
     "dependencies": {
-        "@zensoftbr/zenerpclient": "^1.0.31"
+        "@zensoftbr/zenerpclient": "^1.0.44"
     }
 }

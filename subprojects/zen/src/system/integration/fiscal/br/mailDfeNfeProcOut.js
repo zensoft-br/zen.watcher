@@ -28,7 +28,7 @@ export async function mailDfeNfeProcOut(z, id, args) {
 
   const invoice = dfeNfeProcOut.invoice ?? dfeNfeProcOut.outgoingInvoice;
 
-  // Let's load all personContact's in just on read
+  // Let's load all personContact's in just one read
   const personIds = [];
   if (recipients.includes("company")) {
     personIds.push(invoice.company.person.id);
