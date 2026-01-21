@@ -3,7 +3,14 @@ import { saleOpPrepare } from "./sale/saleOpPrepare.js";
 
 export const schema = {
   version: "1.0",
-  watchers: [],
+  watchers: [
+    {
+      description: "Prepare sale operation before processing sale operations",
+      events: ["/sale/saleOpPrepare"],
+      path: "/",
+      tags: ["before"],
+    },
+  ],
 };
 
 export async function watcher(zenReq) {
