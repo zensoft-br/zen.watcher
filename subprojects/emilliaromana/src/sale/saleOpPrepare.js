@@ -24,9 +24,11 @@ export async function saleOpPrepare(zenReq) {
   let oldComission = -1;
   let newComission = 0;
   let saleComissionUpdate = true;
+  let coeficient = 1;
 
   for (const saleItem of saleItemList) {
-    newComission = await getComission(saleItem.unitValue, saleItem.priceListValue);
+    coeficient = saleItem.productPacking.product.tags?.split(",")?.includes("comissao:2") ? 2 : 1;
+    newComission = await getComission(saleItem.unitValue, saleItem.priceListValue, coeficient);
 
     if (oldComission == -1) {
       oldComission = newComission;
@@ -50,15 +52,20 @@ export async function saleOpPrepare(zenReq) {
   } else {
     delete sale.properties.salesCommission;
   }
+
   await saleService.saleUpdate(sale);
 }
 
-async function getComission(unitValue, priceListValue) {
-  const discountValue = Math.round((priceListValue - unitValue) / priceListValue * 10000) / 100;
-  if (discountValue > 9) {
-    return 0;
-  } else if (discountValue > 5) {
+async function getComission(unitValue, priceListValue, coeficient) {
+  const discountValue = priceListValue - unitValue;
+  if (discountValue <= 0) {
+    return 5;
+  } else if (discountValue <= coeficient) {
+    return 4;
+  } else if (discountValue <= (coeficient * 2)) {
     return 3;
+  } else if (discountValue <= (coeficient * 3)) {
+    return 2;
   } else  
-    return 4;  
+    return 0;  
 }
